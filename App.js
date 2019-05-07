@@ -1,49 +1,115 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    Platform,
+    ActivityIndicator,
+    TextInput,
+    Modal,
+    TouchableOpacity,
+    Keyboard,
+    Animated,
+    LayoutAnimation,
+    InteractionManager,
+    Alert, StatusBar, DeviceEventEmitter, Linking
+} from 'react-native';
+import {Input} from "react-native-elements";
+import {Navigation} from 'react-native-navigation';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import Color from './src/style/color'
+import Api from './src/util/api'
 
-type Props = {};
-export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
-  }
+import LoginForm from './src/component/loginForm'
+import RegisterForm from './src/component/registerForm'
+
+
+export default class App extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = ({
+            isLoginPage: true,
+            loading: false
+        });
+    }
+
+    setLoading(loading) {
+        this.setState({loading});
+    }
+
+    _toWeb() {
+        Linking.openURL("https://timepill.net/home/forgot_password");
+    }
+
+    _switchForm() {
+        LayoutAnimation.easeInEaseOut();
+        this.setState({
+            isLoginPage: !this.state.isLoginPage
+        });
+    }
+
+    render() {
+        return (
+          <View style={localStyle.wrap}>
+            <Modal visible={this.state.loading}
+                onRequestClose={() => {}}
+                transparent={true}>
+                <View style={localStyle.modal}>
+                    <ActivityIndicator animating={true} color={Color.primary} size={Platform.OS === 'android' ? 'large' : 'small'}/>
+                </View>
+            </Modal>
+            <Animated.View style={localStyle.content}>
+                {this.state.isLoginPage
+                  ? (<LoginForm setLoading={this.setLoading.bind(this)}></LoginForm>)
+                  : (<RegisterForm setLoading={this.setLoading.bind(this)}></RegisterForm>)}
+                
+                <View style={localStyle.bottom}>
+                    <TouchableOpacity onPress={this._switchForm.bind(this)}>
+                        <Text style={localStyle.bottomText}>
+                            {this.state.isLoginPage ? '没有账号？注册一个' : '已有账号？马上登录'}
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this._toWeb.bind(this)}>
+                        <Text style={localStyle.bottomText}>
+                            忘记密码？
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+
+            </Animated.View>
+          </View>
+        );
+    }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+const localStyle = StyleSheet.create({
+    wrap: {
+        flex: 1,
+        backgroundColor: 'white'
+    },
+    content: {
+        flex: 1,
+        paddingTop: 100,
+        paddingHorizontal: 15
+    },
+    bottom: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingTop: 22,
+        paddingHorizontal: 5
+    },
+    bottomText: {
+        fontSize: 14,
+        color: Color.primary,
+        padding: 10
+    },
+    modal: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)'
+    }
 });

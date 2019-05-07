@@ -1,9 +1,40 @@
 /**
- * @format
+ * @entry
  */
 
-import {AppRegistry} from 'react-native';
-import App from './App';
-import {name as appName} from './app.json';
+import { Navigation } from 'react-native-navigation';
 
-AppRegistry.registerComponent(appName, () => App);
+import App from './App';
+import PageList from './src/page/_list'
+import Token from './src/util/token'
+
+
+async function init() {
+    let token = await Token.getUserToken();
+    if (!token) {
+        Navigation.startSingleScreenApp({
+            screen: {
+                screen: 'App',
+                title: 'App Title'
+            }
+        });
+
+    } else {
+        Navigation.startSingleScreenApp({
+            screen: {
+                screen: 'Home',
+                title: 'Home Title'
+            }
+        });
+    }
+}
+
+
+Navigation.registerComponent('App', () => App);
+// regist screens automatically
+for (let pageName in PageList) {
+    Navigation.registerComponent(pageName, () => PageList[pageName]);
+}
+
+init();
+
