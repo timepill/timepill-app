@@ -1,5 +1,5 @@
 {
-  "name": "Timepill",
+  "name": "timepill",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "react": "16.8.3",
-    "react-native": "0.59.4"
+    "react-native": "0.59.4",
+    "react-native-navigation": "^2.18.4"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
