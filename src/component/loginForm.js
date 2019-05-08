@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, InteractionManager, Alert} from 'react-native';
-import {Input, Button} from "react-native-elements";
+import {FormInput, Button} from "react-native-elements";
 import {Navigation} from 'react-native-navigation';
 
 import Color from '../style/color'
 import Api from '../util/api'
+import BottomNav from '../nav/bottomNav'
 
 
 export default class LoginForm extends Component {
@@ -21,15 +22,13 @@ export default class LoginForm extends Component {
     async login() {
         let isLoginSucc, errMsg = '账号或密码不正确';
 
-        this.props.setLoading(true);
         try {
             isLoginSucc = await Api.login(this.state.username, this.state.password);
         } catch (err) {
             console.log(err);
             errMsg = err.message;
         }
-        this.props.setLoading(false);
-        
+
         return {
             isLoginSucc,
             errMsg
@@ -39,12 +38,7 @@ export default class LoginForm extends Component {
     _checkResult(result) {
         InteractionManager.runAfterInteractions(() => {
             if(result.isLoginSucc) {
-                Navigation.startSingleScreenApp({
-                    screen: {
-                        screen: 'Home',
-                        title: 'Home Title',
-                    }
-                });
+                Navigation.startTabBasedApp(BottomNav.config());
 
             } else {
                 Alert.alert(
@@ -56,11 +50,15 @@ export default class LoginForm extends Component {
                     {cancelable: false}
                 );
             }
-        })
+        });
     }
 
     _clickLogin() {
-        this.login().then(this._checkResult);
+        this.props.setLoading(true);
+        this.login().then(result => {
+            this.props.setLoading(false);
+            this._checkResult(result);
+        });
     }
 
     _usernameSubmit() {
@@ -73,10 +71,12 @@ export default class LoginForm extends Component {
 
     render() {return (
         <View>
+            
+
             <Text style={localStyle.title}>{'欢迎来到胶囊日记'}</Text>
 
             <View style={localStyle.form}>
-                <Input ref="loginUsername"
+                <FormInput ref="loginUsername"
 
                     selectionColor={Color.primary}
                     underlineColorAndroid='transparent'
@@ -95,7 +95,7 @@ export default class LoginForm extends Component {
                     onSubmitEditing={this._usernameSubmit.bind(this)}
                 />
 
-                <Input ref="loginPw"
+                <FormInput ref="loginPw"
 
                     selectionColor={Color.primary}
                     underlineColorAndroid='transparent'

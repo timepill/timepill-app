@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, InteractionManager, Alert} from 'react-native';
-import {Input, Button} from "react-native-elements";
+import {FormInput, Button} from "react-native-elements";
 import {Navigation} from 'react-native-navigation';
 
 import Color from '../style/color'
@@ -69,7 +69,7 @@ export default class RegisterForm extends Component {
             <Text style={localStyle.title}>{'注册胶囊日记账号'}</Text>
 
             <View style={localStyle.form}>
-                <Input
+                <FormInput
 
                     selectionColor={Color.primary}
                     underlineColorAndroid='transparent'
@@ -88,7 +88,7 @@ export default class RegisterForm extends Component {
                     onSubmitEditing={() => {}}
                 />
 
-                <Input
+                <FormInput
 
                     selectionColor={Color.primary}
                     underlineColorAndroid='transparent'
@@ -107,7 +107,7 @@ export default class RegisterForm extends Component {
                     onSubmitEditing={() => {}}
                 />
 
-                <Input
+                <FormInput
 
                     selectionColor={Color.primary}
                     underlineColorAndroid='transparent'

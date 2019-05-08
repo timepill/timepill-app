@@ -2,30 +2,30 @@
  * @entry
  */
 
-import { Navigation } from 'react-native-navigation';
+import {Navigation} from 'react-native-navigation';
+import {Icon, loadIcon} from './src/style/icon'
 
 import App from './App';
-import PageList from './src/page/_list'
+
 import Token from './src/util/token'
+import PageList from './src/page/_list'
+import BottomNav from './src/nav/bottomNav'
 
 
 async function init() {
-    let token = await Token.getUserToken();
+    await loadIcon();
+
+    // let token = await Token.getUserToken();
+    let token;
     if (!token) {
         Navigation.startSingleScreenApp({
             screen: {
-                screen: 'App',
-                title: 'App Title'
+                screen: 'App'
             }
         });
 
     } else {
-        Navigation.startSingleScreenApp({
-            screen: {
-                screen: 'Home',
-                title: 'Home Title'
-            }
-        });
+        Navigation.startTabBasedApp(BottomNav.config());
     }
 }
 

@@ -21,6 +21,7 @@ import {Navigation} from 'react-native-navigation';
 import Color from './src/style/color'
 import Api from './src/util/api'
 
+import Loading from './src/component/loading'
 import LoginForm from './src/component/loginForm'
 import RegisterForm from './src/component/registerForm'
 
@@ -32,12 +33,12 @@ export default class App extends Component {
 
         this.state = ({
             isLoginPage: true,
-            loading: false
+            isLoading: false
         });
     }
 
-    setLoading(loading) {
-        this.setState({loading});
+    _setLoading(value) {
+        this.setState({isLoading: value});
     }
 
     _toWeb() {
@@ -54,17 +55,11 @@ export default class App extends Component {
     render() {
         return (
           <View style={localStyle.wrap}>
-            <Modal visible={this.state.loading}
-                onRequestClose={() => {}}
-                transparent={true}>
-                <View style={localStyle.modal}>
-                    <ActivityIndicator animating={true} color={Color.primary} size={Platform.OS === 'android' ? 'large' : 'small'}/>
-                </View>
-            </Modal>
+            <Loading visible={this.state.isLoading}></Loading>
             <Animated.View style={localStyle.content}>
                 {this.state.isLoginPage
-                  ? (<LoginForm setLoading={this.setLoading.bind(this)}></LoginForm>)
-                  : (<RegisterForm setLoading={this.setLoading.bind(this)}></RegisterForm>)}
+                  ? (<LoginForm setLoading={this._setLoading.bind(this)}></LoginForm>)
+                  : (<RegisterForm></RegisterForm>)}
                 
                 <View style={localStyle.bottom}>
                     <TouchableOpacity onPress={this._switchForm.bind(this)}>
