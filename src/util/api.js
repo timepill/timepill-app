@@ -35,6 +35,19 @@ async function getSelfInfo() {
     return call('GET', '/users/my')
 }
 
+async function getTodayDiaries(page = 1, page_size = 20, first_id = '') {
+    return call('GET', '/diaries/today?page=' + page + '&page_size=' + page_size + `&first_id=${first_id}`)
+        .then((json) => {
+            json.page = Number(json.page);
+            json.page_size = Number(json.page_size);
+
+            return json;
+        });
+}
+
+
+
+
 async function call(method, api, body, _timeout = 10000) {
     let token = await TokenManager.getUserToken();
 
@@ -57,16 +70,6 @@ async function call(method, api, body, _timeout = 10000) {
 
     , _timeout);
 }
-
-function timeout(promise, time) {
-    return Promise.race([
-        promise,
-        new Promise(function (resolve, reject) {
-            setTimeout(() => reject(new Error('request timeout')), time)
-        })
-    ]);
-}
-
 
 async function checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
@@ -94,6 +97,15 @@ async function checkStatus(response) {
     }
 }
 
+function timeout(promise, time) {
+    return Promise.race([
+        promise,
+        new Promise(function (resolve, reject) {
+            setTimeout(() => reject(new Error('request timeout')), time)
+        })
+    ]);
+}
+
 function parseJSON(response) {
     if (response.headers.get('content-type') === 'application/json') {
         return response.json();
@@ -113,5 +125,6 @@ function handleCatch(err) {
 
 
 export default {
-    login
+    login,
+    getTodayDiaries
 }

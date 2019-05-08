@@ -71,8 +71,6 @@ export default class LoginForm extends Component {
 
     render() {return (
         <View>
-            
-
             <Text style={localStyle.title}>{'欢迎来到胶囊日记'}</Text>
 
             <View style={localStyle.form}>

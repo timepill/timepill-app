@@ -38,9 +38,8 @@ const styles = StyleSheet.create({
     loading: {
         position: "absolute",
         left: 0,
-        top: 0,
         width: width,
-        height: 400,
+        top: 200,
         justifyContent: "center",
         alignItems: "center"
     }
