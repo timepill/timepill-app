@@ -9,6 +9,9 @@ import {
 import {Divider} from "react-native-elements";
 import {isIphoneX} from 'react-native-iphone-x-helper'
 
+import Color from '../style/color'
+import Msg from '../util/msg'
+
 import Loading from '../component/loading'
 import Touchable from '../component/touchable'
 import DiaryBrief from '../component/diary/diaryBrief'
@@ -29,37 +32,82 @@ export default class HomePage extends Component {
         this.dataSource = new HomeListData();
         this.state = {
             isLoading: true,
-            diaries: []
+
+            diaries: [],
+            hasMore: false,
+
+            refreshing: false,
+            refreshFailed: false
         };
     }
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.refresh()
+            this.refresh();
+        });
+    }
+
+    async refresh(loadMore = false) {
+        if (this.state.refreshing) {
+            return;
+        }
+
+        this.setState({refreshing: true, hasMore: false, refreshFailed: false});
+        this.dataSource.refresh(loadMore)
                 .then(data => {
                     console.log('homepage data:', data);
+                    if(!data) {
+                        throw {
+                            message: 'empty data'
+                        }
 
-                    this.setState({
-                        isLoading: false,
-                        diaries: data && data.list ? data.list : []
-                    });
+                    } else {
+                        let diaries = this.state.diaries;
+                        let newDiaries = data.list;
+                        if (!loadMore && diaries.length > 0 && newDiaries.length > 0
+                                && diaries[0].id === newDiaries[0].id) {
+
+                            Msg.showMsg('没有新内容');
+                        }
+
+                        this.setState({
+                            diaries: data.list ? data.list : [],
+                            hasMore: data.more,
+                            refreshFailed: false
+                        });
+                    }
 
                 }).catch(e => {
                     if (e.code && e.code === 401) {
                         this.props.navigator.showModal({
                             screen: "App"
                         });
-
-                        this.setState({
-                            diaries: []
-                        });
                     }
+
+                    this.setState({
+                        diaries: [],
+                        hasMore: false,
+                        refreshFailed: true
+                    });
+
+                }).done(() => {
+                    this.setState({
+                        isLoading: false,
+                        refreshing: false
+                    });
                 });
-        });
     }
 
-    async refresh() {
-        return await this.dataSource.refresh();
+    async loadMore() {
+        if (this.state.refreshing) {
+            return;
+        }
+
+        this.refresh(true);
+    }
+
+    _checkResult(result) {
+
     }
 
     _onDiaryPress(diary) {
@@ -88,17 +136,55 @@ export default class HomePage extends Component {
                 renderItem={({item}) => {
                     return (
                         <Touchable onPress={() => this._onDiaryPress(item)}>
-                            <DiaryFull diary={item}></DiaryFull>
+                            <DiaryBrief diary={item}></DiaryBrief>
                         </Touchable>
                     )
                 }}
 
                 ItemSeparatorComponent={({highlighted}) => <Divider style={{backgroundColor: '#eee'}}/>}
                 
+                ListFooterComponent={this.renderFooter()}
+
+                refreshing={this.state.refreshing}
+                onRefresh={this.refresh.bind(this)}
+                
                 automaticallyAdjustContentInsets={true}
                 onEndReachedThreshold={2}
+                onEndReached={this.state.hasMore ? this.loadMore.bind(this) : null}
             />
           </View>
+        );
+    }
+
+    renderFooter() {
+        if (this.state.refreshing || this.state.diaries.length === 0) {
+            return null;
+        }
+
+        if (this.state.refreshFailed) {
+            return (
+                <View style={localStyle.footer}>
+                    <TouchableOpacity style={{marginTop: 15}}
+                                      onPress={() => {this.loadMore();}}>
+                        <Text style={{color: Color.primary}}>加载失败,请点击重试</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+
+        if (!this.state.hasMore) {
+            return (
+                <View style={localStyle.footer}>
+                    <Text style={{color: Color.inactiveText, fontSize: 12}}>——  THE END  ——</Text>
+                </View>
+            );
+        }
+
+        return (
+            <View style={localStyle.footer}>
+                <ActivityIndicator animating={true} color={Color.primary}
+                    size={Platform.OS === 'android' ? 'large' : 'small'}/>
+            </View>
         );
     }
 }
@@ -115,5 +201,11 @@ const localStyle = StyleSheet.create({
     list: {
         backgroundColor: 'white',
         height: '100%'
+    },
+    footer: {
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingBottom: 15
     }
 });
