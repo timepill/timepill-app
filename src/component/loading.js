@@ -1,30 +1,23 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, Dimensions } from 'react-native';
+import {StyleSheet, Text, View, ActivityIndicator} from 'react-native';
 
-const { width, height } = Dimensions.get('window')
+import Api from '../util/api'
 
 
 export default class Loading extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            color: props.color ? props.color : '#aaa'
+        }
     }
-
-    /*
-    show() {
-        this.setState({visible: true})
-    }
-    
-    hide() {
-        this.setState({visible: false})
-    }
-    */
 
     render() {
         if (this.props.visible) {
             return (
-                <View style={styles.loading}>
-                    <ActivityIndicator size="large" color="#aaa" />
+                <View style={localStyle.loading}>
+                    <ActivityIndicator size="large" color={this.state.color} />
                 </View>
             );
 
@@ -34,13 +27,13 @@ export default class Loading extends Component {
     }
 }
 
-const styles = StyleSheet.create({
+const localStyle = StyleSheet.create({
     loading: {
-        position: "absolute",
+        position: 'absolute',
         left: 0,
-        width: width,
+        width: Api.DEVICE_WINDOW.width,
         top: 200,
-        justifyContent: "center",
-        alignItems: "center"
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });

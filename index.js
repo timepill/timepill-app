@@ -15,8 +15,8 @@ import BottomNav from './src/nav/bottomNav'
 async function init() {
     await loadIcon();
 
-    // let token = await Token.getUserToken();
-    let token;
+    let token = await Token.getUserToken();
+    // let token;
     if (!token) {
         Navigation.startSingleScreenApp({
             screen: {

@@ -1,11 +1,20 @@
-import TokenManager from './token'
+import {Platform, Dimensions} from 'react-native'
 import DeviceInfo from 'react-native-device-info';
+import {isIphoneX} from 'react-native-iphone-x-helper'
 
+import TokenManager from './token'
+
+
+const IS_ANDROID = Platform.OS === 'android';
+const DEVICE_WINDOW = Dimensions.get('window')
 
 const OS = DeviceInfo.getSystemName();
 const OS_VERSION = DeviceInfo.getSystemVersion();
 const DEVICE_ID = DeviceInfo.getUniqueID();
 const VERSION = DeviceInfo.getVersion();
+
+const IS_IPHONEX = isIphoneX();
+
 
 const baseUrl = 'http://open.timepill.net/api';
 
@@ -32,11 +41,21 @@ async function login(username, password) {
 }
 
 async function getSelfInfo() {
-    return call('GET', '/users/my')
+    return call('GET', '/users/my');
 }
 
 async function getTodayDiaries(page = 1, page_size = 20, first_id = '') {
     return call('GET', '/diaries/today?page=' + page + '&page_size=' + page_size + `&first_id=${first_id}`)
+        .then((json) => {
+            json.page = Number(json.page);
+            json.page_size = Number(json.page_size);
+
+            return json;
+        });
+}
+
+async function getFollowDiaries(page = 1, page_size = 20, first_id = '') {
+    return call('GET', '/diaries/follow?page=' + page + '&page_size=' + page_size + `&first_id=${first_id}`)
         .then((json) => {
             json.page = Number(json.page);
             json.page_size = Number(json.page_size);
@@ -125,6 +144,15 @@ function handleCatch(err) {
 
 
 export default {
+    IS_ANDROID,
+    DEVICE_WINDOW,
+    OS,
+    OS_VERSION,
+    DEVICE_ID,
+    VERSION,
+    IS_IPHONEX,
+
     login,
-    getTodayDiaries
+    getTodayDiaries,
+    getFollowDiaries
 }
