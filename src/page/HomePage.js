@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-import Api from '../util/api'
+import Api from '../util/api';
 
 import DiaryList from '../component/diary/diaryList'
 import HomeListData from '../dataLoader/homeListData';

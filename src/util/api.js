@@ -64,7 +64,9 @@ async function getFollowDiaries(page = 1, page_size = 20, first_id = '') {
         });
 }
 
-
+async function getDiaryComments(diaryId) {
+    return call('GET', '/diaries/' + diaryId + '/comments')
+}
 
 
 async function call(method, api, body, _timeout = 10000) {
@@ -154,5 +156,6 @@ export default {
 
     login,
     getTodayDiaries,
-    getFollowDiaries
+    getFollowDiaries,
+    getDiaryComments
 }

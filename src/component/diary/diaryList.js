@@ -8,12 +8,12 @@ import {
 } from 'react-native';
 import {Divider} from "react-native-elements";
 
-import Color from '../../style/color'
-import Msg from '../../util/msg'
-import Api from '../../util/api'
+import Color from '../../style/color';
+import Msg from '../../util/msg';
+import Api from '../../util/api';
 
-import Touchable from '../touchable'
-import DiaryBrief from './diaryBrief'
+import Touchable from '../touchable';
+import DiaryBrief from './diaryBrief';
 
 
 export default class DiaryList extends Component {
@@ -34,7 +34,6 @@ export default class DiaryList extends Component {
     }
 
     componentDidMount() {
-        console.log('diaryList mounted.');
         InteractionManager.runAfterInteractions(() => {
             this.refresh();
         });
@@ -101,13 +100,13 @@ export default class DiaryList extends Component {
     }
 
     _onDiaryPress(diary) {
-        /*
+        
         this.props.navigator.push({
             screen: 'DiaryDetail',
             title: '日记详情',
             passProps: { diary: diary }
         });
-        */
+        
     }
 
     render() {

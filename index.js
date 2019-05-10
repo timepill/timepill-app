@@ -3,13 +3,13 @@
  */
 
 import {Navigation} from 'react-native-navigation';
-import {Icon, loadIcon} from './src/style/icon'
+import {Icon, loadIcon} from './src/style/icon';
 
 import App from './App';
 
-import Token from './src/util/token'
-import PageList from './src/page/_list'
-import BottomNav from './src/nav/bottomNav'
+import Token from './src/util/token';
+import PageList from './src/page/_list';
+import BottomNav from './src/nav/bottomNav';
 
 
 async function init() {

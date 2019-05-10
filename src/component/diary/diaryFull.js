@@ -1,54 +1,68 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import moment from 'moment'
+import moment from 'moment';
 
-import Color from '../../style/color'
-import UserIcon from './userIcon'
+import Color from '../../style/color';
+import UserIcon from '../userIcon';
+import Photo from '../photo';
+
+import CommentList from '../comment/commentList';
 
 
 export default class DiaryFull extends Component {
 
     render() {
-      let diary = this.props.diary;
-      let user = diary.user;
+        let diary = this.props.diary;
+        let user = diary.user;
+        let editable = this.props.editable;
 
-      return (
-        <View style={localStyle.box}>
-            <UserIcon iconUrl={user.iconUrl}></UserIcon>
-            <View style={localStyle.body}>
-                <View style={localStyle.title}>
-                    <Text style={localStyle.titleName} numberOfLines={1}>
-                        {user.name}
-                    </Text>
-                    <Text style={[localStyle.titleText, {flex: 1}]} numberOfLines={1}>
-                        《{diary.notebook_subject}》
-                    </Text>
-                    <Text style={localStyle.titleText}>
-                        {moment(diary.created).format('H:mm')}
-                    </Text>
+        return (
+            <View>
+                <View style={localStyle.box}>
+                    <UserIcon iconUrl={user.iconUrl}></UserIcon>
+                    <View style={localStyle.body}>
+                        <View style={localStyle.title}>
+                            <Text style={localStyle.titleName} numberOfLines={1}>
+                                {user.name}
+                            </Text>
+                            <Text style={[localStyle.titleText, {flex: 1}]} numberOfLines={1}>
+                                《{diary.notebook_subject}》
+                            </Text>
+                            <Text style={localStyle.titleText}>
+                                {moment(diary.created).format('H:mm')}
+                            </Text>
+                        </View>
+
+                        <Text style={localStyle.content}>
+                            {diary.content.trim()}
+                        </Text>
+
+                        <Photo uri={diary.photoThumbUrl}></Photo>
+                    </View>
                 </View>
 
-                <Text style={localStyle.content}>
-                    {diary.content}
-                </Text>
+                <CommentList diaryId={diary.id}></CommentList>
+
             </View>
-        </View>
-      );
+        );
     }
 }
+
 
 const localStyle = StyleSheet.create({
     box: {
         flexDirection: "row",
         overflow: "hidden",
         paddingHorizontal: 15,
-        paddingTop: 15
+        paddingTop: 15,
+        marginBottom: 30
     },
     body: {
         flexDirection: "column",
         flexGrow: 1,
         flexShrink: 1,
-        paddingTop: 2
+        paddingTop: 2,
+        paddingBottom: 5
     },
     title: {
         flexDirection: "row",
@@ -69,7 +83,6 @@ const localStyle = StyleSheet.create({
         lineHeight: 24,
         color: Color.text,
         fontSize: 15,
-        textAlignVertical: 'bottom',
-        paddingBottom: 15
+        textAlignVertical: 'bottom'
     }
 });

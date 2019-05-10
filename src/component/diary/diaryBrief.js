@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import moment from 'moment'
+import moment from 'moment';
 
-import Color from '../../style/color'
-import UserIcon from './userIcon'
-import Photo from '../photo'
+import Color from '../../style/color';
+import UserIcon from '../userIcon';
+import Photo from '../photo';
 
-import CommentIcon from '../comment/commentIcon'
-import DiaryActionIcon from './diaryActionIcon'
+import CommentIcon from '../comment/commentIcon';
+import DiaryActionIcon from './diaryActionIcon';
 
 
 export default class DiaryBrief extends Component {
