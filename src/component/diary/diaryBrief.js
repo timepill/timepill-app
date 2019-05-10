@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import moment from 'moment'
 
 import Color from '../../style/color'
 import UserIcon from './userIcon'
+import Photo from '../photo'
+
+import CommentIcon from '../comment/commentIcon'
+import DiaryActionIcon from './diaryActionIcon'
 
 
 export default class DiaryBrief extends Component {
@@ -11,6 +15,7 @@ export default class DiaryBrief extends Component {
     render() {
       let diary = this.props.diary;
       let user = diary.user;
+      let editable = this.props.editable;
 
       return (
         <View style={localStyle.box}>
@@ -31,7 +36,24 @@ export default class DiaryBrief extends Component {
                 <Text style={localStyle.content} numberOfLines={5}>
                     {diary.content.trim()}
                 </Text>
+
+                <Photo uri={diary.photoThumbUrl}></Photo>
+
+                <View style={localStyle.actionBar}>
+                    {
+                        diary.comment_count > 0
+                        ? <CommentIcon count={diary.comment_count}></CommentIcon>
+                        : null
+                    }
+                    <View style={{flex: 1}} />
+                    {
+                        editable
+                        ? <DiaryActionIcon></DiaryActionIcon>
+                        : null
+                    }
+                </View>
             </View>
+            
         </View>
       );
     }
@@ -48,7 +70,8 @@ const localStyle = StyleSheet.create({
         flexDirection: "column",
         flexGrow: 1,
         flexShrink: 1,
-        paddingTop: 2
+        paddingTop: 2,
+        paddingBottom: 5
     },
     title: {
         flexDirection: "row",
@@ -69,7 +92,14 @@ const localStyle = StyleSheet.create({
         lineHeight: 24,
         color: Color.text,
         fontSize: 15,
-        textAlignVertical: 'bottom',
-        paddingBottom: 15
+        textAlignVertical: 'bottom'
+    },
+    actionBar: {
+        flexDirection: 'row',
+        alignItems: "center",
+        width: '100%',
+        height: 30,
+        marginTop: 5,
+        justifyContent: 'space-between'
     }
 });
