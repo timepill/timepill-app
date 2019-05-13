@@ -13,7 +13,7 @@ export default class Comment extends Component {
     render() {
         let comment = this.props.comment;
         let user = comment.user;
-        let editable = this.props.editable || true;
+        let editable = this.props.editable;
 
         return (
             <View>

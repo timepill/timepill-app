@@ -38,7 +38,7 @@ export default class LoginForm extends Component {
     _checkResult(result) {
         InteractionManager.runAfterInteractions(() => {
             if(result.isLoginSucc) {
-                Navigation.startTabBasedApp(BottomNav.config());
+                Navigation.setRoot(BottomNav.config());
 
             } else {
                 Alert.alert(

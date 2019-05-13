@@ -41,7 +41,7 @@ const localStyle = StyleSheet.create({
     wrap: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingTop: Api.IS_IPHONEX || Api.IS_ANDROID ? 44 : 20
+        paddingTop: 20
     },
     header: {
         paddingLeft: 20,

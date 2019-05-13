@@ -1,110 +1,159 @@
 import Color from '../style/color'
 import {Icon} from '../style/icon'
 
-const insets = {
-    top: 6,
-    left: 0,
-    bottom: -6,
-    right: 0
-};
-
 function config() {
     return {
-        tabs: [
-            {
-                // label: '首页',
-                screen: 'Home',
-                icon: Icon.homeIcon,
-                selectedIcon: Icon.homeSelectedIcon, // iOS only
-                title: '首页',
-                iconInsets: insets,
-                navigatorStyle: {
-                    tabBarHidden: false,
-                }
-            },
-            {
-                // label: '关注',
-                screen: 'Follow',
-                icon: Icon.followIcon,
-                selectedIcon: Icon.followSelectedIcon, // iOS only
-                title: '关注',
-                iconInsets: insets,
-                navigatorStyle: {
-                    tabBarHidden: false,
-                }
-            },
-            {
-                // label: '写日记',
-                screen: 'Write',
-                icon: Icon.writeIcon,
-                selectedIcon: Icon.writeSelectedIcon, // iOS only
-                title: '写日记',
-                iconInsets: insets,
-                overrideBackPress: true,
-                navigatorStyle: {
-                    tabBarHidden: true,
-                },
-                passProps: {
-                    tabOpen: true,
-                }
-            },
-            {
-                // label: '提醒',
-                screen: 'Notification',
-                icon: Icon.tipIcon,
-                selectedIcon: Icon.tipSelectedIcon, // iOS only
-                title: '提醒',
-                iconInsets: insets,
-                navigatorStyle: {
-                    tabBarHidden: false,
-                }
-            },
-            {
-                // label: '我的',
-                screen: 'User',
-                icon: Icon.myIcon,
-                selectedIcon: Icon.mySelectIcon, // iOS only
-                title: '我的',
-                iconInsets: insets,
-                navigatorStyle: {
-                    tabBarHidden: false,
-                },
-                passProps: {
-                    isMyself: true,
-                    tabOpen: true,
-                }
+        root: {
+            bottomTabs: {
+              options: {
+                  bottomTabs: {
+                      titleDisplayMode: 'alwaysShow' // android
+                  }
+              },
+              children: [{
+                    stack: {
+                      children: [{
+                        component: {
+                          name: 'Home',
+                          options: {
+                            topBar: {
+                              title: {
+                                text: '首页'
+                              }
+                            }
+                          }
+                        }
+                      }],
+                      options: {
+                        bottomTab: {
+                          text: '首页',
+                          icon: Icon.homeIcon,
+
+                          // ios
+                          selectedIcon: Icon.homeSelectedIcon,
+
+                          // android
+                          iconColor: '#ccc',
+                          selectedIconColor: Color.primary
+                        }
+                      }
+                    }
+              },{
+                    stack: {
+                      children: [{
+                        component: {
+                          name: 'Follow',
+                          options: {
+                            topBar: {
+                              title: {
+                                text: '关注'
+                              }
+                            }
+                          }
+                        }
+                      }],
+                      options: {
+                        bottomTab: {
+                          text: '关注',
+                          icon: Icon.followIcon,
+
+                          // ios
+                          selectedIcon: Icon.followSelectedIcon,
+
+                          // android
+                          iconColor: '#ccc',
+                          selectedIconColor: Color.primary
+                        }
+                      }
+                    }
+              },{
+                    stack: {
+                      children: [{
+                        component: {
+                          name: 'Write',
+                          options: {
+                            topBar: {
+                              title: {
+                                text: '写日记',
+                                alignment: 'center' // android
+                              }
+                            }
+                          }
+                        }
+                      }],
+                      options: {
+                        bottomTab: {
+                          text: '写日记',
+                          icon: Icon.writeIcon,
+
+                          // ios
+                          selectedIcon: Icon.writeSelectedIcon,
+
+                          // android
+                          iconColor: '#ccc',
+                          selectedIconColor: Color.primary
+                        }
+                      }
+                    }
+              },{
+                    stack: {
+                      children: [{
+                        component: {
+                          name: 'Notification',
+                          options: {
+                            topBar: {
+                              title: {
+                                text: '提醒'
+                              }
+                            }
+                          }
+                        }
+                      }],
+                      options: {
+                        bottomTab: {
+                          text: '提醒',
+                          icon: Icon.tipIcon,
+
+                          // ios
+                          selectedIcon: Icon.tipSelectedIcon,
+
+                          // android
+                          iconColor: '#ccc',
+                          selectedIconColor: Color.primary
+                        }
+                      }
+                    }
+              },{
+                    stack: {
+                      children: [{
+                        component: {
+                          name: 'User',
+                          options: {
+                            topBar: {
+                              title: {
+                                text: '我'
+                              }
+                            }
+                          }
+                        }
+                      }],
+                      options: {
+                        bottomTab: {
+                          text: '我',
+                          icon: Icon.myIcon,
+
+                          // ios
+                          selectedIcon: Icon.mySelectIcon,
+
+                          // android
+                          iconColor: '#ccc',
+                          selectedIconColor: Color.primary
+                        }
+                      }
+                    }
+              }]
             }
-        ],
-        tabsStyle: {
-            tabBarHidden: true,
-            tabBarSelectedButtonColor: Color.primary,
-
-            navBarTranslucent: false,
-            statusBarTextColorScheme: 'dark',
-            drawUnderNavBar: true,
-
-            initialTabIndex: 0,
-        },
-        appStyle: {
-            tabBarHidden: true,
-            tabBarBackgroundColor: Color.navBackground,
-            tabBarButtonColor: '#999',
-            tabBarSelectedButtonColor: Color.primary,
-
-            navBarTranslucent: false,
-            navBarBackgroundColor: Color.navBackground,
-            navigationBarColor: Color.navBackground,
-            
-            statusBarTextColorScheme: 'dark',
-            statusBarColor: Color.navBackground,
-
-            keepStyleAcrossPush: false,
-            topBarBorderColor: '#ddd',
-            drawUnderStatusBar: false,
-            orientation: 'portrait',
-            initialTabIndex: 0,
-        },
-        animationType: 'fade'
+        }
     }
 }
 

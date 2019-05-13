@@ -33,11 +33,7 @@ export default class CommentList extends Component {
     }
 
     async loadMore() {
-        console.log('commentList:', this.diaryId);
-
         let comments = await Api.getDiaryComments(this.diaryId);
-        console.log('comments:', comments);
-
         if(comments && comments.length > 0) {
             if (comments.length > 1) {
                 comments = comments.reverse();

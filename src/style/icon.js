@@ -54,6 +54,7 @@ async function loadIcon() {
         Ionicons.getImageSource('ios-contact' + outline, 26),
         Ionicons.getImageSource('ios-contact', 26),
 
+        
         Ionicons.getImageSource('md-checkmark', 28, iconColor),
         Ionicons.getImageSource('md-close', 28, iconColor),
 
@@ -67,7 +68,7 @@ async function loadIcon() {
         Ionicons.getImageSource(Platform.OS === 'ios' ? 'md-arrow-back' : 'md-arrow-back', 26, iconColor),
         Ionicons.getImageSource(Platform.OS === 'ios' ? 'ios-open-outline' : 'md-open', 26, iconColor),
 
-        Ionicons.getImageSource(Platform.OS === 'ios' ? 'md-time' : 'md-time', 26, iconColor),
+        Ionicons.getImageSource(Platform.OS === 'ios' ? 'md-time' : 'md-time', 26, iconColor)
         
     ]);
 
@@ -76,7 +77,6 @@ async function loadIcon() {
         Icon[name] = localIcons[index];
         index++;
     }
-    
 }
 
 export {

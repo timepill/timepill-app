@@ -2,6 +2,7 @@
  * @entry
  */
 
+import {Alert} from 'react-native'
 import {Navigation} from 'react-native-navigation';
 import {Icon, loadIcon} from './src/style/icon';
 
@@ -12,29 +13,38 @@ import PageList from './src/page/_list';
 import BottomNav from './src/nav/bottomNav';
 
 
-async function init() {
-    await loadIcon();
-
-    let token = await Token.getUserToken();
-    // let token;
-    if (!token) {
-        Navigation.startSingleScreenApp({
-            screen: {
-                screen: 'App'
-            }
-        });
-
-    } else {
-        Navigation.startTabBasedApp(BottomNav.config());
-    }
-}
-
-
-Navigation.registerComponent('App', () => App);
+Navigation.registerComponent('Timepill', () => App);
 // regist screens automatically
 for (let pageName in PageList) {
     Navigation.registerComponent(pageName, () => PageList[pageName]);
 }
 
-init();
+Navigation.events().registerAppLaunchedListener(async () => {
+
+    try {
+        await loadIcon();
+    } catch (err) {
+        Alert.alert("loadIcon err: " + err.toString());
+    }
+
+    let token = await Token.getUserToken();
+    // let token;
+    if (!token) {
+        Navigation.setRoot({
+            root: {
+                stack: {
+                    children: [{
+                        component: {
+                          name: 'Timepill'
+                        }
+                    }]
+                }
+            }
+        });
+
+    } else {
+        Navigation.setRoot(BottomNav.config());
+    }
+
+});
 
