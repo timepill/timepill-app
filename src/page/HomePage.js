@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {Navigation} from 'react-native-navigation';
 
 import Api from '../util/api';
 
@@ -12,6 +13,19 @@ export default class HomePage extends Component {
     constructor(props) {
         super(props);
         this.dataSource = new HomeListData();
+    }
+
+    _onDiaryPress(diary) {
+        console.log('componentId:', this.props.componentId, diary);
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'DiaryDetail',
+                passProps: {
+                    diary: diary
+                }
+            }
+        });
+        
     }
 
     renderHeader() {
@@ -28,6 +42,7 @@ export default class HomePage extends Component {
                 <DiaryList ref={(r) => this.list = r}
                     dataSource={this.dataSource}
                     header={this.renderHeader.bind(this)}
+                    onDiaryPress={this._onDiaryPress.bind(this)}
 
                     navigator={this.props.navigator}
 

@@ -6,6 +6,7 @@ import {
     FlatList,
     Text, View
 } from 'react-native';
+import {Navigation} from 'react-native-navigation';
 import {Divider} from "react-native-elements";
 
 import Color from '../../style/color';
@@ -47,8 +48,6 @@ export default class DiaryList extends Component {
         this.setState({hasMore: false, refreshing: true, refreshFailed: false});
         this.dataSource.refresh(loadMore)
                 .then(result => {
-                    console.log('diaryList refresh:', result);
-
                     if(!result) {
                         throw {
                             message: 'refresh no result'
@@ -72,9 +71,11 @@ export default class DiaryList extends Component {
 
                 }).catch(e => {
                     if (e.code === 401) {
+                        /*
                         this.props.navigator.showModal({
                             screen: "App"
                         });
+                        */
                     }
 
                     this.setState({
@@ -99,16 +100,6 @@ export default class DiaryList extends Component {
         this.refresh(true);
     }
 
-    _onDiaryPress(diary) {
-        
-        this.props.navigator.push({
-            screen: 'DiaryDetail',
-            title: '日记详情',
-            passProps: { diary: diary }
-        });
-        
-    }
-
     render() {
         return (
             <View style={localStyle.container}>
@@ -124,7 +115,7 @@ export default class DiaryList extends Component {
 
                     renderItem={({item}) => {
                         return (
-                            <Touchable onPress={() => this._onDiaryPress(item)}>
+                            <Touchable onPress={() => this.props.onDiaryPress(item)}>
                                 <DiaryBrief diary={item}></DiaryBrief>
                             </Touchable>
                         )
