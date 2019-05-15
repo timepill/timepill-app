@@ -10,6 +10,8 @@ import {
 import Api from '../util/api';
 import Color from '../style/color';
 
+import NotebookList from '../component/notebook/notebookList'
+
 
 export default class UserPage extends Component {
 
@@ -55,7 +57,10 @@ export default class UserPage extends Component {
     _renderScene = SceneMap({
         userInfo: () => <View style={localStyle.container}><Text style={localStyle.welcome}>user info !</Text></View>,
         diary: () => <View style={localStyle.container}><Text style={localStyle.welcome}>diary !</Text></View>,
-        notebook: () => <View style={localStyle.container}><Text style={localStyle.welcome}>notebook !</Text></View>
+        notebook: () => <NotebookList
+
+            navigator={this.props.navigator}
+        />
     });
 
     render() {

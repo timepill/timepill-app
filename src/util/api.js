@@ -68,6 +68,10 @@ async function getDiaryComments(diaryId) {
     return call('GET', '/diaries/' + diaryId + '/comments')
 }
 
+async function getSelfNotebooks() {
+    return call('GET', '/notebooks/my')
+}
+
 
 async function call(method, api, body, _timeout = 10000) {
     let token = await TokenManager.getUserToken();
@@ -157,5 +161,6 @@ export default {
     login,
     getTodayDiaries,
     getFollowDiaries,
-    getDiaryComments
+    getDiaryComments,
+    getSelfNotebooks
 }

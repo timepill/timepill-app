@@ -17,6 +17,7 @@ function config() {
                           name: 'Home',
                           options: {
                             topBar: {
+                              // visible: false,
                               title: {
                                 text: '首页'
                               }
@@ -42,14 +43,7 @@ function config() {
                     stack: {
                       children: [{
                         component: {
-                          name: 'Follow',
-                          options: {
-                            topBar: {
-                              title: {
-                                text: '关注'
-                              }
-                            }
-                          }
+                          name: 'Follow'
                         }
                       }],
                       options: {
