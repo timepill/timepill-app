@@ -72,6 +72,14 @@ async function getSelfNotebooks() {
     return call('GET', '/notebooks/my')
 }
 
+async function getRelationUsers(page, page_size) {
+  return call('GET', `/relation?page=${page}&page_size=${page_size}`);
+}
+
+async function getRelationReverseUsers(page, page_size) {
+  return call('GET', `/relation/reverse?page=${page}&page_size=${page_size}`);
+}
+
 
 async function call(method, api, body, _timeout = 10000) {
     let token = await TokenManager.getUserToken();
@@ -159,8 +167,13 @@ export default {
     IS_IPHONEX,
 
     login,
+
     getTodayDiaries,
     getFollowDiaries,
+    
     getDiaryComments,
-    getSelfNotebooks
+    getSelfNotebooks,
+    
+    getRelationUsers,
+    getRelationReverseUsers
 }

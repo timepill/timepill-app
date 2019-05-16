@@ -54,7 +54,11 @@ export default class FollowPage extends Component {
                 name: 'FollowUser',
                 options: {
                     bottomTabs: {
-                        visible: false
+                        visible: false,
+
+                        // hide bottom tab for android
+                        drawBehind: true,
+                        animate: true
                     }
                 }
             }
