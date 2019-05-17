@@ -1,7 +1,7 @@
 import Api from '../util/api'
 
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 21;
 
 export default class FollowedByUserData {
     

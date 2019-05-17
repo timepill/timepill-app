@@ -17,46 +17,38 @@ export default class Notebook extends Component {
         let notebook = this.props.notebook;
         
         return (
-            <TouchableOpacity key={notebook.id} style={localStyle.container}
-                activeOpacity={0.7}
-                onPress={() => {}}>
+            <View style={Api.IS_ANDROID ? localStyle.androidBox : localStyle.iosBox}>
+                <ImageBackground key={notebook.id}
+                    style={localStyle.cover} imageStyle={{resizeMode: 'cover'}}
+                    source={{uri: notebook.coverUrl}}>
+                    
+                    {this.getLabel(notebook.isPublic)}
+                </ImageBackground>
 
-                <View style={Api.IS_ANDROID ? localStyle.androidBox : localStyle.iosBox}>
-                    <ImageBackground key={notebook.id}
-                        style={localStyle.cover} imageStyle={{resizeMode: 'cover'}}
-                        source={{uri: notebook.coverUrl}}>
-                        
-                        {this.getLabel(notebook.isPublic)}
-                    </ImageBackground>
-
-                    <View style={localStyle.banner}>
-                        <View style={localStyle.subject}>
-                            <Text allowFontScaling={false}>{notebook.subject}</Text>
-                        </View>
-                        <Text style={localStyle.desc} allowFontScaling={false}>
-                            {notebook.isExpired ? '已过期' : '未过期'}
-                        </Text>
-                        <Text style={localStyle.desc} allowFontScaling={false}>
-                            {notebook.created}至{notebook.expired}
-                        </Text>
+                <View style={localStyle.banner}>
+                    <View style={localStyle.subject}>
+                        <Text allowFontScaling={false}>{notebook.subject}</Text>
                     </View>
-
+                    <Text style={localStyle.desc} allowFontScaling={false}>
+                        {notebook.isExpired ? '已过期' : '未过期'}
+                    </Text>
+                    <Text style={localStyle.desc} allowFontScaling={false}>
+                        {notebook.created}至{notebook.expired}
+                    </Text>
                 </View>
-            </TouchableOpacity>
+            </View>
         );
     }
 }
 
 const localStyle = StyleSheet.create({
-    container: {
-        marginBottom: 15
-    },
     androidBox: {
         width: 140,
         elevation: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        margin: 3
+        margin: 3,
+        marginBottom: 15
     },
     iosBox: {
         width: 140,
@@ -65,7 +57,8 @@ const localStyle = StyleSheet.create({
         shadowOffset: {width: 0, height: 0},
         backgroundColor: '#fff',
         alignItems: 'center',
-        margin: 3
+        margin: 3,
+        marginBottom: 15
     },
     privateLabel: {
         position: 'absolute',

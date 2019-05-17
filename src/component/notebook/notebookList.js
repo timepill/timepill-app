@@ -5,7 +5,8 @@ import {
     Text,
     FlatList,
     StyleSheet,
-    RefreshControl
+    RefreshControl,
+    TouchableOpacity
 } from 'react-native';
 
 import Api from '../../util/api';
@@ -72,11 +73,14 @@ export default class NotebookList extends Component {
     }
 
     _renderItem(notebook) {
-        
         return notebook ? (
-            <Notebook key={notebook.id} notebook={notebook} onPress={() => {}} />
+            <TouchableOpacity key={notebook.id} activeOpacity={0.7}
+                onPress={() => this.props.onNotebookPress(notebook)}>
+
+                <Notebook key={notebook.id} notebook={notebook} />
+
+            </TouchableOpacity>
         ) : null
-        
     }
 
     render() {

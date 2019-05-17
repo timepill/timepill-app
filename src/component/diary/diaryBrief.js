@@ -19,15 +19,21 @@ export default class DiaryBrief extends Component {
 
       return (
         <View style={localStyle.box}>
-            <UserIcon iconUrl={user.iconUrl}></UserIcon>
+            {(user && user.iconUrl)
+                ? <UserIcon iconUrl={user.iconUrl}></UserIcon> : null}
+
             <View style={localStyle.body}>
                 <View style={localStyle.title}>
-                    <Text style={localStyle.titleName} numberOfLines={1}>
-                        {user.name}
-                    </Text>
-                    <Text style={[localStyle.titleText, {flex: 1}]} numberOfLines={1}>
-                        《{diary.notebook_subject}》
-                    </Text>
+                    {(user && user.name) 
+                    ? ( <Text style={localStyle.titleName} numberOfLines={1}>
+                            {user.name}
+                        </Text>
+                    ) : null}
+                    {(user && user.name)
+                    ? ( <Text style={[localStyle.titleText, {flex: 1}]} numberOfLines={1}>
+                            《{diary.notebook_subject}》
+                        </Text>
+                    ) : null}
                     <Text style={localStyle.titleText}>
                         {moment(diary.created).format('H:mm')}
                     </Text>
@@ -99,7 +105,7 @@ const localStyle = StyleSheet.create({
         alignItems: "center",
         width: '100%',
         height: 30,
-        marginTop: 5,
+        marginTop: 10,
         justifyContent: 'space-between'
     }
 });

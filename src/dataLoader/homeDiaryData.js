@@ -3,16 +3,16 @@ import Api from '../util/api'
 
 const PAGE_SIZE = 21;
 
-export default class FollowListData {
-    
+export default class HomeDiaryData {
+
     list: [];
     last_id: 0;
 
     async refresh(loadMore = false) {
         let lastId = !loadMore ? 0 : this.last_id;
-        let data = await Api.getFollowDiaries(0, PAGE_SIZE, lastId);
+        let data = await Api.getTodayDiaries(0, PAGE_SIZE, lastId);
         let more = data.diaries.length === PAGE_SIZE;
-
+        
         if(!loadMore) {
             this.list = data.diaries.slice(0, PAGE_SIZE - 1);
 

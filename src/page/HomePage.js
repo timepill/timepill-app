@@ -5,7 +5,7 @@ import {Navigation} from 'react-native-navigation';
 import Api from '../util/api';
 
 import DiaryList from '../component/diary/diaryList'
-import HomeListData from '../dataLoader/homeListData';
+import HomeListData from '../dataLoader/homeDiaryData';
 
 
 export default class HomePage extends Component {

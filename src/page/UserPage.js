@@ -6,6 +6,7 @@ import {
   TabBar,
   SceneMap
 } from 'react-native-tab-view';
+import {Navigation} from 'react-native-navigation';
 
 import Api from '../util/api';
 import Color from '../style/color';
@@ -25,6 +26,18 @@ export default class UserPage extends Component {
                 { key: 'notebook', title: '日记本' }
             ]
         };
+    }
+
+    _onNotebookPress(notebook) {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'NotebookDetail',
+                passProps: {
+                    notebook: notebook
+                }
+            }
+        });
+        
     }
 
     _renderLabel = props => ({route}) => {
@@ -58,7 +71,7 @@ export default class UserPage extends Component {
         userInfo: () => <View style={localStyle.container}><Text style={localStyle.welcome}>user info !</Text></View>,
         diary: () => <View style={localStyle.container}><Text style={localStyle.welcome}>diary !</Text></View>,
         notebook: () => <NotebookList
-
+            onNotebookPress={this._onNotebookPress.bind(this)}
             navigator={this.props.navigator}
         />
     });

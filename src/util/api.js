@@ -73,11 +73,21 @@ async function getSelfNotebooks() {
 }
 
 async function getRelationUsers(page, page_size) {
-  return call('GET', `/relation?page=${page}&page_size=${page_size}`);
+    return call('GET', `/relation?page=${page}&page_size=${page_size}`);
 }
 
 async function getRelationReverseUsers(page, page_size) {
-  return call('GET', `/relation/reverse?page=${page}&page_size=${page_size}`);
+    return call('GET', `/relation/reverse?page=${page}&page_size=${page_size}`);
+}
+
+async function getNotebookDiaries(id, page, page_size) {
+    return call('GET', '/notebooks/' + id + '/diaries?page=' + page + '&page_size=' + page_size, null, 30000)
+            .then((json) => {
+                json.page = Number(json.page);
+                json.page_size = Number(json.page_size);
+
+                return json;
+            });
 }
 
 
@@ -170,6 +180,7 @@ export default {
 
     getTodayDiaries,
     getFollowDiaries,
+    getNotebookDiaries,
     
     getDiaryComments,
     getSelfNotebooks,

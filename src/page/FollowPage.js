@@ -6,7 +6,7 @@ import Api from '../util/api'
 import {Icon} from '../style/icon'
 
 import DiaryList from '../component/diary/diaryList'
-import FollowListData from '../dataLoader/followListData';
+import FollowListData from '../dataLoader/followDiaryData';
 
 
 export default class FollowPage extends Component {
