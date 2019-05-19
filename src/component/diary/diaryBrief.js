@@ -18,7 +18,7 @@ export default class DiaryBrief extends Component {
       let editable = this.props.editable;
 
       return (
-        <View style={localStyle.box}>
+        <View style={[localStyle.box, this.props.style]}>
             {(user && user.iconUrl)
                 ? <UserIcon iconUrl={user.iconUrl}></UserIcon> : null}
 

@@ -6,6 +6,7 @@ import Touchable from '../touchable';
 import Color from '../../style/color';
 
 import UserIcon from '../userIcon';
+import ListFooter from '../listFooter';
 
 
 export default class FollowUserList extends Component {
@@ -18,10 +19,13 @@ export default class FollowUserList extends Component {
 
         this.state = {
             users: [],
-            hasMore: false,
 
             refreshing: false,
-            refreshFailed: false
+            refreshFailed: false,
+
+            hasMore: true,
+            loadingMore: false,
+            loadFailed: false
         };
     }
 
@@ -31,13 +35,47 @@ export default class FollowUserList extends Component {
         });
     }
 
-    refresh(loadMore = false) {
+    refresh() {
         if (this.state.refreshing) {
             return;
         }
 
-        this.setState({hasMore: false, refreshing: true, refreshFailed: false});
-        this.dataSource.refresh(loadMore)
+        this.setState({refreshing: true, refreshFailed: false});
+        this.dataSource.refresh()
+                .then(result => {
+                    if(!result) {
+                        throw {
+                            message: 'refresh ' + this.listType + ' no result'
+                        }
+
+                    } else {
+                        console.log('refresh ' + this.listType + ' result:', result);
+
+                        this.setState({
+                            users: result.list ? result.list : [],
+                            refreshFailed: false
+                        });
+                    }
+
+                }).catch(e => {
+                    this.setState({
+                        refreshFailed: true
+                    });
+
+                }).done(() => {
+                    this.setState({
+                        refreshing: false
+                    });
+                });
+    }
+
+    loadMore() {
+        if (this.state.loadingMore) {
+            return;
+        }
+
+        this.setState({loadingMore: true, loadFailed: false});
+        this.dataSource.refresh(true)
                 .then(result => {
                     if(!result) {
                         throw {
@@ -50,30 +88,21 @@ export default class FollowUserList extends Component {
                         this.setState({
                             users: result.list ? result.list : [],
                             hasMore: result.more,
-                            refreshFailed: false
+                            loadFailed: false
                         });
                     }
 
                 }).catch(e => {
                     this.setState({
-                        users: [],
                         hasMore: false,
-                        refreshFailed: true
+                        loadFailed: true
                     });
 
                 }).done(() => {
                     this.setState({
-                        refreshing: false
+                        loadingMore: false
                     });
                 });
-    }
-
-    loadMore() {
-        if (this.state.refreshing) {
-            return;
-        }
-
-        this.refresh(true);
     }
 
     render() {
@@ -103,10 +132,26 @@ export default class FollowUserList extends Component {
                         );
                     }}
 
+                    ListFooterComponent={() => {
+                        if (this.state.refreshing || this.state.loadingMore || this.state.users.length == 0) {
+                            return null;
+                        }
+
+                        if (this.state.loadFailed) {
+                            return ListFooter.renderFooterFailed(this.loadMore.bind(this));
+                        }
+
+                        if (!this.state.hasMore) {
+                            return ListFooter.renderFooterEnd();
+                        }
+
+                        return ListFooter.renderFooterLoading();
+                    }}
+
                     refreshing={this.state.refreshing}
                     onRefresh={this.refresh.bind(this)}
 
-                    onEndReachedThreshold={5}
+                    onEndReachedThreshold={2}
                     onEndReached={this.state.hasMore ? this.loadMore.bind(this) : null}
                 />
             </View>

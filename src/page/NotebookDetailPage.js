@@ -9,9 +9,9 @@ export default class NotebookDetailPage extends Component {
 
     render() {
         return (
-            <ScrollView style={{flex: 1}}>
+            <View style={{flex: 1}}>
                 <NotebookDiaryList notebook={this.props.notebook}></NotebookDiaryList>
-            </ScrollView>
+            </View>
       );
     }
 }

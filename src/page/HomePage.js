@@ -55,11 +55,11 @@ export default class HomePage extends Component {
 const localStyle = StyleSheet.create({
     wrap: {
         flex: 1,
-        backgroundColor: '#fff',
-        paddingTop: 20
+        backgroundColor: '#fff'
     },
     header: {
         paddingLeft: 20,
+        paddingTop: 20,
         flexDirection: "row"
     },
     title: {
