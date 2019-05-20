@@ -92,12 +92,17 @@ async function getNotebookDiaries(id, page, page_size) {
 }
 
 async function getSelfInfoByStore() {
-  return await TokenManager.getUserInfo();
+    return await TokenManager.getUserInfo();
 }
 
 async function getUserTodayDiaries(userId) {
-  return call('GET', '/users/' + userId + '/diaries/')
+    return call('GET', '/users/' + userId + '/diaries/');
 }
+
+async function getMessagesHistory() {
+    return call('GET', '/tip/history');
+}
+
 
 
 async function call(method, api, body, _timeout = 10000) {
@@ -197,5 +202,7 @@ export default {
     getSelfNotebooks,
     
     getRelationUsers,
-    getRelationReverseUsers
+    getRelationReverseUsers,
+
+    getMessagesHistory
 }
