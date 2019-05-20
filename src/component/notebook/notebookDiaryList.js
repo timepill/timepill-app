@@ -97,6 +97,7 @@ export default class NotebookDiaryList extends Component {
                         let diaries = this.formatDiaries(result.list);
                         this.setState({
                             diaries,
+                            hasMore: result.more,
                             refreshFailed: false
                         });
                     }
@@ -159,7 +160,9 @@ export default class NotebookDiaryList extends Component {
 
                 renderItem={(rowData) => {
                     return (<Touchable onPress={() => {}}>
-                        <DiaryBrief diary={rowData.item}></DiaryBrief>
+                        <DiaryBrief diary={rowData.item}
+                            showField={['createdTime']}>
+                        </DiaryBrief>
                     </Touchable>);
                 }}
 

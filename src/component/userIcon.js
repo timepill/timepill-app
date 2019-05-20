@@ -11,8 +11,10 @@ export default class UserIcon extends Component {
 
     render() {
         return (
-            <Avatar small rounded
+            <Avatar rounded
                 containerStyle={localStyle.container}
+                width={this.props.width || 40}
+                height={this.props.height || 40}
                 source={{uri: this.props.iconUrl}}
                 onPress={this.props.onPress ? this.props.onPress : this._defaultOnPress.bind(this)}
                 activeOpacity={0.7}

@@ -66,6 +66,7 @@ export default class DiaryList extends Component {
 
                         this.setState({
                             diaries: result.list ? result.list : [],
+                            hasMore: result.more,
                             refreshFailed: false
                         });
                     }
@@ -130,7 +131,9 @@ export default class DiaryList extends Component {
                     renderItem={({item}) => {
                         return (
                             <Touchable onPress={() => this.props.onDiaryPress(item)}>
-                                <DiaryBrief diary={item}></DiaryBrief>
+                                <DiaryBrief diary={item}
+                                    showField={this.props.showField}>
+                                </DiaryBrief>
                             </Touchable>
                         )
                     }}

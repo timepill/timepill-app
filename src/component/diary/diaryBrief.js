@@ -12,31 +12,53 @@ import DiaryActionIcon from './diaryActionIcon';
 
 export default class DiaryBrief extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.diary = props.diary;
+        this.editable = props.editable || false;
+
+        this.showField = ['icon', 'userName', 'subject', 'createdTime'];
+        if(props.showField && props.showField.length > 0) {
+            this.showField = props.showField
+        }
+    }
+
+    show(field) {
+        return this.showField.indexOf(field) >= 0;
+    }
+
     render() {
-      let diary = this.props.diary;
+      let diary = this.diary;
+      if(!diary) {
+        return null;
+      }
+
       let user = diary.user;
-      let editable = this.props.editable;
 
       return (
         <View style={[localStyle.box, this.props.style]}>
-            {(user && user.iconUrl)
+            {(user && user.iconUrl && this.show('icon'))
                 ? <UserIcon iconUrl={user.iconUrl}></UserIcon> : null}
 
             <View style={localStyle.body}>
                 <View style={localStyle.title}>
-                    {(user && user.name) 
+                    {(user && user.name && this.show('userName'))
                     ? ( <Text style={localStyle.titleName} numberOfLines={1}>
                             {user.name}
                         </Text>
                     ) : null}
-                    {(user && user.name)
+                    {(diary.notebook_subject && this.show('subject'))
                     ? ( <Text style={[localStyle.titleText, {flex: 1}]} numberOfLines={1}>
                             《{diary.notebook_subject}》
                         </Text>
                     ) : null}
-                    <Text style={localStyle.titleText}>
-                        {moment(diary.created).format('H:mm')}
-                    </Text>
+                    {(diary.created && this.show('createdTime'))
+                    ? ( <Text style={localStyle.titleText}>
+                            {moment(diary.created).format('H:mm')}
+                        </Text>
+                    ) : null}
+                    
                 </View>
 
                 <Text style={localStyle.content} numberOfLines={5}>
@@ -53,7 +75,7 @@ export default class DiaryBrief extends Component {
                     }
                     <View style={{flex: 1}} />
                     {
-                        editable
+                        this.editable
                         ? <DiaryActionIcon></DiaryActionIcon>
                         : null
                     }

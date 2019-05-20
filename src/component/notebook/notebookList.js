@@ -60,8 +60,6 @@ export default class NotebookList extends Component {
         this.setState({refreshing: true});
         Api.getSelfNotebooks()
             .then(notebooks => {
-                console.log('get notebooks:', notebooks);
-                
                 let groups = this.createGroup(notebooks, this.itemsPerRow);
                 this.setState({
                     notebooks: groups

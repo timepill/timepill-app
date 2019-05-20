@@ -53,6 +53,7 @@ export default class FollowUserList extends Component {
 
                         this.setState({
                             users: result.list ? result.list : [],
+                            hasMore: result.more,
                             refreshFailed: false
                         });
                     }

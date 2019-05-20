@@ -22,7 +22,7 @@ export default class Loading extends Component {
             );
 
         } else {
-            return <View />
+            return null;
         }
     }
 }

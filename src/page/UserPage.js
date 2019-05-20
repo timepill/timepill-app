@@ -11,17 +11,23 @@ import {Navigation} from 'react-native-navigation';
 import Api from '../util/api';
 import Color from '../style/color';
 
-import NotebookList from '../component/notebook/notebookList'
+import UserIntro from '../component/userIntro';
+import UserDiaryData from '../dataLoader/userDiaryData';
+import DiaryList from '../component/diary/diaryList';
+import NotebookList from '../component/notebook/notebookList';
 
 
 export default class UserPage extends Component {
 
     constructor(props) {
         super(props);
+
+        this.dataSource = new UserDiaryData();
+
         this.state = {
             index: 0,
             routes: [
-                { key: 'userInfo', title: '简介' },
+                { key: 'userIntro', title: '简介' },
                 { key: 'diary', title: '日记' },
                 { key: 'notebook', title: '日记本' }
             ]
@@ -68,8 +74,14 @@ export default class UserPage extends Component {
     };
 
     _renderScene = SceneMap({
-        userInfo: () => <View style={localStyle.container}><Text style={localStyle.welcome}>user info !</Text></View>,
-        diary: () => <View style={localStyle.container}><Text style={localStyle.welcome}>diary !</Text></View>,
+        userIntro: () => <UserIntro
+        />,
+        diary: () => <DiaryList
+            dataSource={this.dataSource}
+            onDiaryPress={() => {}}
+
+            navigator={this.props.navigator}
+        />,
         notebook: () => <NotebookList
             onNotebookPress={this._onNotebookPress.bind(this)}
             navigator={this.props.navigator}
@@ -100,14 +112,6 @@ export default class UserPage extends Component {
 }
 
 const localStyle = StyleSheet.create({
-    
-    welcome: {
-      fontSize: 20,
-      textAlign: 'center',
-      marginTop: 40
-    },
-
-
     container: {
         flex: 1
     },

@@ -25,6 +25,7 @@ async function login(username, password) {
 
     try {
         const userInfo = await getSelfInfo();
+
         await TokenManager.setUserInfo(userInfo);
         await TokenManager.setLoginPassword('');
 
@@ -88,6 +89,14 @@ async function getNotebookDiaries(id, page, page_size) {
 
                 return json;
             });
+}
+
+async function getSelfInfoByStore() {
+  return await TokenManager.getUserInfo();
+}
+
+async function getUserTodayDiaries(userId) {
+  return call('GET', '/users/' + userId + '/diaries/')
 }
 
 
@@ -177,10 +186,12 @@ export default {
     IS_IPHONEX,
 
     login,
+    getSelfInfoByStore,
 
     getTodayDiaries,
     getFollowDiaries,
     getNotebookDiaries,
+    getUserTodayDiaries,
     
     getDiaryComments,
     getSelfNotebooks,

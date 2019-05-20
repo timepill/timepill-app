@@ -6,7 +6,7 @@ import Api from '../util/api'
 import {Icon} from '../style/icon'
 
 import DiaryList from '../component/diary/diaryList'
-import FollowListData from '../dataLoader/followDiaryData';
+import FollowDiaryData from '../dataLoader/followDiaryData';
 
 
 export default class FollowPage extends Component {
@@ -15,7 +15,7 @@ export default class FollowPage extends Component {
         super(props);
 
         Navigation.events().bindComponent(this);
-        this.dataSource = new FollowListData();
+        this.dataSource = new FollowDiaryData();
     }
 
     static options(passProps) {

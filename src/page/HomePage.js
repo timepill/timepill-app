@@ -5,14 +5,14 @@ import {Navigation} from 'react-native-navigation';
 import Api from '../util/api';
 
 import DiaryList from '../component/diary/diaryList'
-import HomeListData from '../dataLoader/homeDiaryData';
+import HomeDiaryData from '../dataLoader/homeDiaryData';
 
 
 export default class HomePage extends Component {
 
     constructor(props) {
         super(props);
-        this.dataSource = new HomeListData();
+        this.dataSource = new HomeDiaryData();
     }
 
     _onDiaryPress(diary) {
@@ -28,20 +28,11 @@ export default class HomePage extends Component {
         
     }
 
-    renderHeader() {
-        return (
-            <View style={localStyle.header}>
-                <Text style={localStyle.title}>胶囊日记</Text>
-            </View>
-        );
-    }
-
     render() {
         return (
           <View style={localStyle.wrap}>
                 <DiaryList ref={(r) => this.list = r}
                     dataSource={this.dataSource}
-                    header={this.renderHeader.bind(this)}
                     onDiaryPress={this._onDiaryPress.bind(this)}
 
                     navigator={this.props.navigator}
@@ -56,15 +47,5 @@ const localStyle = StyleSheet.create({
     wrap: {
         flex: 1,
         backgroundColor: '#fff'
-    },
-    header: {
-        paddingLeft: 20,
-        paddingTop: 20,
-        flexDirection: "row"
-    },
-    title: {
-        flex: 1,
-        fontSize: 30,
-        color: '#000'
     }
 });
