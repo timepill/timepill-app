@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import ActionSheet from 'react-native-actionsheet-api';
 
 import Color from '../../style/color'
@@ -30,7 +30,7 @@ export default class DiaryActionIcon extends Component {
     render() {
         return (
             <TouchableOpacity onPress={this.props.onPress ? this.props.onPress : this._defaultOnPress.bind(this)}>
-                <Icon name="ios-more"
+                <Ionicons name="ios-more"
                       size={24}
                       color={Color.inactiveText}
                       style={localStyle.moreIcon} />
