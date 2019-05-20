@@ -11,20 +11,33 @@ import CommentList from '../comment/commentList';
 
 export default class DiaryFull extends Component {
 
+    constructor(props) {
+        super(props);
+        this.diary = props.diary;
+    }
+
     render() {
-        let diary = this.props.diary;
+        let diary = this.diary;
+        if(!diary) {
+            return null;
+        }
+        
         let user = diary.user;
-        let editable = this.props.editable;
 
         return (
             <View>
                 <View style={localStyle.box}>
-                    <UserIcon iconUrl={user.iconUrl}></UserIcon>
+                    {user && user.iconUrl
+                        ? <UserIcon iconUrl={user.iconUrl}></UserIcon> : null}
+                    
                     <View style={localStyle.body}>
                         <View style={localStyle.title}>
-                            <Text style={localStyle.titleName} numberOfLines={1}>
-                                {user.name}
-                            </Text>
+                            {user && user.name
+                            ? ( <Text style={localStyle.titleName} numberOfLines={1}>
+                                    {user.name}
+                                </Text>
+                            ) : null}
+
                             <Text style={[localStyle.titleText, {flex: 1}]} numberOfLines={1}>
                                 《{diary.notebook_subject}》
                             </Text>

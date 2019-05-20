@@ -20,12 +20,20 @@ export default class HomePage extends Component {
         Navigation.push(this.props.componentId, {
             component: {
                 name: 'DiaryDetail',
+                options: {
+                    bottomTabs: {
+                        visible: false,
+
+                        // hide bottom tab for android
+                        drawBehind: true,
+                        animate: true
+                    }
+                },
                 passProps: {
                     diary: diary
                 }
             }
         });
-        
     }
 
     render() {

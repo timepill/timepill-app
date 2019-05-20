@@ -63,8 +63,21 @@ export default class CommentList extends Component {
                             </Touchable>
                         )
                     }}
+
+                    ListHeaderComponent={() => {
+                        let count = this.state.comments.length;
+                        return (
+                            <View>
+                                <View style={localStyle.line} />
+                                <Text style={localStyle.header}>
+                                  {count > 0 ? `共 ${count} 条回复` : '还没有人回复'}
+                                </Text>
+                            </View>
+                        );
+                    }}
                 >
                 </FlatList>
+
             </View>
         );
     }
@@ -73,8 +86,19 @@ export default class CommentList extends Component {
 const localStyle = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Color.navBackground,
+        backgroundColor: 'white',
         justifyContent: 'space-between',
         paddingBottom: Api.IS_IPHONEX ? 30 : 0
+    },
+    line: {
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderColor: Color.line,
+        marginHorizontal: 15
+    },
+    header: {
+        marginHorizontal: 16,
+        marginTop: 20,
+        marginBottom: 20,
+        color: Color.inactiveText
     }
 });
