@@ -8,6 +8,7 @@ import {
     RefreshControl,
     TouchableOpacity
 } from 'react-native';
+import {Navigation} from 'react-native-navigation';
 
 import Api from '../../util/api';
 import Notebook from './notebook'
@@ -20,6 +21,8 @@ export default class NotebookList extends Component {
 
         this.itemsPerRow = 2;
         this.state = {
+            user: props.user,
+
             notebooks: [],
             refreshing: false
         };
@@ -56,9 +59,31 @@ export default class NotebookList extends Component {
         return groups;
     }
 
+    _onNotebookPress(notebook) {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'NotebookDetail',
+                options: {
+                    bottomTabs: {
+                        visible: false,
+
+                        // hide bottom tab for android
+                        drawBehind: true,
+                        animate: true
+                    }
+                },
+                passProps: {
+                    notebook: notebook
+                }
+            }
+        });
+    }
+
     refresh() {
         this.setState({refreshing: true});
-        Api.getSelfNotebooks()
+
+        let user = this.state.user;
+        (user ? Api.getUserNotebooks(user.id) : Api.getSelfNotebooks())
             .then(notebooks => {
                 let groups = this.createGroup(notebooks, this.itemsPerRow);
                 this.setState({
@@ -73,7 +98,7 @@ export default class NotebookList extends Component {
     _renderItem(notebook) {
         return notebook ? (
             <TouchableOpacity key={notebook.id} activeOpacity={0.7}
-                onPress={() => this.props.onNotebookPress(notebook)}>
+                onPress={() => this._onNotebookPress(notebook)}>
 
                 <Notebook key={notebook.id} notebook={notebook} />
 

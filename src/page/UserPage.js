@@ -22,7 +22,9 @@ export default class UserPage extends Component {
     constructor(props) {
         super(props);
 
-        this.dataSource = new UserDiaryData();
+        this.user = props.user;
+        this.userId = this.user ? this.user.id : (props.userId || 0);
+        this.dataSource = new UserDiaryData(this.userId);
 
         this.state = {
             index: 0,
@@ -34,17 +36,7 @@ export default class UserPage extends Component {
         };
     }
 
-    _onNotebookPress(notebook) {
-        Navigation.push(this.props.componentId, {
-            component: {
-                name: 'NotebookDetail',
-                passProps: {
-                    notebook: notebook
-                }
-            }
-        });
-        
-    }
+    
 
     _renderLabel = props => ({route}) => {
         let routes = props.navigationState.routes;
@@ -75,16 +67,15 @@ export default class UserPage extends Component {
 
     _renderScene = SceneMap({
         userIntro: () => <UserIntro
+            user={this.user}
         />,
         diary: () => <DiaryList
             dataSource={this.dataSource}
-            onDiaryPress={() => {}}
-
-            navigator={this.props.navigator}
+            {...this.props}
         />,
         notebook: () => <NotebookList
-            onNotebookPress={this._onNotebookPress.bind(this)}
-            navigator={this.props.navigator}
+            user={this.user}
+            {...this.props}
         />
     });
 

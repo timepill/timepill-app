@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
     ActivityIndicator
 } from 'react-native';
+import {Navigation} from 'react-native-navigation';
 import moment from 'moment'
 
 import Api from '../../util/api';
@@ -149,6 +150,26 @@ export default class NotebookDiaryList extends Component {
                 });
     }
 
+    _onDiaryPress(diary) {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'DiaryDetail',
+                options: {
+                    bottomTabs: {
+                        visible: false,
+
+                        // hide bottom tab for android
+                        drawBehind: true,
+                        animate: true
+                    }
+                },
+                passProps: {
+                    diary: diary
+                }
+            }
+        });
+    }
+
     render() {
         return this.notebook ? (
           <View style={localStyle.container}>
@@ -159,7 +180,7 @@ export default class NotebookDiaryList extends Component {
                 sections={this.state.diaries}
 
                 renderItem={(rowData) => {
-                    return (<Touchable onPress={() => {}}>
+                    return (<Touchable onPress={() => this._onDiaryPress(rowData.item)}>
                         <DiaryBrief diary={rowData.item}
                             showField={['createdTime']}>
                         </DiaryBrief>

@@ -42,6 +42,46 @@ export default class DiaryList extends Component {
         });
     }
 
+    _onUserIconPress(diary) {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'User',
+                options: {
+                    bottomTabs: {
+                        visible: false,
+
+                        // hide bottom tab for android
+                        drawBehind: true,
+                        animate: true
+                    }
+                },
+                passProps: {
+                    user: diary.user
+                }
+            }
+        });
+    }
+
+    _onDiaryPress(diary) {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'DiaryDetail',
+                options: {
+                    bottomTabs: {
+                        visible: false,
+
+                        // hide bottom tab for android
+                        drawBehind: true,
+                        animate: true
+                    }
+                },
+                passProps: {
+                    diary: diary
+                }
+            }
+        });
+    }
+
     async refresh() {
         if (this.state.refreshing) {
             return;
@@ -130,9 +170,10 @@ export default class DiaryList extends Component {
 
                     renderItem={({item}) => {
                         return (
-                            <Touchable onPress={() => this.props.onDiaryPress(item)}>
+                            <Touchable onPress={() => this._onDiaryPress(item)}>
                                 <DiaryBrief diary={item}
-                                    showField={this.props.showField}>
+                                    showField={this.props.showField}
+                                    onUserIconPress={() => this._onUserIconPress(item)}>
                                 </DiaryBrief>
                             </Touchable>
                         )

@@ -35,20 +35,6 @@ export default class FollowPage extends Component {
     }
 
     navigationButtonPressed({buttonId}) {
-        /*
-        Navigation.setRoot({
-          root: {
-            stack: {
-              children: [{
-                component: {
-                  name: 'FollowUser'
-                }
-              }]
-            }
-          }
-        });
-        */
-
         Navigation.push(this.props.componentId, {
             component: {
                 name: 'FollowUser',
@@ -66,34 +52,12 @@ export default class FollowPage extends Component {
         
     }
 
-    _onDiaryPress(diary) {
-        Navigation.push(this.props.componentId, {
-            component: {
-                name: 'DiaryDetail',
-                passProps: {
-                    diary: diary
-                }
-            }
-        });
-    }
-
-    renderHeader() {
-        return (
-            <View style={localStyle.header}>
-                <Text style={localStyle.title}>关注</Text>
-            </View>
-        );
-    }
-
     render() {
         return (
           <View style={localStyle.wrap}>
                 <DiaryList ref={(r) => this.list = r}
                     dataSource={this.dataSource}
-                    /* header={this.renderHeader.bind(this)} */
-                    onDiaryPress={this._onDiaryPress.bind(this)}
-
-                    navigator={this.props.navigator}
+                    {...this.props}
 
                 ></DiaryList>
           </View>

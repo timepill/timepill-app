@@ -65,22 +65,6 @@ async function getFollowDiaries(page = 1, page_size = 20, first_id = '') {
         });
 }
 
-async function getDiaryComments(diaryId) {
-    return call('GET', '/diaries/' + diaryId + '/comments')
-}
-
-async function getSelfNotebooks() {
-    return call('GET', '/notebooks/my')
-}
-
-async function getRelationUsers(page, page_size) {
-    return call('GET', `/relation?page=${page}&page_size=${page_size}`);
-}
-
-async function getRelationReverseUsers(page, page_size) {
-    return call('GET', `/relation/reverse?page=${page}&page_size=${page_size}`);
-}
-
 async function getNotebookDiaries(id, page, page_size) {
     return call('GET', '/notebooks/' + id + '/diaries?page=' + page + '&page_size=' + page_size, null, 30000)
             .then((json) => {
@@ -91,12 +75,36 @@ async function getNotebookDiaries(id, page, page_size) {
             });
 }
 
+async function getUserTodayDiaries(userId) {
+    return call('GET', '/users/' + userId + '/diaries/');
+}
+
+async function getDiaryComments(diaryId) {
+    return call('GET', '/diaries/' + diaryId + '/comments')
+}
+
+async function getSelfNotebooks() {
+    return call('GET', '/notebooks/my')
+}
+
+async function getUserNotebooks(id) {
+    return call('GET', '/users/' + id + '/notebooks')
+}
+
+async function getRelationUsers(page, page_size) {
+    return call('GET', `/relation?page=${page}&page_size=${page_size}`);
+}
+
+async function getRelationReverseUsers(page, page_size) {
+    return call('GET', `/relation/reverse?page=${page}&page_size=${page_size}`);
+}
+
 async function getSelfInfoByStore() {
     return await TokenManager.getUserInfo();
 }
 
-async function getUserTodayDiaries(userId) {
-    return call('GET', '/users/' + userId + '/diaries/');
+async function getUserInfo(id) {
+    return call('GET', '/users/' + id)
 }
 
 async function getMessagesHistory() {
@@ -192,6 +200,7 @@ export default {
 
     login,
     getSelfInfoByStore,
+    getUserInfo,
 
     getTodayDiaries,
     getFollowDiaries,
@@ -199,7 +208,9 @@ export default {
     getUserTodayDiaries,
     
     getDiaryComments,
+    
     getSelfNotebooks,
+    getUserNotebooks,
     
     getRelationUsers,
     getRelationReverseUsers,

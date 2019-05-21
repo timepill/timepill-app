@@ -29,7 +29,8 @@ export default class UserIntro extends Component {
     }
 
     loadUser() {
-        Api.getSelfInfoByStore()
+        let user = this.state.user;
+        (user ? Api.getUserInfo(user.id) : Api.getSelfInfoByStore())
             .then(user => {
                 this.setState({
                     user: user

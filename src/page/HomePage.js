@@ -15,35 +15,12 @@ export default class HomePage extends Component {
         this.dataSource = new HomeDiaryData();
     }
 
-    _onDiaryPress(diary) {
-        console.log('componentId:', this.props.componentId, diary);
-        Navigation.push(this.props.componentId, {
-            component: {
-                name: 'DiaryDetail',
-                options: {
-                    bottomTabs: {
-                        visible: false,
-
-                        // hide bottom tab for android
-                        drawBehind: true,
-                        animate: true
-                    }
-                },
-                passProps: {
-                    diary: diary
-                }
-            }
-        });
-    }
-
     render() {
         return (
           <View style={localStyle.wrap}>
                 <DiaryList ref={(r) => this.list = r}
                     dataSource={this.dataSource}
-                    onDiaryPress={this._onDiaryPress.bind(this)}
-
-                    navigator={this.props.navigator}
+                    {...this.props}
 
                 ></DiaryList>
           </View>

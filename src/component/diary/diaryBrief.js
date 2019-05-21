@@ -39,7 +39,7 @@ export default class DiaryBrief extends Component {
       return (
         <View style={[localStyle.box, this.props.style]}>
             {(user && user.iconUrl && this.show('icon'))
-                ? <UserIcon iconUrl={user.iconUrl}></UserIcon> : null}
+                ? <UserIcon iconUrl={user.iconUrl} onPress={this.props.onUserIconPress}></UserIcon> : null}
 
             <View style={localStyle.body}>
                 <View style={localStyle.title}>
