@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, InteractionManager, FlatList} from 'react-native';
+import {StyleSheet, Text, View, InteractionManager, FlatList, Alert} from 'react-native';
+import {Navigation} from 'react-native-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Touchable from '../touchable';
@@ -33,6 +34,41 @@ export default class FollowUserList extends Component {
         InteractionManager.runAfterInteractions(() => {
             this.refresh();
         });
+    }
+
+    _onItemPress(user) {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'User',
+                options: {
+                    bottomTabs: {
+                        visible: false,
+
+                        // hide bottom tab for android
+                        drawBehind: true,
+                        animate: true
+                    }
+                },
+                passProps: {
+                    user: user
+                }
+            }
+        });
+    }
+
+    _onDeletePress(user) {
+        Alert.alert('提示', '确定删除关注?', [
+            {text: '删除', style: 'destructive', onPress: () => {
+                this.props.onDeletePress(user.id)
+                    .done(() => {
+                        let filterUsers = this.state.users.filter((it) => it.id !== user.id);
+                        this.setState({
+                            users: filterUsers
+                        });
+                    });
+            }},
+            {text: '取消', onPress: () => {}}
+        ]);
     }
 
     refresh() {
@@ -119,11 +155,11 @@ export default class FollowUserList extends Component {
 
                     renderItem={({item}) => {
                         return (
-                          <Touchable key={item.id} onPress={() => {}}>
+                          <Touchable key={item.id} onPress={() => this._onItemPress(item)}>
                             <View style={localStyle.box}>
                                 <UserIcon iconUrl={item.iconUrl}></UserIcon>
                                 <Text style={localStyle.userName}>{item.name}</Text>
-                                <Touchable onPress={() => {}}>
+                                <Touchable onPress={() => this._onDeletePress(item)}>
                                     <Ionicons name="md-close" size={20}
                                         style={localStyle.removeIcon}
                                         color={Color.inactiveText} />

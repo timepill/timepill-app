@@ -14,7 +14,7 @@ import FollowingUserData from '../dataLoader/followingUserData'
 import FollowedByUserData from '../dataLoader/followedByUserData'
 
 
-export default class FollowPage extends Component {
+export default class FollowUserPage extends Component {
 
     constructor(props) {
         super(props);
@@ -70,9 +70,17 @@ export default class FollowPage extends Component {
     _renderScene = SceneMap({
         following: () => <FollowUserList
             listType={'followingUser'} dataSource={new FollowingUserData()}
+            onDeletePress={async (id) => {
+                return Api.deleteFollow(id);
+            }}
+            {...this.props}
         />,
         followedBy: () => <FollowUserList
             listType={'followedByUser'} dataSource={new FollowedByUserData()}
+            onDeletePress={async (id) => {
+                return Api.deleteFollowBy(id);
+            }}
+            {...this.props}
         />
     });
 

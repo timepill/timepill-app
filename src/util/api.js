@@ -6,6 +6,7 @@ import TokenManager from './token'
 
 
 const IS_ANDROID = Platform.OS === 'android';
+const IS_IOS = Platform.OS === 'ios';
 const DEVICE_WINDOW = Dimensions.get('window')
 
 const OS = DeviceInfo.getSystemName();
@@ -43,6 +44,14 @@ async function login(username, password) {
 
 async function getSelfInfo() {
     return call('GET', '/users/my');
+}
+
+async function getSelfInfoByStore() {
+    return await TokenManager.getUserInfo();
+}
+
+async function getUserInfo(id) {
+    return call('GET', '/users/' + id)
 }
 
 async function getTodayDiaries(page = 1, page_size = 20, first_id = '') {
@@ -99,12 +108,12 @@ async function getRelationReverseUsers(page, page_size) {
     return call('GET', `/relation/reverse?page=${page}&page_size=${page_size}`);
 }
 
-async function getSelfInfoByStore() {
-    return await TokenManager.getUserInfo();
+async function deleteFollow(user_id) {
+    return call('DELETE', '/relation/' + user_id);
 }
 
-async function getUserInfo(id) {
-    return call('GET', '/users/' + id)
+async function deleteFollowBy(user_id) {
+    return call('DELETE', '/relation/reverse/' + user_id);
 }
 
 async function getMessagesHistory() {
@@ -191,6 +200,7 @@ function handleCatch(err) {
 
 export default {
     IS_ANDROID,
+    IS_IOS,
     DEVICE_WINDOW,
     OS,
     OS_VERSION,
@@ -214,6 +224,8 @@ export default {
     
     getRelationUsers,
     getRelationReverseUsers,
+    deleteFollow,
+    deleteFollowBy,
 
     getMessagesHistory
 }
