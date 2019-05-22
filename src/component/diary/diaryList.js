@@ -4,10 +4,13 @@ import {
     ActivityIndicator,
     StyleSheet,
     FlatList,
-    Text, View
+    Text,
+    View,
+    Alert
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {Divider} from "react-native-elements";
+import ActionSheet from 'react-native-actionsheet-api';
 
 import Color from '../../style/color';
 import Msg from '../../util/msg';
@@ -23,7 +26,9 @@ export default class DiaryList extends Component {
     constructor(props) {
         super(props);
 
+        this.editable = props.editable || false;
         this.dataSource = props.dataSource;
+
         this.state = {
             diaries: [],
             
@@ -78,6 +83,38 @@ export default class DiaryList extends Component {
                 passProps: {
                     diary: diary
                 }
+            }
+        });
+    }
+
+    _onDeleteDiary(diary) {
+        ActionSheet.showActionSheetWithOptions({
+            options:['修改','删除', '取消'],
+            cancelButtonIndex: 2,
+            destructiveButtonIndex: 1
+
+        }, (index) => {
+            if(index === 0) {
+                
+
+            } else if (index === 1) {
+                Alert.alert('提示', '确认删除日记?', [
+                    {text: '删除', style: 'destructive', onPress: () => {
+                        Api.deleteDiary(diary.id)
+                            .then(() => {
+                                let filterDiaries = this.state.diaries.filter((it) => it.id !== diary.id);
+                                this.setState({
+                                    diaries: filterDiaries
+                                });
+
+                                Msg.showMsg('日记已删除');
+                            })
+                            .catch(e => {
+                                Msg.showMsg('日记删除失败');
+                            });
+                    }},
+                    {text: '取消', onPress: () => {}},
+                ]);
             }
         });
     }
@@ -173,7 +210,12 @@ export default class DiaryList extends Component {
                             <Touchable onPress={() => this._onDiaryPress(item)}>
                                 <DiaryBrief diary={item}
                                     showField={this.props.showField}
-                                    onUserIconPress={() => this._onUserIconPress(item)}>
+                                    editable={this.editable}
+
+                                    onUserIconPress={() => this._onUserIconPress(item)}
+                                    onDeleteDiary={() => this._onDeleteDiary(item)}
+                                >
+
                                 </DiaryBrief>
                             </Touchable>
                         )
@@ -204,6 +246,7 @@ export default class DiaryList extends Component {
                     onEndReached={this.state.hasMore ? this.loadMore.bind(this) : null}
                 >
                 </FlatList>
+                <ActionSheet/>
             </View>
         );
     }

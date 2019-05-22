@@ -71,6 +71,7 @@ export default class UserPage extends Component {
         />,
         diary: () => <DiaryList
             dataSource={this.dataSource}
+            editable={!this.user}
             {...this.props}
         />,
         notebook: () => <NotebookList

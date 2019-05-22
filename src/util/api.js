@@ -120,6 +120,9 @@ async function getMessagesHistory() {
     return call('GET', '/tip/history');
 }
 
+async function deleteDiary(id) {
+    return call('DELETE', '/diaries/' + id);
+}
 
 
 async function call(method, api, body, _timeout = 10000) {
@@ -227,5 +230,7 @@ export default {
     deleteFollow,
     deleteFollowBy,
 
-    getMessagesHistory
+    getMessagesHistory,
+
+    deleteDiary
 }
