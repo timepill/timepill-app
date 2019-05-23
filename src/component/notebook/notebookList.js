@@ -12,6 +12,7 @@ import {Navigation} from 'react-native-navigation';
 
 import Api from '../../util/api';
 import Notebook from './notebook'
+import NotebookAdd from './notebookAdd'
 
 
 export default class NotebookList extends Component {
@@ -59,6 +60,17 @@ export default class NotebookList extends Component {
         return groups;
     }
 
+    _onAddPress() {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'NotebookAdd',
+                passProps: {
+                    
+                }
+            }
+        });
+    }
+
     _onNotebookPress(notebook) {
         Navigation.push(this.props.componentId, {
             component: {
@@ -85,6 +97,10 @@ export default class NotebookList extends Component {
         let user = this.state.user;
         (user ? Api.getUserNotebooks(user.id) : Api.getSelfNotebooks())
             .then(notebooks => {
+                if(!user) {
+                    notebooks.unshift({id: 'new'});
+                }
+
                 let groups = this.createGroup(notebooks, this.itemsPerRow);
                 this.setState({
                     notebooks: groups
@@ -93,6 +109,16 @@ export default class NotebookList extends Component {
             }).done(() => {
                 this.setState({refreshing: false});
             });
+    }
+
+    _renderAdd() {
+        return (<NotebookAdd key='new'
+                    onPress={() => this._onAddPress()}>
+        </NotebookAdd>);
+    }
+
+    _renderPlaceHolder() {
+        return <View key="placeholder" style={{width: 140}} />;
     }
 
     _renderItem(notebook) {
@@ -113,11 +139,18 @@ export default class NotebookList extends Component {
                 data={this.state.notebooks}
 
                 keyExtractor={(item, index) => {
-                    return item[0].id.toString()
+                    return item[0].id.toString();
                 }}
 
                 renderItem={({item}) => {
                     let row = item.map((notebook) => {
+                        if(!notebook) {
+                            return this._renderPlaceHolder();
+
+                        } else if(notebook.id == 'new') {
+                            return this._renderAdd();
+                        }
+
                         return this._renderItem(notebook);
                     });
 

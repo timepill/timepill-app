@@ -5,4 +5,14 @@
         <!-- Customize your theme here. -->
     </style>
 
+<style name="SpinnerDatePickerDialog" parent="android:Theme.Material.Light.Dialog">
+    <item name="android:datePickerStyle">@style/MyDatePicker</item>
+    <item name="android:colorAccent">#2196f3</item>
+    <item name="android:colorControlNormal">#2196f3</item>
+</style>
+
+<style name="MyDatePicker" parent="android:Widget.Material.DatePicker">
+    <item name="android:datePickerMode">spinner</item>
+</style>
+
 </resources>
