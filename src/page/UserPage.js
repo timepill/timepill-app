@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Animated} from 'react-native';
+import {StyleSheet, Text, View, Animated, DeviceEventEmitter} from 'react-native';
 import {
   PagerScroll,
   TabView,
@@ -9,6 +9,7 @@ import {
 import {Navigation} from 'react-native-navigation';
 
 import Api from '../util/api';
+import Event from "../util/event";
 import Color from '../style/color';
 
 import UserIntro from '../component/userIntro';
@@ -36,7 +37,15 @@ export default class UserPage extends Component {
         };
     }
 
-    
+    componentDidMount(){
+        this.listener = DeviceEventEmitter.addListener(Event.updateNotebooks, (param) => {
+            this.notebookList.refresh();
+        });
+    }
+
+    componentWillUnmount(){
+        this.listener.remove();
+    }
 
     _renderLabel = props => ({route}) => {
         let routes = props.navigationState.routes;
@@ -75,6 +84,7 @@ export default class UserPage extends Component {
             {...this.props}
         />,
         notebook: () => <NotebookList
+            ref={(r) => this.notebookList = r}
             user={this.user}
             {...this.props}
         />

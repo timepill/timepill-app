@@ -1,5 +1,16 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, ScrollView, Switch, TextInput, TouchableOpacity} from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    ScrollView,
+    Switch,
+    TextInput,
+    TouchableOpacity,
+    DeviceEventEmitter,
+    Keyboard,
+    Alert
+} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import ActionSheet from 'react-native-actionsheet-api';
 import ImagePicker from 'react-native-image-crop-picker'
@@ -9,6 +20,7 @@ import Color from '../style/color';
 import {Icon} from '../style/icon';
 import Msg from '../util/msg';
 import Api from '../util/api';
+import Event from "../util/event";
 
 import Loading from '../component/loading'
 import DateInput from '../component/dateInput'
@@ -23,11 +35,11 @@ export default class NotebookEditPage extends Component {
         this.state = {
             notebook: props.notebook,
 
-            subject: '',
-            isPublic: false,
-            dateString: '',
+            subject: props.notebook ? props.notebook.subject : '',
+            isPublic: props.notebook ? props.notebook.isPublic : false,
 
-            uploading: false
+            uploading: false,
+            saving: false
         }
     }
 
@@ -35,7 +47,10 @@ export default class NotebookEditPage extends Component {
         return {
             topBar: {
               title: {
-                  text: '创建日记本'
+                  text: !passProps.notebook ? '创建日记本' : '修改日记本'
+              },
+              backButton: {
+                  title: passProps.backTitle ? passProps.backTitle : '返回'
               },
               rightButtons: [{
                   id: 'save',
@@ -53,8 +68,49 @@ export default class NotebookEditPage extends Component {
     }
 
     navigationButtonPressed({buttonId}) {
-        console.log('date string:', this.dateInput.getDate());
+        this.saveNotebook();
     }
+
+    async saveNotebook() {
+        let notebook = this.state.notebook;
+
+        let subject = this.state.subject;
+        let isPublic = this.state.isPublic;
+
+        try{
+            this.setState({saving: true});
+
+            let result;
+            if (!notebook) {
+                let dateString = this.dateInput.getDate();
+                result = await Api.createNotebook(subject, '', dateString, isPublic ? 10 : 1);
+
+            } else {
+                result = await Api.updateNotebook(notebook.id, subject, notebook.description, isPublic ? 10 : 1);
+            }
+            
+            if(result) {
+                Keyboard.dismiss();
+
+                Msg.showMsg(!notebook ? '创建完成' : '保存完成');
+                DeviceEventEmitter.emit(Event.updateNotebooks);
+
+                Navigation.popToRoot(this.props.componentId);
+
+            } else {
+                throw {
+                    message: 'save notebook failed'
+                }
+            }
+
+        } catch(e) {
+            console.log('e:', e);
+            Msg.showMsg(!notebook ? '创建日记本失败' : '修改日记本失败');
+        }
+
+        this.setState({saving: false});
+    }
+
 
     async resizePhoto(uri, oWidth, oHeight) {
         let width = 0;
@@ -123,24 +179,22 @@ export default class NotebookEditPage extends Component {
     }
 
     _onDelete() {
-        Navigation.popToRoot(this.props.componentId);
-
-        /*
-        let notebookId = this.state.notebook ? this.state.notebook.id;
+        let notebookId = this.state.notebook ? this.state.notebook.id : null;
         if(!notebookId) {
             return;
         }
 
         Api.deleteNotebook(notebookId)
             .then(() => {
+                DeviceEventEmitter.emit(Event.updateNotebooks);
+
                 Alert.alert('提示', '日记本已删除', [{text: '好', onPress: () =>  {
-                    Navigation.popToRoot();
+                    Navigation.popToRoot(this.props.componentId);
                 }}]);
             })
             .catch((err) => {
                 Alert.alert('删除失败', err.message)
             });
-        */
     }
 
     render() {
@@ -163,15 +217,21 @@ export default class NotebookEditPage extends Component {
                     </View>
                     <View style={localStyle.line} />
 
-                    <View>
-                          <View style={localStyle.item}>
-                              <DateInput ref={(r) => {this.dateInput = r}}
-                                    style={localStyle.datePickerStyle}
-                                    customStyles={customDatePickerStyle}>
-                                </DateInput>
-                          </View>
-                    </View>
-                    <View style={localStyle.line} />
+                    {
+                        !this.state.notebook
+                        ? (
+                            <View>
+                                  <View style={localStyle.item}>
+                                      <DateInput ref={(r) => {this.dateInput = r}}
+                                            style={localStyle.datePickerStyle}
+                                            customStyles={customDatePickerStyle}>
+                                        </DateInput>
+                                  </View>
+                                  <View style={localStyle.line} />
+                            </View>
+                        ) : null
+                    }
+                    
 
                     <View style={localStyle.item}>
                         <Text style={localStyle.title}>公开日记本</Text>
@@ -183,24 +243,26 @@ export default class NotebookEditPage extends Component {
                     </View>
                 </View>
 
-
-                <View style={localStyle.group}>
-                    <TouchableOpacity style={localStyle.item}
-                        onPress={this._onEditCover.bind(this)}>
-                        <Text style={localStyle.editCover}>设置封面</Text>
-                    </TouchableOpacity>
-                </View>
-
-
-                <View>
-                    <View style={localStyle.group}>
-                        <TouchableOpacity style={localStyle.item}
-                            onPress={this._onDelete.bind(this)}>
-                            <Text style={localStyle.delete}>删除</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <Text style={localStyle.tip}>提示：写过的日记本不能被删除</Text>
-                </View>
+                {
+                    this.state.notebook
+                    ? (
+                        <View>
+                            <View style={localStyle.group}>
+                                <TouchableOpacity style={localStyle.item}
+                                    onPress={this._onEditCover.bind(this)}>
+                                    <Text style={localStyle.editCover}>设置封面</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={localStyle.group}>
+                                <TouchableOpacity style={localStyle.item}
+                                    onPress={this._onDelete.bind(this)}>
+                                    <Text style={localStyle.delete}>删除</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={localStyle.tip}>提示：写过的日记本不能被删除</Text>
+                        </View>
+                    ) : null
+                }
 
             </View>
         );

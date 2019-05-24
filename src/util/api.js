@@ -132,7 +132,28 @@ async function updateNotebookCover(bookId, photoUri) {
             name: 'image.jpg',
             type: 'image/jpg'
         }
-    })
+    });
+}
+
+async function createNotebook(subject, description, expired, privacy) {
+    return call('POST', '/notebooks', {
+        subject: subject,
+        description: description,
+        expired: expired,
+        privacy: privacy
+    });
+}
+
+async function updateNotebook(id, subject, description, privacy) {
+    return call('PUT', '/notebooks/' + id, {
+        subject: subject,
+        description: description,
+        privacy: privacy
+    });
+}
+
+async function deleteNotebook(id) {
+    return call('DELETE', '/notebooks/' + id)
 }
 
 
@@ -272,5 +293,8 @@ export default {
 
     getMessagesHistory,
 
-    updateNotebookCover
+    updateNotebookCover,
+    createNotebook,
+    updateNotebook,
+    deleteNotebook
 }
