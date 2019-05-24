@@ -81,13 +81,17 @@ export default class DiaryList extends Component {
                     }
                 },
                 passProps: {
-                    diary: diary
+                    diary: diary,
+                    user: diary.user,
+
+                    editable: this.editable,
+                    onDiaryAction: this._onDiaryAction.bind(this)
                 }
             }
         });
     }
 
-    _onDeleteDiary(diary) {
+    _onDiaryAction(diary) {
         ActionSheet.showActionSheetWithOptions({
             options:['修改','删除', '取消'],
             cancelButtonIndex: 2,
@@ -111,7 +115,8 @@ export default class DiaryList extends Component {
                             })
                             .catch(e => {
                                 Msg.showMsg('日记删除失败');
-                            });
+                            })
+                            .done();
                     }},
                     {text: '取消', onPress: () => {}},
                 ]);
@@ -127,6 +132,7 @@ export default class DiaryList extends Component {
         this.setState({refreshing: true, refreshFailed: false});
         this.dataSource.refresh()
                 .then(result => {
+                    console.log('diary list result:', result);
                     if(!result) {
                         throw {
                             message: 'refresh diary no result'
@@ -202,7 +208,7 @@ export default class DiaryList extends Component {
                     data={this.state.diaries}
 
                     keyExtractor={(item, index) => {
-                        return item.id.toString()
+                        return item.id.toString() + item.comment_count;
                     }}
 
                     renderItem={({item}) => {
@@ -213,7 +219,7 @@ export default class DiaryList extends Component {
                                     editable={this.editable}
 
                                     onUserIconPress={() => this._onUserIconPress(item)}
-                                    onDeleteDiary={() => this._onDeleteDiary(item)}
+                                    onDiaryAction={() => this._onDiaryAction(item)}
                                 >
 
                                 </DiaryBrief>

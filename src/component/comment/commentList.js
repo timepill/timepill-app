@@ -4,13 +4,16 @@ import {
     ActivityIndicator,
     StyleSheet,
     FlatList,
-    Text, View
+    Text,
+    View,
+    Alert
 } from 'react-native';
 import {Divider} from "react-native-elements";
 
 import Touchable from '../touchable';
 import Color from '../../style/color';
 import Api from '../../util/api';
+import Msg from '../../util/msg'
 
 import Comment from './comment';
 
@@ -21,6 +24,8 @@ export default class CommentList extends Component {
         super(props);
 
         this.diaryId = props.diaryId;
+        this.editable = props.editable || false;
+
         this.state = {
             comments: []
         };
@@ -45,6 +50,41 @@ export default class CommentList extends Component {
         }
     }
 
+    _onCommentAction(comment) {
+        ActionSheet.showActionSheetWithOptions({
+            options:['删除回复', '取消'],
+            cancelButtonIndex: 1,
+            destructiveButtonIndex: 0
+
+        }, (index) => {
+            if(index == 0) {
+                Alert.alert('提示', '确认删除回复?', [
+                    {
+                        text: '删除',
+                        style: 'destructive',
+                        onPress: () => {
+                            Api.deleteComment(comment.id)
+                                .then(() => {
+                                    const filterComments = this.state.comments.filter(it => it.id !== comment.id);
+                                    this.setState({
+                                        comments: filterComments
+                                    });
+                                })
+                                .catch(e => {
+                                    Msg.showMsg('删除失败');
+                                })
+                                .done();
+                        }
+                    },
+                    {
+                        text: '取消',
+                        onPress: () => {}
+                    }
+                ]);
+            }
+        });
+    }
+
     render() {
         return (
             <View style={localStyle.container}>
@@ -59,7 +99,9 @@ export default class CommentList extends Component {
                     renderItem={({item}) => {
                         return (
                             <Touchable onPress={() => {}}>
-                                <Comment comment={item}></Comment>
+                                <Comment comment={item} editable={this.editable}
+                                    onCommentAction={() => this._onCommentAction(item)}>
+                                </Comment>
                             </Touchable>
                         )
                     }}

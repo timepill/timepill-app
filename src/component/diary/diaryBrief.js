@@ -77,7 +77,7 @@ export default class DiaryBrief extends Component {
                     {
                         this.editable
                         ? <DiaryActionIcon diaryId={diary.id}
-                            onPress={this.props.onDeleteDiary}></DiaryActionIcon>
+                            onPress={this.props.onDiaryAction}></DiaryActionIcon>
                         : null
                     }
                 </View>

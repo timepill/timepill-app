@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Animated, DeviceEventEmitter} from 'react-native';
+import {StyleSheet, Text, View, Animated, DeviceEventEmitter, Alert} from 'react-native';
 import {
   PagerScroll,
   TabView,
@@ -9,6 +9,7 @@ import {
 import {Navigation} from 'react-native-navigation';
 
 import Api from '../util/api';
+import {Icon} from '../style/icon'
 import Event from "../util/event";
 import Color from '../style/color';
 
@@ -22,6 +23,7 @@ export default class UserPage extends Component {
 
     constructor(props) {
         super(props);
+        Navigation.events().bindComponent(this);
 
         this.user = props.user;
         this.userId = this.user ? this.user.id : (props.userId || 0);
@@ -37,7 +39,89 @@ export default class UserPage extends Component {
         };
     }
 
+    static options(passProps) {
+        return passProps.user ? {
+            topBar: {
+                title: {
+                    text: passProps.user.name
+                },
+                rightButtons: [{
+                    id: 'followIcon',
+                    icon: Icon.followIcon
+                }]
+            }
+        } : {
+            topBar: {
+                title: {
+                    text: '我'
+                },
+                rightButtons: [{
+                    id: 'setting',
+                    icon: Icon.navButtonSetting,
+
+                    color: Color.primary
+                }]
+            }
+        }
+    }
+
+    navigationButtonPressed({buttonId}) {
+        if(buttonId == 'followIcon') {
+            Api.addFollow(this.userId)
+                .then(() => {
+                    Navigation.mergeOptions(this.props.componentId, {
+                        topBar: {
+                            rightButtons: [{
+                                id: 'navButtonFollowSelected',
+                                icon: Icon.navButtonFollowSelected
+                            }]
+                        }
+                    });
+
+                    Alert.alert('已关注');
+                })
+                .catch(e => {
+                    Alert.alert('关注失败');
+                }).done();
+
+        } else if(buttonId == 'navButtonFollowSelected') {
+            Api.deleteFollow(this.userId)
+                .then(() => {
+                    Navigation.mergeOptions(this.props.componentId, {
+                        topBar: {
+                            rightButtons: [{
+                                id: 'followIcon',
+                                icon: Icon.followIcon
+                            }]
+                        }
+                    });
+
+                    Alert.alert('已取消关注');
+                })
+                .catch(e => {
+                    Alert.alert('取消关注失败');
+                }).done();
+        }
+    }
+
     componentDidMount(){
+        if(this.userId) {
+            Api.getRelation(this.userId)
+                .then(re => {
+                    this.followed = re;
+                    if(this.followed) {
+                        Navigation.mergeOptions(this.props.componentId, {
+                            topBar: {
+                                rightButtons: [{
+                                    id: 'navButtonFollowSelected',
+                                    icon: Icon.navButtonFollowSelected
+                                }]
+                            }
+                        });
+                    }
+                });
+        }
+
         this.listener = DeviceEventEmitter.addListener(Event.updateNotebooks, (param) => {
             this.notebookList.refresh();
         });

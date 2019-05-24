@@ -40,7 +40,7 @@ export default class Comment extends Component {
 
                 {
                     editable
-                    ? <CommentActionIcon></CommentActionIcon>
+                    ? <CommentActionIcon onPress={this.props.onCommentAction}></CommentActionIcon>
                     : null
                 }
 

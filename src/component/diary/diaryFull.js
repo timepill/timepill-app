@@ -13,7 +13,9 @@ export default class DiaryFull extends Component {
 
     constructor(props) {
         super(props);
+        
         this.diary = props.diary;
+        this.editable = props.editable || false;
     }
 
     render() {
@@ -54,7 +56,7 @@ export default class DiaryFull extends Component {
                     </View>
                 </View>
 
-                <CommentList diaryId={diary.id}></CommentList>
+                <CommentList diaryId={diary.id} editable={this.editable}></CommentList>
 
             </View>
         );

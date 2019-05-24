@@ -92,6 +92,10 @@ async function getDiaryComments(diaryId) {
     return call('GET', '/diaries/' + diaryId + '/comments')
 }
 
+async function deleteComment(id) {
+    return call('DELETE', '/comments/' + id)
+}
+
 async function getSelfNotebooks() {
     return call('GET', '/notebooks/my')
 }
@@ -108,6 +112,10 @@ async function getRelationReverseUsers(page, page_size) {
     return call('GET', `/relation/reverse?page=${page}&page_size=${page_size}`);
 }
 
+async function getRelation(user_id) {
+    return call('GET', '/relation/' + user_id);
+}
+
 async function deleteFollow(user_id) {
     return call('DELETE', '/relation/' + user_id);
 }
@@ -115,6 +123,11 @@ async function deleteFollow(user_id) {
 async function deleteFollowBy(user_id) {
     return call('DELETE', '/relation/reverse/' + user_id);
 }
+
+async function addFollow(user_id) {
+    return call('POST', '/relation/' + user_id);
+}
+
 
 async function getMessagesHistory() {
     return call('GET', '/tip/history');
@@ -154,6 +167,13 @@ async function updateNotebook(id, subject, description, privacy) {
 
 async function deleteNotebook(id) {
     return call('DELETE', '/notebooks/' + id)
+}
+
+async function report(user_id, diary_id) {
+    return call('POST', '/reports/', {
+        user_id: user_id,
+        diary_id: diary_id,
+    });
 }
 
 
@@ -282,19 +302,24 @@ export default {
     deleteDiary,
     
     getDiaryComments,
+    deleteComment,
     
     getSelfNotebooks,
     getUserNotebooks,
     
     getRelationUsers,
     getRelationReverseUsers,
+    getRelation,
     deleteFollow,
     deleteFollowBy,
+    addFollow,
 
     getMessagesHistory,
 
     updateNotebookCover,
     createNotebook,
     updateNotebook,
-    deleteNotebook
+    deleteNotebook,
+
+    report
 }
