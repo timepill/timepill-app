@@ -125,6 +125,45 @@ async function deleteDiary(id) {
 }
 
 
+async function updateNotebookCover(bookId, photoUri) {
+    return upload('POST', `/notebooks/${bookId}/cover`, {
+        cover: {
+            uri: photoUri,
+            name: 'image.jpg',
+            type: 'image/jpg'
+        }
+    })
+}
+
+
+async function upload(method, api, body) {
+    let token = await TokenManager.getToken();
+    let formData = new FormData();
+    for(let prop of Object.keys(body)) {
+        formData.append(prop, body[prop]);
+    }
+    
+    return timeout(
+        fetch(baseUrl + api, {
+            method: method,
+            headers: {
+                'Authorization': token,
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data',
+                'X-TP-OS': OS,
+                'X-TP-OS-Version': OS_VERSION,
+                'X-TP-Version': VERSION,
+                'X-TP-Device-ID': DEVICE_ID,
+            },
+            body: formData
+        })
+        .then(checkStatus)
+        .then(parseJSON)
+        .catch(handleCatch)
+
+    , 60000);
+}
+
 async function call(method, api, body, _timeout = 10000) {
     let token = await TokenManager.getUserToken();
 
@@ -219,6 +258,7 @@ export default {
     getFollowDiaries,
     getNotebookDiaries,
     getUserTodayDiaries,
+    deleteDiary,
     
     getDiaryComments,
     
@@ -232,5 +272,5 @@ export default {
 
     getMessagesHistory,
 
-    deleteDiary
+    updateNotebookCover
 }

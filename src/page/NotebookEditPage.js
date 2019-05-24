@@ -1,15 +1,20 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, ScrollView, Switch, TextInput, TouchableOpacity} from 'react-native';
 import {Navigation} from 'react-native-navigation';
+import ActionSheet from 'react-native-actionsheet-api';
+import ImagePicker from 'react-native-image-crop-picker'
+import ImageResizer from 'react-native-image-resizer'
 
 import Color from '../style/color';
 import {Icon} from '../style/icon';
+import Msg from '../util/msg';
 import Api from '../util/api';
 
+import Loading from '../component/loading'
 import DateInput from '../component/dateInput'
 
 
-export default class NotebookAddPage extends Component {
+export default class NotebookEditPage extends Component {
 
     constructor(props) {
         super(props);
@@ -20,7 +25,9 @@ export default class NotebookAddPage extends Component {
 
             subject: '',
             isPublic: false,
-            dateString: ''
+            dateString: '',
+
+            uploading: false
         }
     }
 
@@ -49,9 +56,97 @@ export default class NotebookAddPage extends Component {
         console.log('date string:', this.dateInput.getDate());
     }
 
+    async resizePhoto(uri, oWidth, oHeight) {
+        let width = 0;
+        let height = 0;
+        
+        let maxPixel = 640 * 640;
+        let oPixel = oWidth * oHeight;
+
+        if(oPixel > maxPixel) {
+            width = Math.sqrt(oWidth * maxPixel / oHeight);
+            height = Math.sqrt(oHeight * maxPixel / oWidth);
+
+        } else {
+            width = oWidth;
+            height = oHeight;
+        }
+        
+        const newUri = await ImageResizer.createResizedImage(uri, width, height, 'JPEG', 75);
+        return 'file://' + newUri.uri;
+    }
+
+    async _uploadCover(uri, width, height) {
+        const newUri = await this.resizePhoto(uri, width, height);
+        
+        try {
+            this.setState({uploading: true});
+            let result = await Api.updateNotebookCover(this.props.notebook.id, newUri);
+            if(result) {
+                Msg.showMsg('封面保存成功');
+
+            } else {
+                throw {
+                    message: 'upload notebook cover failed'
+                }
+            }
+
+        } catch (e) {
+            Msg.showMsg('封面保存失败');
+        }
+
+        this.setState({uploading: false});
+    }
+
+    _onEditCover() {
+        ActionSheet.showActionSheetWithOptions({
+            options: ['拍照', '从相册选择', '取消'],
+            cancelButtonIndex: 2,
+            title: '设置封面'
+
+        }, (index) => {
+            if (index != 2) {
+                let imageOption = {
+                    width: 640,
+                    height: 480,
+                    cropping: true
+                };
+
+                let imageSelect = index == 0
+                    ? ImagePicker.openCamera(imageOption) : ImagePicker.openPicker(imageOption);
+                
+                imageSelect.then(image => {
+                    this._uploadCover(image.path, image.width, image.height);
+                })
+            }
+        });
+    }
+
+    _onDelete() {
+        Navigation.popToRoot(this.props.componentId);
+
+        /*
+        let notebookId = this.state.notebook ? this.state.notebook.id;
+        if(!notebookId) {
+            return;
+        }
+
+        Api.deleteNotebook(notebookId)
+            .then(() => {
+                Alert.alert('提示', '日记本已删除', [{text: '好', onPress: () =>  {
+                    Navigation.popToRoot();
+                }}]);
+            })
+            .catch((err) => {
+                Alert.alert('删除失败', err.message)
+            });
+        */
+    }
+
     render() {
         return (
             <View style={localStyle.wrap}>
+                <Loading visible={this.state.uploading}></Loading>
 
                 <View style={localStyle.group}>
                     <View style={localStyle.item}>
@@ -88,6 +183,24 @@ export default class NotebookAddPage extends Component {
                     </View>
                 </View>
 
+
+                <View style={localStyle.group}>
+                    <TouchableOpacity style={localStyle.item}
+                        onPress={this._onEditCover.bind(this)}>
+                        <Text style={localStyle.editCover}>设置封面</Text>
+                    </TouchableOpacity>
+                </View>
+
+
+                <View>
+                    <View style={localStyle.group}>
+                        <TouchableOpacity style={localStyle.item}
+                            onPress={this._onDelete.bind(this)}>
+                            <Text style={localStyle.delete}>删除</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={localStyle.tip}>提示：写过的日记本不能被删除</Text>
+                </View>
 
             </View>
         );
@@ -133,6 +246,24 @@ const localStyle = StyleSheet.create({
         padding: 0,
         height: '100%',
         justifyContent: 'center'
+    },
+    editCover: {
+        flex: 1,
+        textAlign: 'center',
+        color: Color.light,
+        fontSize: 16
+    },
+    delete: {
+        flex: 1,
+        textAlign: 'center',
+        color: '#d9534f',
+        fontSize: 16
+    },
+    tip: {
+        fontSize: 12,
+        padding: 10,
+        paddingTop: 8,
+        color: Color.inactiveText   
     }
 });
 

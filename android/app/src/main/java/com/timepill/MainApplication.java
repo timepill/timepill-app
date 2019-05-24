@@ -3,6 +3,8 @@ package com.timepill;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
@@ -43,7 +45,8 @@ public class MainApplication extends NavigationApplication {
             // eg. new VectorIconsPackage()
             new RNDeviceInfo(),
             new VectorIconsPackage(),
-            new AsyncStoragePackage()
+            new AsyncStoragePackage(),
+	    new PickerPackage()
     );
   }
 

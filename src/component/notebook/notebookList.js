@@ -63,7 +63,7 @@ export default class NotebookList extends Component {
     _onAddPress() {
         Navigation.push(this.props.componentId, {
             component: {
-                name: 'NotebookAdd',
+                name: 'NotebookEdit',
                 passProps: {
                     
                 }
