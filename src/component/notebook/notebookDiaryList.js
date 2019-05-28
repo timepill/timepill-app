@@ -25,8 +25,9 @@ export default class NotebookDiaryList extends Component {
     constructor(props) {
         super(props);
 
-        this.dataSource = new NotebookDiaryData();
+        this.editable = props.editable || false;
         this.notebook =  props.notebook;
+        this.dataSource = new NotebookDiaryData();
 
         this.state = {
             diaries: [],
@@ -164,7 +165,8 @@ export default class NotebookDiaryList extends Component {
                     }
                 },
                 passProps: {
-                    diary: diary
+                    diary: diary,
+                    editable: this.editable
                 }
             }
         });

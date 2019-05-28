@@ -85,7 +85,8 @@ export default class NotebookList extends Component {
                     }
                 },
                 passProps: {
-                    notebook: notebook
+                    notebook: notebook,
+                    editable: !this.state.user
                 }
             }
         });

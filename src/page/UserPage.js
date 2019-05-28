@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, Animated, DeviceEventEmitter, Alert} from 'react-native';
 import {
-  PagerScroll,
+  PagerPan,
   TabView,
   TabBar,
   SceneMap
@@ -30,7 +30,7 @@ export default class UserPage extends Component {
         this.dataSource = new UserDiaryData(this.userId);
 
         this.state = {
-            index: 0,
+            index: 1,
             routes: [
                 { key: 'userIntro', title: '简介' },
                 { key: 'diary', title: '日记' },
@@ -104,7 +104,7 @@ export default class UserPage extends Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         if(this.userId) {
             Api.getRelation(this.userId)
                 .then(re => {
@@ -120,15 +120,21 @@ export default class UserPage extends Component {
                         });
                     }
                 });
+
         }
 
-        this.listener = DeviceEventEmitter.addListener(Event.updateNotebooks, (param) => {
+        this.notebookListener = DeviceEventEmitter.addListener(Event.updateNotebooks, (param) => {
             this.notebookList.refresh();
+        });
+
+        this.diaryListener = DeviceEventEmitter.addListener(Event.updateDiarys, (param) => {
+            this.diaryList.refresh();
         });
     }
 
-    componentWillUnmount(){
-        this.listener.remove();
+    componentWillUnmount() {
+        this.notebookListener.remove();
+        this.diaryListener.remove();
     }
 
     _renderLabel = props => ({route}) => {
@@ -163,6 +169,7 @@ export default class UserPage extends Component {
             user={this.user}
         />,
         diary: () => <DiaryList
+            ref={(r) => this.diaryList = r}
             dataSource={this.dataSource}
             editable={!this.user}
             {...this.props}
@@ -182,7 +189,7 @@ export default class UserPage extends Component {
                   width: Api.DEVICE_WINDOW.width
               }}
 
-              renderPager={(props) => <PagerScroll {...props}/>} /* android */
+              renderPager = {props => <PagerPan {...props} />} /* android */
 
               renderTabBar={this._renderTabBar}
               renderScene={this._renderScene}

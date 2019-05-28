@@ -1,11 +1,21 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, ScrollView} from 'react-native';
+import {
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+    ScrollView,
+    DeviceEventEmitter,
+    Keyboard
+} from 'react-native';
 import {Navigation} from 'react-native-navigation';
+import KeyboardSpacer from "react-native-keyboard-spacer";
 
 import Color from '../style/color';
 import {Icon} from '../style/icon';
 import Msg from '../util/msg';
 import Api from '../util/api'
+import Event from '../util/event';
 
 import DiaryFull from '../component/diary/diaryFull';
 import CommentInput from '../component/comment/commentInput'
@@ -17,10 +27,16 @@ export default class DiaryDetailPage extends Component {
         super(props);
         Navigation.events().bindComponent(this);
 
-        this.diary = props.diary;
-        this.user = props.user;
+        this.state = {
+            selfInfo: null,
 
-        this.editable = props.editable || false;
+            diary: props.diary,
+            user: props.user,
+
+            editable: props.editable || false,
+            needScrollToBottom: false
+        }
+
         this.onDiaryAction = props.onDiaryAction || (() => {});
     }
 
@@ -41,8 +57,8 @@ export default class DiaryDetailPage extends Component {
     }
 
     navigationButtonPressed({buttonId}) {
-        if(this.editable) {
-            this.onDiaryAction();
+        if(this.state.editable) {
+            this.onDiaryAction(this.state.diary);
 
         } else {
             ActionSheet.showActionSheetWithOptions({
@@ -52,22 +68,65 @@ export default class DiaryDetailPage extends Component {
 
             }, (index) => {
                 if(index == 0) {
-                    // Api.report(this.diary.user_id, this.diary.id).done();
+                    Api.report(this.state.diary.user_id, this.state.diary.id).done();
                     Msg.showMsg('举报成功，感谢你的贡献 :)');
                 }
             });
         }
     }
 
+    componentDidMount() {
+        Api.getSelfInfoByStore()
+            .then(user => {
+                this.setState({
+                    selfInfo: user
+                });
+
+            }).done();
+
+        this.listener = DeviceEventEmitter.addListener(Event.updateComments, (param) => {
+            this.setState({needScrollToBottom: true});
+            this.diaryFull.refreshComment();
+            Keyboard.dismiss();
+        });
+    }
+
+    componentWillUnmount(){
+        this.listener.remove();
+    }
+
     render() {
         return (
             <View style={localStyle.wrap}>
-                <ScrollView style={{flex: 1}}>
-                    <DiaryFull diary={this.props.diary} editable={this.editable}></DiaryFull>
+                <ScrollView ref={(r)=>this.scroll = r}
+                    style={{flex: 1}}
+                    onContentSizeChange={(width, height) => {
+                        if(this.state.needScrollToBottom) {
+                            this.scroll.scrollTo({y: height});
+                            this.setState({needScrollToBottom: false});
+                        }
+                    }}
+                >
+
+                    <DiaryFull ref={(r) => this.diaryFull = r}
+                        diary={this.state.diary}
+                        editable={this.state.editable}
+                    ></DiaryFull>
+
                 </ScrollView>
                 
-                <CommentInput></CommentInput>
+                {
+                    this.state.selfInfo ? (
+                        <CommentInput ref={(r) => this.commentInput = r}
+                            diary={this.state.diary}
+                            selfInfo={this.state.selfInfo}
+                        ></CommentInput>
+                    ) : null
+                }
 
+                {
+                    Api.IS_IOS ? <KeyboardSpacer topSpacing={Api.IS_IPHONEX ? -30 : 0} /> : null
+                }
             </View>
         );
     }

@@ -62,7 +62,7 @@ export default class DiaryBrief extends Component {
                 </View>
 
                 <Text style={localStyle.content} numberOfLines={5}>
-                    {diary.content.trim()}
+                    {diary.content}
                 </Text>
 
                 <Photo uri={diary.photoThumbUrl}></Photo>

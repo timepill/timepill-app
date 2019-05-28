@@ -91,6 +91,7 @@ export default class DiaryList extends Component {
         });
     }
 
+    // to be seperated as diaryAction component
     _onDiaryAction(diary) {
         ActionSheet.showActionSheetWithOptions({
             options:['修改','删除', '取消'],
@@ -99,7 +100,26 @@ export default class DiaryList extends Component {
 
         }, (index) => {
             if(index === 0) {
-                
+                Navigation.push(this.props.componentId, {
+                    component: {
+                        name: 'Write',
+                        options: {
+                            bottomTabs: {
+                                visible: false,
+
+                                // hide bottom tab for android
+                                drawBehind: true,
+                                animate: true
+                            }
+                        },
+                        passProps: {
+                            diary: diary,
+                            onSave: (diary) => {
+                                // 
+                            }
+                        }
+                    }
+                });
 
             } else if (index === 1) {
                 Alert.alert('提示', '确认删除日记?', [
@@ -132,7 +152,6 @@ export default class DiaryList extends Component {
         this.setState({refreshing: true, refreshFailed: false});
         this.dataSource.refresh()
                 .then(result => {
-                    console.log('diary list result:', result);
                     if(!result) {
                         throw {
                             message: 'refresh diary no result'
@@ -208,7 +227,7 @@ export default class DiaryList extends Component {
                     data={this.state.diaries}
 
                     keyExtractor={(item, index) => {
-                        return item.id.toString() + item.comment_count;
+                        return item.id + item.updated + item.comment_count;
                     }}
 
                     renderItem={({item}) => {

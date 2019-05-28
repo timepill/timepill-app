@@ -19,36 +19,18 @@ export default class NotebookLine extends Component {
         super(props);
 
         this.state = {
-            notebooks: []
+            notebooks: props.notebooks || []
         };
     }
 
-    componentDidMount(){
-        InteractionManager.runAfterInteractions(() => {
-            this.load();
-        });
-    }
+    componentDidMount() {
+        notebooks = this.props.refreshData()
 
-    load() {
-        Api.getSelfNotebooks()
-            .then(notebooks => {
-                if(!notebooks || !notebooks.filter) {
-                    notebooks = [];
-                }
-
-                const unExpiredBooks = notebooks.filter(it => !it.isExpired);
-                if(unExpiredBooks.length === 0) {
-                    Alert.alert('提示', '没有可用日记本,无法写日记', [
-                        {text: '取消', onPress: () =>  {}},
-                        {text: '创建一个', onPress: () => {}}
-                    ]);
-                }
-
-                this.setState({
-                    notebooks: unExpiredBooks
-                });
-
-            }).done(() => {});
+        if(notebooks && notebooks.length > 0) {
+            this.setState({
+                notebooks
+            })
+        }
     }
 
     render() {
@@ -69,7 +51,7 @@ export default class NotebookLine extends Component {
                     this.state.notebooks.map((notebook) => {
                         return (
                             <TouchableOpacity key={notebook.id} activeOpacity={0.7}                                
-                                onPress={this.props.onNotebookPress}>
+                                onPress={() => this.props.onNotebookPress(notebook)}>
 
                                 <Notebook key={notebook.id} style={{paddingRight: 10}}
                                     notebook={notebook} />

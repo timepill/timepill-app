@@ -89,12 +89,20 @@ async function getUserTodayDiaries(userId) {
 }
 
 async function getDiaryComments(diaryId) {
-    return call('GET', '/diaries/' + diaryId + '/comments')
+    return call('GET', '/diaries/' + diaryId + '/comments');
 }
 
 async function deleteComment(id) {
-    return call('DELETE', '/comments/' + id)
+    return call('DELETE', '/comments/' + id);
 }
+
+async function addComment(diaryId, content, recipient_id) {
+    return call('POST', '/diaries/' + diaryId + '/comments', {
+        content: content,
+        recipient_id: recipient_id,
+    });
+}
+
 
 async function getSelfNotebooks() {
     return call('GET', '/notebooks/my')
@@ -168,6 +176,34 @@ async function updateNotebook(id, subject, description, privacy) {
 async function deleteNotebook(id) {
     return call('DELETE', '/notebooks/' + id)
 }
+
+async function addDiary(bookId, content, photoUri = null, join_topic = null) {
+    if(!photoUri) {
+        return call('POST', '/notebooks/' + bookId + '/diaries', {
+            content,
+            join_topic
+        });
+
+    } else {
+        return upload('POST', '/notebooks/' + bookId + '/diaries', {
+            content,
+            join_topic,
+            photo: {
+                uri: photoUri,
+                name: 'image.jpg',
+                type: 'image/jpg'
+            }
+        });
+    }
+}
+
+async function updateDiary(id, bookId, content) {
+    return call('PUT', '/diaries/' + id, {
+        content,
+        notebook_id: bookId
+    });
+}
+
 
 async function report(user_id, diary_id) {
     return call('POST', '/reports/', {
@@ -303,6 +339,7 @@ export default {
     
     getDiaryComments,
     deleteComment,
+    addComment,
     
     getSelfNotebooks,
     getUserNotebooks,
@@ -320,6 +357,9 @@ export default {
     createNotebook,
     updateNotebook,
     deleteNotebook,
+
+    addDiary,
+    updateDiary,
 
     report
 }

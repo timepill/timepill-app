@@ -9,16 +9,23 @@ import {
     Modal,
     Animated,
     Easing,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    DeviceEventEmitter,
+    Alert
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
+import KeyboardSpacer from "react-native-keyboard-spacer";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {Icon} from '../style/icon'
-import Color from '../style/color'
-import Api from '../util/api'
+import BottomNav from '../nav/bottomNav';
+import {Icon} from '../style/icon';
+import Color from '../style/color';
+import Api from '../util/api';
+import Msg from '../util/msg';
+import Token from '../util/token'
+import Event from "../util/event";
 
-import NotebookLine from '../component/notebook/notebookLine'
+import NotebookLine from '../component/notebook/notebookLine';
 
 
 export default class WritePage extends Component {
@@ -27,8 +34,14 @@ export default class WritePage extends Component {
         super(props);
         Navigation.events().bindComponent(this);
 
+        let diary = this.diary = props.diary;
         this.state = {
-            content: '',
+            notebooks: [],
+
+            targetbookId: diary ? diary.notebook_id : 0,
+            targetbookSubject: diary ? diary.notebook_subject : '',
+            
+            content: diary ? diary.content : '',
 
             modalVisible: false,
             fadeAnimOpacity: new Animated.Value(0),
@@ -50,19 +63,57 @@ export default class WritePage extends Component {
                   id: 'save',
                   icon: Icon.navButtonSave
               }]
-            },
-            bottomTabs: {
-                visible: false,
-
-                // hide bottom tab for android
-                drawBehind: true,
-                animate: true
             }
         };
     }
 
+    navigationButtonPressed({buttonId}) {
+        if(buttonId == 'cancel') {
+
+            if(this.diary) {
+                Navigation.pop(this.props.componentId);
+
+            } else {
+                Navigation.setStackRoot(this.props.componentId, {
+                    component: {
+                        name: 'Empty',
+                        options: {
+                            bottomTabs: {
+                                visible: true
+                            }
+                        },
+                        passProps: {
+                            from: 'write'
+                        }
+                    }
+                });
+            }
+
+        } else if(buttonId == 'save') {
+            this.saveDiary();
+        }
+    }
+
+    componentDidMount() {
+        this.loadNotebook();
+
+        this.notebookListener = DeviceEventEmitter.addListener(Event.updateNotebooks, (param) => {
+            this.loadNotebook(true);
+        });
+    }
+
+    componentWillUnmount(){
+        this.notebookListener.remove();
+    }
+
     openModal() {
         this.setState({modalVisible: true});
+
+        if(this.state.notebooks.length == 0) {
+            Alert.alert('提示', '没有可用日记本，无法写日记', [
+                {text: '确定', onPress: () =>  {}}
+            ]);
+        }
     }
 
     closeModal(showKeyboard = true) {
@@ -95,6 +146,88 @@ export default class WritePage extends Component {
         });
     }
 
+    _onCreateNotebook() {
+        this.closeModal(false);
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'NotebookEdit'
+            }
+        });
+    }
+
+    _onNotebookSelected(notebook) {
+        this.setState({
+          targetbookId: notebook.id,
+          targetbookSubject: notebook.subject
+
+        }, () => {
+            this.closeModal();
+        });
+    }
+
+    loadNotebook(resetTargetbook = false) {
+        Api.getSelfNotebooks()
+            .then(notebooks => {
+                if(!notebooks || !notebooks.filter) {
+                    notebooks = [];
+                }
+
+                let unExpiredBooks = notebooks.filter(it => !it.isExpired);
+                if(unExpiredBooks.length > 0) {
+                    let st = {
+                        notebooks: unExpiredBooks
+                    }
+
+                    if(resetTargetbook || this.state.targetbookId == 0) {
+                        st.targetbookId = unExpiredBooks[0].id;
+                        st.targetbookSubject = unExpiredBooks[0].subject;
+                    }
+
+                    this.setState(st);
+                }
+
+            }).done();
+    }
+
+    saveDiary() {
+        let photoUri = null;
+        let topic = this.props.topic ? 1 : 0;
+
+        (this.diary
+          ? Api.updateDiary(this.diary.id, this.state.targetbookId, this.state.content)
+          : Api.addDiary(this.state.targetbookId, this.state.content, null, topic)
+        ).then(result => {
+              Msg.showMsg('日记保存完成');
+              DeviceEventEmitter.emit(Event.updateDiarys);
+
+              this.props.onSave(result);
+
+              if(this.diary) {
+                  Navigation.pop(this.props.componentId);
+              
+              } else {
+                  Navigation.setStackRoot(this.props.componentId, {
+                      component: {
+                          name: 'Empty',
+                          options: {
+                              bottomTabs: {
+                                  visible: true
+                              }
+                          },
+                          passProps: {
+                              from: 'write'
+                          }
+                      }
+                  });
+              }
+              
+          })
+          .catch(e => {
+              Msg.showMsg('保存失败');
+          })
+          .done();
+    }
+
     render() {
       return (
           <ScrollView style={localStyle.container}
@@ -112,7 +245,9 @@ export default class WritePage extends Component {
                   placeholder='记录点滴生活'
                   value={this.state.content}
 
-                  onChangeText={() => {}}
+                  onChangeText={(text) => {
+                      this.setState({content: text});
+                  }}
 
                   autoCorrect={false}
                   autoCapitalize='none'
@@ -123,21 +258,23 @@ export default class WritePage extends Component {
                       <View style={localStyle.notebookButton}>
                           <Ionicons name='ios-bookmarks-outline' size={16} 
                               color={Color.text} style={{marginTop: 2, marginRight: 6}} />
-                          <Text style={{fontSize: 13, color: Color.text }}>{'日记本名'}</Text>
+                          <Text style={{fontSize: 13, color: Color.text }}>
+                              {this.state.targetbookSubject ? this.state.targetbookSubject : '..'}
+                          </Text>
                       </View>
                   </TouchableOpacity>
 
                   <View style={{flex: 1}} />
-
-                  <TouchableOpacity>
-                      <Text style={localStyle.topic}># {'话题名'}</Text>
-                  </TouchableOpacity>
 
                   <TouchableOpacity style={localStyle.photo} onPress={() => {}}>
                       <Ionicons name="ios-image-outline" size={30}
                           style={{paddingTop: 4}} color={Color.light} />
                   </TouchableOpacity>
               </View>
+
+              {
+                  Api.IS_IOS ? <KeyboardSpacer topSpacing={Api.IS_IPHONEX ? -30 : 0} /> : null
+              }
 
               {this.renderModal()}
 
@@ -180,7 +317,7 @@ export default class WritePage extends Component {
 
                     <Animated.View style={{height: this.state.fadeAnimHeight, backgroundColor: '#fff'}}>
                         <View style={localStyle.modalBanner}>
-                            <TouchableOpacity onPress={() => {}} style={localStyle.modalButton}>
+                            <TouchableOpacity onPress={this._onCreateNotebook.bind(this)} style={localStyle.modalButton}>
                                 <Text style={localStyle.modalButtonText}>新添</Text>
                             </TouchableOpacity>
                             <Text style={{padding: 10, color: Color.text}}>选择日记本</Text>
@@ -189,7 +326,10 @@ export default class WritePage extends Component {
                             </TouchableOpacity>
                         </View>
 
-                        <NotebookLine onNotebookPress={() => {}}></NotebookLine>
+                        <NotebookLine
+                            refreshData={() => this.state.notebooks}
+                            onNotebookPress={this._onNotebookSelected.bind(this)}
+                        ></NotebookLine>
 
                     </Animated.View>
                 </View>
@@ -259,6 +399,6 @@ const localStyle = StyleSheet.create({
     },
     modalButtonText: {
         color: Color.light,
-        fontSize: 15,
+        fontSize: 15
     }
 });

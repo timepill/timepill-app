@@ -15,18 +15,23 @@ export default class NotebookDetailPage extends Component {
     }
 
     static options(passProps) {
-        return {
-            topBar: {
-              title: {
-                  text: '《' + passProps.notebook.subject + '》'
-              },
-              rightButtons: [{
-                  id: 'navButtonNotebookSetting',
-                  icon: Icon.navButtonNotebookSetting,
-
-                  color: Color.primary
-              }]
+        let topBar = {
+            title: {
+                text: '《' + passProps.notebook.subject + '》'
             }
+        }
+
+        if(passProps.editable) {
+            topBar.rightButtons = [{
+                id: 'navButtonNotebookSetting',
+                icon: Icon.navButtonNotebookSetting,
+
+                color: Color.primary
+            }];
+        }
+
+        return {
+            topBar
         };
     }
 

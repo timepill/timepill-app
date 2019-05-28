@@ -5,8 +5,10 @@ function config() {
     return {
         root: {
             bottomTabs: {
+              id: 'MainBottomTab',
               options: {
                   bottomTabs: {
+                      currentTabIndex: 0,
                       titleDisplayMode: 'alwaysShow' // android
                   }
               },
@@ -64,15 +66,13 @@ function config() {
                     stack: {
                       children: [{
                         component: {
-                          name: 'Write',
+                          name: 'Empty',
                           options: {
                             topBar: {
-                              title: {
-                                text: '写日记',
-                                alignment: 'center' // android
-                              }
+                                visible: false
                             }
                           }
+
                         }
                       }],
                       options: {

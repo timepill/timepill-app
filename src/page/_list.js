@@ -1,5 +1,6 @@
 export default {
 DiaryDetail: require("./DiaryDetailPage.js").default,
+Empty: require("./EmptyPage.js").default,
 Follow: require("./FollowPage.js").default,
 FollowUser: require("./FollowUserPage.js").default,
 Home: require("./HomePage.js").default,

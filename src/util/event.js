@@ -1,4 +1,9 @@
 export default {
-    updateNotebooks: 'updateNotebooks'
 
+    updateNotebooks: 'updateNotebooks',
+    updateDiarys: 'updateDiarys',
+    updateComments: 'updateComments',
+
+    commentPressed: 'commentPressed'
+    
 }

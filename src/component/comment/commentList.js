@@ -6,13 +6,16 @@ import {
     FlatList,
     Text,
     View,
-    Alert
+    Alert,
+    Keyboard,
+    DeviceEventEmitter
 } from 'react-native';
 import {Divider} from "react-native-elements";
 
 import Touchable from '../touchable';
 import Color from '../../style/color';
 import Api from '../../util/api';
+import Event from '../../util/event';
 import Msg from '../../util/msg'
 
 import Comment from './comment';
@@ -33,11 +36,11 @@ export default class CommentList extends Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.loadMore();
+            this.refresh();
         });
     }
 
-    async loadMore() {
+    async refresh() {
         let comments = await Api.getDiaryComments(this.diaryId);
         if(comments && comments.length > 0) {
             if (comments.length > 1) {
@@ -48,6 +51,10 @@ export default class CommentList extends Component {
                 comments
             });
         }
+    }
+
+    _onCommentPress(comment) {
+        DeviceEventEmitter.emit(Event.commentPressed, comment);
     }
 
     _onCommentAction(comment) {
@@ -88,7 +95,7 @@ export default class CommentList extends Component {
     render() {
         return (
             <View style={localStyle.container}>
-                <FlatList
+                <FlatList ref={(r) => this.list = r}
 
                     data={this.state.comments}
 
@@ -98,7 +105,7 @@ export default class CommentList extends Component {
 
                     renderItem={({item}) => {
                         return (
-                            <Touchable onPress={() => {}}>
+                            <Touchable onPress={() => this._onCommentPress(item)}>
                                 <Comment comment={item} editable={this.editable}
                                     onCommentAction={() => this._onCommentAction(item)}>
                                 </Comment>

@@ -18,6 +18,14 @@ export default class DiaryFull extends Component {
         this.editable = props.editable || false;
     }
 
+    refreshDiaryContent() {
+        // empty
+    }
+
+    async refreshComment() {
+        await this.commentList.refresh();
+    }
+
     render() {
         let diary = this.diary;
         if(!diary) {
@@ -56,7 +64,10 @@ export default class DiaryFull extends Component {
                     </View>
                 </View>
 
-                <CommentList diaryId={diary.id} editable={this.editable}></CommentList>
+                <CommentList ref={(r) => this.commentList = r}
+                    diaryId={diary.id}
+                    editable={this.editable}
+                ></CommentList>
 
             </View>
         );
