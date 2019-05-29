@@ -28,7 +28,7 @@ export default class NotificationHistoryPage extends Component {
     render() {
       return (
           <View style={localStyle.container}>
-              <NotificationList></NotificationList>
+              <NotificationList {...this.props}></NotificationList>
           </View>
       );
     }

@@ -24,7 +24,7 @@ export default class NotebookLine extends Component {
     }
 
     componentDidMount() {
-        notebooks = this.props.refreshData()
+        let notebooks = this.props.refreshData()
 
         if(notebooks && notebooks.length > 0) {
             this.setState({

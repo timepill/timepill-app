@@ -35,7 +35,12 @@ Navigation.events().registerAppLaunchedListener(async () => {
                 stack: {
                     children: [{
                         component: {
-                          name: 'Timepill'
+                            name: 'Timepill',
+                            options: {
+                                topBar: {
+                                    visible: false
+                                }
+                            }
                         }
                     }]
                 }

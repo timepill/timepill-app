@@ -68,7 +68,6 @@ export default class NotebookDiaryList extends Component {
             return maplist;
 
         }, {});
-        console.log('reduce result:', reducedDiaries);
 
         let result = [];
         for(let key in reducedDiaries) {

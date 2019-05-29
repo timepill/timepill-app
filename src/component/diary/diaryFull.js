@@ -14,12 +14,21 @@ export default class DiaryFull extends Component {
     constructor(props) {
         super(props);
         
-        this.diary = props.diary;
-        this.editable = props.editable || false;
+        this.state = {
+            diary: props.diary,
+            editable: props.editable || false
+        }
     }
 
     refreshDiaryContent() {
-        // empty
+        if(!this.props.refreshData) {
+            return;
+        }
+
+        let diary = this.props.refreshData();
+        if(diary) {
+            this.setState({diary})
+        }
     }
 
     async refreshComment() {
@@ -27,7 +36,7 @@ export default class DiaryFull extends Component {
     }
 
     render() {
-        let diary = this.diary;
+        let diary = this.state.diary;
         if(!diary) {
             return null;
         }
@@ -66,7 +75,7 @@ export default class DiaryFull extends Component {
 
                 <CommentList ref={(r) => this.commentList = r}
                     diaryId={diary.id}
-                    editable={this.editable}
+                    editable={this.state.editable}
                 ></CommentList>
 
             </View>

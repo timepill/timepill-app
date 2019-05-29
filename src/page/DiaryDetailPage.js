@@ -30,6 +30,7 @@ export default class DiaryDetailPage extends Component {
         this.state = {
             selfInfo: null,
 
+            diaryId: props.diaryId,
             diary: props.diary,
             user: props.user,
 
@@ -76,6 +77,27 @@ export default class DiaryDetailPage extends Component {
     }
 
     componentDidMount() {
+        if(!this.state.diary && this.state.diaryId) {
+            Api.getDiary(this.state.diaryId)
+                .then(result => {
+                    console.log('get diary:', result);
+                    if(!result) {
+                        throw {
+                            message: 'get diary no result'
+                        }
+                    }
+
+                    this.setState({
+                        diary: result
+                    }, () => {
+                        this.diaryFull.refreshDiaryContent();
+                    })
+                })
+                .done(() => {
+
+                });
+        }
+
         Api.getSelfInfoByStore()
             .then(user => {
                 this.setState({
@@ -110,13 +132,14 @@ export default class DiaryDetailPage extends Component {
 
                     <DiaryFull ref={(r) => this.diaryFull = r}
                         diary={this.state.diary}
+                        refreshData={() => this.state.diary}
                         editable={this.state.editable}
                     ></DiaryFull>
 
                 </ScrollView>
                 
                 {
-                    this.state.selfInfo ? (
+                    this.state.selfInfo && this.state.diary ? (
                         <CommentInput ref={(r) => this.commentInput = r}
                             diary={this.state.diary}
                             selfInfo={this.state.selfInfo}

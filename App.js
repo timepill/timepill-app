@@ -87,7 +87,7 @@ const localStyle = StyleSheet.create({
     },
     content: {
         flex: 1,
-        paddingTop: 100,
+        paddingTop: 65,
         paddingHorizontal: 15
     },
     bottom: {

@@ -25,7 +25,6 @@ export default class LoginForm extends Component {
         try {
             isLoginSucc = await Api.login(this.state.username, this.state.password);
         } catch (err) {
-            console.log(err);
             errMsg = err.message;
         }
 

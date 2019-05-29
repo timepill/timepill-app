@@ -24,6 +24,7 @@ import Event from "../util/event";
 
 import Loading from '../component/loading'
 import DateInput from '../component/dateInput'
+import ImageAction from '../component/image/imageAction'
 
 
 export default class NotebookEditPage extends Component {
@@ -111,71 +112,34 @@ export default class NotebookEditPage extends Component {
         this.setState({saving: false});
     }
 
-
-    async resizePhoto(uri, oWidth, oHeight) {
-        let width = 0;
-        let height = 0;
-        
-        let maxPixel = 640 * 640;
-        let oPixel = oWidth * oHeight;
-
-        if(oPixel > maxPixel) {
-            width = Math.sqrt(oWidth * maxPixel / oHeight);
-            height = Math.sqrt(oHeight * maxPixel / oWidth);
-
-        } else {
-            width = oWidth;
-            height = oHeight;
-        }
-        
-        const newUri = await ImageResizer.createResizedImage(uri, width, height, 'JPEG', 75);
-        return 'file://' + newUri.uri;
-    }
-
-    async _uploadCover(uri, width, height) {
-        const newUri = await this.resizePhoto(uri, width, height);
-        
-        try {
-            this.setState({uploading: true});
-            let result = await Api.updateNotebookCover(this.props.notebook.id, newUri);
-            if(result) {
-                Msg.showMsg('封面保存成功');
-
-            } else {
-                throw {
-                    message: 'upload notebook cover failed'
+    uploadCover(uri) {
+        this.setState({uploading: true});
+        Api.updateNotebookCover(this.props.notebook.id, uri)
+            .then(result => {
+                if(!result) {
+                    throw {
+                        message: 'upload notebook cover failed'
+                    }
                 }
-            }
 
-        } catch (e) {
-            Msg.showMsg('封面保存失败');
-        }
-
-        this.setState({uploading: false});
+                DeviceEventEmitter.emit(Event.updateNotebooks);
+                Msg.showMsg('封面保存成功');
+            })
+            .catch(e => {
+                // Msg.showMsg('封面保存失败:' + e.message);
+                Alert.alert('封面保存失败:' + e.message);
+            })
+            .done(() => {
+                this.setState({uploading: false});
+            });
     }
 
     _onEditCover() {
-        ActionSheet.showActionSheetWithOptions({
-            options: ['拍照', '从相册选择', '取消'],
-            cancelButtonIndex: 2,
-            title: '设置封面'
-
-        }, (index) => {
-            if (index != 2) {
-                let imageOption = {
-                    width: 640,
-                    height: 480,
-                    cropping: true
-                };
-
-                let imageSelect = index == 0
-                    ? ImagePicker.openCamera(imageOption) : ImagePicker.openPicker(imageOption);
-                
-                imageSelect.then(image => {
-                    this._uploadCover(image.path, image.width, image.height);
-                })
-            }
-        });
+        ImageAction.action({
+            width: 640,
+            height: 480,
+            cropping: true
+        }, this.uploadCover.bind(this));
     }
 
     _onDelete() {

@@ -141,6 +141,10 @@ async function getMessagesHistory() {
     return call('GET', '/tip/history');
 }
 
+async function getDiary(id) {
+    return call('GET', '/diaries/' + id);
+}
+
 async function deleteDiary(id) {
     return call('DELETE', '/diaries/' + id);
 }
@@ -214,7 +218,7 @@ async function report(user_id, diary_id) {
 
 
 async function upload(method, api, body) {
-    let token = await TokenManager.getToken();
+    let token = await TokenManager.getUserToken();
     let formData = new FormData();
     for(let prop of Object.keys(body)) {
         formData.append(prop, body[prop]);
@@ -335,6 +339,8 @@ export default {
     getFollowDiaries,
     getNotebookDiaries,
     getUserTodayDiaries,
+
+    getDiary,
     deleteDiary,
     
     getDiaryComments,
