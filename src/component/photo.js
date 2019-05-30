@@ -17,7 +17,7 @@ export default class Photo extends Component {
     render() {
         return this.formatUri ? (
             <TouchableOpacity
-                onPress={() => {}}
+                onPress={this.props.onPress}
                 style={localStyle.photoBox}>
                 <Image style={localStyle.photo} source={{uri: this.formatUri}}/>
             </TouchableOpacity>

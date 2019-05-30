@@ -8,6 +8,7 @@ NotebookDetail: require("./NotebookDetailPage.js").default,
 NotebookEdit: require("./NotebookEditPage.js").default,
 NotificationHistory: require("./NotificationHistoryPage.js").default,
 Notification: require("./NotificationPage.js").default,
+Photo: require("./PhotoPage.js").default,
 User: require("./UserPage.js").default,
 Write: require("./WritePage.js").default
 }

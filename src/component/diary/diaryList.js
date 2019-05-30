@@ -144,6 +144,17 @@ export default class DiaryList extends Component {
         });
     }
 
+    _onPhotoPress(photoUrl) {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'Photo',
+                passProps: {
+                    url: photoUrl
+                }
+            }
+        })
+    }
+
     async refresh() {
         if (this.state.refreshing) {
             return;
@@ -239,6 +250,7 @@ export default class DiaryList extends Component {
 
                                     onUserIconPress={() => this._onUserIconPress(item)}
                                     onDiaryAction={() => this._onDiaryAction(item)}
+                                    onPhotoPress={() => this._onPhotoPress(item.photoUrl)}
                                 >
 
                                 </DiaryBrief>

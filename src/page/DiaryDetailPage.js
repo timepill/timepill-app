@@ -134,6 +134,7 @@ export default class DiaryDetailPage extends Component {
                         diary={this.state.diary}
                         refreshData={() => this.state.diary}
                         editable={this.state.editable}
+                        {...this.props}
                     ></DiaryFull>
 
                 </ScrollView>

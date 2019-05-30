@@ -1,16 +1,20 @@
 import Toast from 'react-native-root-toast';
 
-function showMsg(msg) {
+function showMsg(msg, option) {
     if (!msg) {
         return;
     }
 
-    Toast.show(msg, {
-        duration: 2500,
-        position: -75,
-        shadow: false,
-        hideOnPress: true,
-    });
+    if(!option) {
+        option = {
+            duration: 2500,
+            position: -75,
+            shadow: false,
+            hideOnPress: true
+        }
+    }
+
+    Toast.show(msg, option);
 }
 
 export default {

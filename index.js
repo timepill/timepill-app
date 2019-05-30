@@ -15,7 +15,7 @@ import BottomNav from './src/nav/bottomNav';
 
 Navigation.registerComponent('Timepill', () => App);
 // regist screens automatically
-for (let pageName in PageList) {
+for(let pageName in PageList) {
     Navigation.registerComponent(pageName, () => PageList[pageName]);
 }
 
@@ -29,7 +29,7 @@ Navigation.events().registerAppLaunchedListener(async () => {
 
     let token = await Token.getUserToken();
     // let token;
-    if (!token) {
+    if(!token) {
         Navigation.setRoot({
             root: {
                 stack: {
@@ -38,7 +38,11 @@ Navigation.events().registerAppLaunchedListener(async () => {
                             name: 'Timepill',
                             options: {
                                 topBar: {
-                                    visible: false
+                                    visible: false,
+
+                                    // hide top bar for android
+                                    drawBehind: true,
+                                    animate: true
                                 }
                             }
                         }

@@ -65,7 +65,7 @@ export default class DiaryBrief extends Component {
                     {diary.content}
                 </Text>
 
-                <Photo uri={diary.photoThumbUrl}></Photo>
+                <Photo uri={diary.photoThumbUrl} onPress={this.props.onPhotoPress}></Photo>
 
                 <View style={localStyle.actionBar}>
                     {

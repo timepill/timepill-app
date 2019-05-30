@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Navigation} from 'react-native-navigation';
 import moment from 'moment';
 
 import Color from '../../style/color';
@@ -35,6 +36,38 @@ export default class DiaryFull extends Component {
         await this.commentList.refresh();
     }
 
+    _onUserIconPress() {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'User',
+                options: {
+                    bottomTabs: {
+                        visible: false,
+
+                        // hide bottom tab for android
+                        drawBehind: true,
+                        animate: true
+                    }
+                },
+                passProps: {
+                    user: this.state.diary.user
+                }
+            }
+        });
+    }
+
+    _onPhotoPress(photoUrl) {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'Photo',
+                passProps: {
+                    url: photoUrl
+                }
+            }
+        })
+    }
+
+
     render() {
         let diary = this.state.diary;
         if(!diary) {
@@ -47,7 +80,7 @@ export default class DiaryFull extends Component {
             <View>
                 <View style={localStyle.box}>
                     {user && user.iconUrl
-                        ? <UserIcon iconUrl={user.iconUrl}></UserIcon> : null}
+                        ? <UserIcon iconUrl={user.iconUrl} onPress={this._onUserIconPress.bind(this)}></UserIcon> : null}
                     
                     <View style={localStyle.body}>
                         <View style={localStyle.title}>
@@ -69,7 +102,7 @@ export default class DiaryFull extends Component {
                             {diary.content.trim()}
                         </Text>
 
-                        <Photo uri={diary.photoThumbUrl}></Photo>
+                        <Photo uri={diary.photoThumbUrl} onPress={() => this._onPhotoPress(diary.photoUrl)}></Photo>
                     </View>
                 </View>
 

@@ -3,6 +3,7 @@ package com.timepill;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
@@ -43,6 +44,7 @@ public class MainApplication extends NavigationApplication {
     // No need to add RnnPackage and MainReactPackage
     return Arrays.<ReactPackage>asList(
             // eg. new VectorIconsPackage()
+            new RNFetchBlobPackage(),
             new RNDeviceInfo(),
             new VectorIconsPackage(),
             new AsyncStoragePackage(),
