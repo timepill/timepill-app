@@ -17,7 +17,12 @@ import Msg from '../../util/msg';
 import Api from '../../util/api';
 
 import Touchable from '../touchable';
-import ListFooter from '../listFooter';
+import {
+    ListFooterLoading,
+    ListFooterEnd,
+    ListFooterFailed
+} from '../listFooter';
+import {ListEmptyRefreshable} from '../listEmpty';
 import DiaryBrief from './diaryBrief';
 
 
@@ -30,6 +35,7 @@ export default class DiaryList extends Component {
         this.dataSource = props.dataSource;
 
         this.state = {
+            mounting: true,
             diaries: [],
             
             refreshing: false,
@@ -91,7 +97,6 @@ export default class DiaryList extends Component {
         });
     }
 
-    // to be seperated as diaryAction component
     _onDiaryAction(diary) {
         ActionSheet.showActionSheetWithOptions({
             options:['修改','删除', '取消'],
@@ -113,10 +118,7 @@ export default class DiaryList extends Component {
                             }
                         },
                         passProps: {
-                            diary: diary,
-                            onSave: (diary) => {
-                                // 
-                            }
+                            diary: diary
                         }
                     }
                 });
@@ -152,11 +154,11 @@ export default class DiaryList extends Component {
                     url: photoUrl
                 }
             }
-        })
+        });
     }
 
     async refresh() {
-        if (this.state.refreshing) {
+        if(this.state.refreshing) {
             return;
         }
 
@@ -169,14 +171,6 @@ export default class DiaryList extends Component {
                         }
 
                     } else {
-                        let diaries = this.state.diaries;
-                        let newDiaries = result.list;
-                        if (diaries.length > 0 && newDiaries.length > 0
-                                && diaries[0].id === newDiaries[0].id) {
-
-                            Msg.showMsg('没有新内容');
-                        }
-
                         this.setState({
                             diaries: result.list ? result.list : [],
                             hasMore: result.more,
@@ -191,6 +185,7 @@ export default class DiaryList extends Component {
 
                 }).done(() => {
                     this.setState({
+                        mounting: false,
                         refreshing: false
                     });
                 });
@@ -231,6 +226,20 @@ export default class DiaryList extends Component {
     }
 
     render() {
+        if(!this.state.mounting && (!this.state.diaries || this.state.diaries.length == 0)) {
+            let message = this.editable
+                            ? '今天还没有写日记，马上写一篇吧'
+                            : '今天还没有人写日记';
+            return (
+                <ListEmptyRefreshable
+                    error={this.state.refreshFailed}
+                    message={message}
+                    onPress={this.refresh.bind(this)}
+
+                ></ListEmptyRefreshable>
+            );
+        }
+
         return (
             <View style={localStyle.container}>
                 <FlatList style={localStyle.list}
@@ -266,14 +275,14 @@ export default class DiaryList extends Component {
                         }
 
                         if (this.state.loadFailed) {
-                            return ListFooter.renderFooterFailed(this.loadMore.bind(this));
+                            return <ListFooterFailed refresh={this.loadMore.bind(this)}></ListFooterFailed>;
                         }
 
                         if (!this.state.hasMore) {
-                            return ListFooter.renderFooterEnd();
+                            return <ListFooterEnd></ListFooterEnd>;
                         }
 
-                        return ListFooter.renderFooterLoading();
+                        return <ListFooterLoading></ListFooterLoading>;
                     }}
 
                     refreshing={this.state.refreshing}

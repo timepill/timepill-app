@@ -6,6 +6,8 @@ import {Navigation} from 'react-native-navigation';
 import Color from '../style/color'
 import {Icon} from '../style/icon'
 
+import {ListEmptyRefreshable} from '../component/listEmpty'
+
 
 export default class NotificationPage extends Component {
 
@@ -24,7 +26,7 @@ export default class NotificationPage extends Component {
                   id: 'history',
                   icon: Icon.navButtonTime,
 
-                  color: '#aaa' // android
+                  color: Color.primary // android
               }]
             }
         };
@@ -39,13 +41,9 @@ export default class NotificationPage extends Component {
     }
 
     render() {
-      return (
-          <View style={localStyle.container}>
-              <Text style={localStyle.text}>没有内容</Text>
-              <Button fontSize={14} borderRadius={999} backgroundColor={Color.primary}
-                  title={'刷新'} onPress={() => {}} />
-          </View>
-      );
+        return (
+            <ListEmptyRefreshable message={'没有提醒:)'}></ListEmptyRefreshable>
+        );
     }
 }
 

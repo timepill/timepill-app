@@ -7,7 +7,11 @@ import Touchable from '../touchable';
 import Color from '../../style/color';
 
 import UserIcon from '../userIcon';
-import ListFooter from '../listFooter';
+import {
+    ListFooterLoading,
+    ListFooterEnd,
+    ListFooterFailed
+} from '../listFooter';
 
 
 export default class FollowUserList extends Component {
@@ -157,7 +161,7 @@ export default class FollowUserList extends Component {
                         return (
                           <Touchable key={item.id} onPress={() => this._onItemPress(item)}>
                             <View style={localStyle.box}>
-                                <UserIcon iconUrl={item.iconUrl}></UserIcon>
+                                <UserIcon iconUrl={item.iconUrl} onPress={() => this._onItemPress(item)}></UserIcon>
                                 <Text style={localStyle.userName}>{item.name}</Text>
                                 <Touchable onPress={() => this._onDeletePress(item)}>
                                     <Ionicons name="md-close" size={20}
@@ -175,14 +179,14 @@ export default class FollowUserList extends Component {
                         }
 
                         if (this.state.loadFailed) {
-                            return ListFooter.renderFooterFailed(this.loadMore.bind(this));
+                            return <ListFooterFailed refresh={this.loadMore.bind(this)}></ListFooterFailed>;
                         }
 
                         if (!this.state.hasMore) {
-                            return ListFooter.renderFooterEnd();
+                            return <ListFooterEnd></ListFooterEnd>;
                         }
 
-                        return ListFooter.renderFooterLoading();
+                        return <ListFooterLoading></ListFooterLoading>;
                     }}
 
                     refreshing={this.state.refreshing}

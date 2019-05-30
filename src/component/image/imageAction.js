@@ -3,11 +3,9 @@ import ImagePicker from 'react-native-image-crop-picker'
 import ImageResizer from 'react-native-image-resizer'
 
 
-async function resize(uri, oWidth, oHeight) {
+async function resize(uri, oWidth, oHeight, maxPixel) {
     let width = oWidth;
     let height = oHeight;
-    
-    let maxPixel = 640 * 640;
     let oPixel = oWidth * oHeight;
 
     if(oPixel > maxPixel) {
@@ -15,11 +13,11 @@ async function resize(uri, oWidth, oHeight) {
         height = Math.sqrt(oHeight * maxPixel / oWidth);
     }
     
-    const newUri = await ImageResizer.createResizedImage(uri, width, height, 'JPEG', 75);
+    const newUri = await ImageResizer.createResizedImage(uri, width, height);
     return 'file://' + newUri.uri;
 }
 
-function action(imageOption, callback) {
+function action(imageOption, maxSize, maxPixel, callback) {
     ActionSheet.showActionSheetWithOptions({
         options: ['拍照', '从相册选择', '取消'],
         cancelButtonIndex: 2,
@@ -37,13 +35,19 @@ function action(imageOption, callback) {
                 : ImagePicker.openPicker(imageOption)
             )
             .then(async (image) => {
-                let imageUri = await resize(image.path, image.width, image.height);
-                if(typeof callback == 'function') {
-                    callback(imageUri);
+                let imageUri = image.path;
+                if(image.size > maxSize) {
+                    imageUri = await resize(image.path, image.width, image.height, maxPixel);
                 }
+
+                callback(null, imageUri);
             })
             .catch(e => {
-                //
+                if(e.message === "User cancelled image selection") {
+                    return;
+                }
+
+                callback(e);
             })
             .done();
         }

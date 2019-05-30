@@ -109,6 +109,8 @@ export default class DiaryFull extends Component {
                 <CommentList ref={(r) => this.commentList = r}
                     diaryId={diary.id}
                     editable={this.state.editable}
+                    onUserIconPress={this._onUserIconPress.bind(this)}
+                    {...this.props}
                 ></CommentList>
 
             </View>

@@ -78,24 +78,7 @@ export default class DiaryDetailPage extends Component {
 
     componentDidMount() {
         if(!this.state.diary && this.state.diaryId) {
-            Api.getDiary(this.state.diaryId)
-                .then(result => {
-                    console.log('get diary:', result);
-                    if(!result) {
-                        throw {
-                            message: 'get diary no result'
-                        }
-                    }
-
-                    this.setState({
-                        diary: result
-                    }, () => {
-                        this.diaryFull.refreshDiaryContent();
-                    })
-                })
-                .done(() => {
-
-                });
+            this.refreshDiary();
         }
 
         Api.getSelfInfoByStore()
@@ -106,7 +89,11 @@ export default class DiaryDetailPage extends Component {
 
             }).done();
 
-        this.listener = DeviceEventEmitter.addListener(Event.updateComments, (param) => {
+        this.diaryListener = DeviceEventEmitter.addListener(Event.updateDiarys, (param) => {
+            this.refreshDiary();
+        });
+
+        this.commentListener = DeviceEventEmitter.addListener(Event.updateComments, (param) => {
             this.setState({needScrollToBottom: true});
             this.diaryFull.refreshComment();
             Keyboard.dismiss();
@@ -114,7 +101,33 @@ export default class DiaryDetailPage extends Component {
     }
 
     componentWillUnmount(){
-        this.listener.remove();
+        this.diaryListener.remove();
+        this.commentListener.remove();
+    }
+
+    refreshDiary() {
+        let diaryId = this.state.diaryId;
+        if(!diaryId) {
+            diaryId = this.state.diary.id;
+        }
+
+        Api.getDiary(diaryId)
+            .then(result => {
+                if(!result) {
+                    throw {
+                        message: 'get diary no result'
+                    }
+                }
+
+                this.setState({
+                    diary: result
+                }, () => {
+                    this.diaryFull.refreshDiaryContent();
+                })
+            })
+            .done(() => {
+
+            });
     }
 
     render() {

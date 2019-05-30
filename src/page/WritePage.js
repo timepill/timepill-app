@@ -11,7 +11,8 @@ import {
     Easing,
     TouchableWithoutFeedback,
     DeviceEventEmitter,
-    Alert
+    Alert,
+    Image
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import KeyboardSpacer from "react-native-keyboard-spacer";
@@ -26,6 +27,7 @@ import Token from '../util/token'
 import Event from "../util/event";
 
 import NotebookLine from '../component/notebook/notebookLine';
+import ImageAction from '../component/image/imageAction'
 
 
 export default class WritePage extends Component {
@@ -42,6 +44,8 @@ export default class WritePage extends Component {
             targetbookSubject: diary ? diary.notebook_subject : '',
             
             content: diary ? diary.content : '',
+            photoSource: null,
+            photoUri: null,
 
             modalVisible: false,
             fadeAnimOpacity: new Animated.Value(0),
@@ -189,22 +193,67 @@ export default class WritePage extends Component {
             }).done();
     }
 
+    _onPickPhoto() {
+        if(this.state.photoUri != null) {
+            ActionSheet.showActionSheetWithOptions({
+                options: ['预览照片', '删除照片', '取消'],
+                destructiveButtonIndex: 1,
+                cancelButtonIndex: 2
+
+            }, (index) => {
+                if(index == 0) {
+                    Navigation.push(this.props.componentId, {
+                        component: {
+                            name: 'Photo',
+                            passProps: {
+                                url: this.state.photoUri
+                            }
+                        }
+                    });
+
+                } else if(index == 1) {
+                    this.setState({
+                        photoSource: null,
+                        photoUri: null
+                    });
+                }
+            });
+
+        } else {
+            ImageAction.action({
+                cropping: false,
+                mediaType: 'photo'
+
+            }, 1024 * 1024 * 2, 2560 * 1920, (e, imageUri) => {
+                if(e) {
+                    Msg.showMsg('操作失败');
+                } else {
+                    this.setState({
+                        photoSource: {
+                            uri: imageUri,
+                            isStatic: true
+                        },
+                        photoUri: imageUri
+                    });
+                }
+            });
+        }
+    }
+
     saveDiary() {
-        let photoUri = null;
+        let photoUri = this.state.photoUri;
         let topic = this.props.topic ? 1 : 0;
 
         (this.diary
           ? Api.updateDiary(this.diary.id, this.state.targetbookId, this.state.content)
-          : Api.addDiary(this.state.targetbookId, this.state.content, null, topic)
+          : Api.addDiary(this.state.targetbookId, this.state.content, photoUri, topic)
         ).then(result => {
               Msg.showMsg('日记保存完成');
               DeviceEventEmitter.emit(Event.updateDiarys);
 
-              this.props.onSave(result);
-
               if(this.diary) {
                   Navigation.pop(this.props.componentId);
-              
+
               } else {
                   Navigation.setStackRoot(this.props.componentId, {
                       component: {
@@ -220,7 +269,6 @@ export default class WritePage extends Component {
                       }
                   });
               }
-              
           })
           .catch(e => {
               Msg.showMsg('保存失败');
@@ -266,10 +314,8 @@ export default class WritePage extends Component {
 
                   <View style={{flex: 1}} />
 
-                  <TouchableOpacity style={localStyle.photo} onPress={() => {}}>
-                      <Ionicons name="ios-image-outline" size={30}
-                          style={{paddingTop: 4}} color={Color.light} />
-                  </TouchableOpacity>
+                  {this.renderPhotoButton()}
+                  
               </View>
 
               {
@@ -280,6 +326,23 @@ export default class WritePage extends Component {
 
           </ScrollView>
       );
+    }
+
+    renderPhotoButton() {
+        if(this.diary) {
+            return null;
+        }
+
+        let content = !this.state.photoSource
+                      ? (<Ionicons name="ios-image-outline" size={30} style={{paddingTop: 4}} color={Color.light} />)
+                      : (<Image source={this.state.photoSource} style={{width: 30, height: 30, borderRadius: 3}} />);
+
+        return (
+          <TouchableOpacity style={localStyle.photo}
+              onPress={this._onPickPhoto.bind(this)}>
+                  {content}
+          </TouchableOpacity>
+        );
     }
 
     renderModal() {

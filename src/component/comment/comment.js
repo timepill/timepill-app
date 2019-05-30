@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import ActionSheet from 'react-native-actionsheet-api';
 import moment from 'moment';
 
 import Color from '../../style/color';
 import UserIcon from '../userIcon';
-
-import CommentActionIcon from './commentActionIcon';
 
 
 export default class Comment extends Component {
@@ -18,7 +18,7 @@ export default class Comment extends Component {
         return (
             <View>
                 <View style={localStyle.box}>
-                    <UserIcon iconUrl={user.iconUrl}></UserIcon>
+                    <UserIcon iconUrl={user.iconUrl} onPress={this.props.onUserIconPress}></UserIcon>
 
                     <View style={localStyle.body}>
                         <View style={localStyle.title}>
@@ -40,7 +40,9 @@ export default class Comment extends Component {
 
                 {
                     editable
-                    ? <CommentActionIcon onPress={this.props.onCommentAction}></CommentActionIcon>
+                    ? <TouchableOpacity onPress={this.props.onCommentAction} style={localStyle.moreIcon}>
+                        <Ionicons name="ios-more" size={24} color={Color.inactiveText} />
+                    </TouchableOpacity>
                     : null
                 }
 
@@ -91,5 +93,12 @@ const localStyle = StyleSheet.create({
         backgroundColor: Color.line,
         marginHorizontal: 16,
         marginLeft: 56
+    },
+    moreIcon: {
+        position: 'absolute',
+        bottom: 0,
+        right: 10,
+        paddingHorizontal: 12,
+        paddingVertical: 5
     }
 });

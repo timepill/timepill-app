@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 
 import Color from '../../style/color';
 import UserIcon from '../userIcon';
 import Photo from '../photo';
-
-import CommentIcon from '../comment/commentIcon';
-import DiaryActionIcon from './diaryActionIcon';
 
 
 export default class DiaryBrief extends Component {
@@ -70,14 +68,22 @@ export default class DiaryBrief extends Component {
                 <View style={localStyle.actionBar}>
                     {
                         diary.comment_count > 0
-                        ? <CommentIcon count={diary.comment_count}></CommentIcon>
+                        ? <View style={localStyle.commentIconBox}>
+                            <Ionicons name="ios-text-outline" size={18}
+                                  color={Color.inactiveText}
+                                  style={localStyle.buttonIcon} />
+                            <Text style={localStyle.commentIconText}>{diary.comment_count}</Text>
+                        </View>
                         : null
                     }
                     <View style={{flex: 1}} />
                     {
                         this.editable
-                        ? <DiaryActionIcon diaryId={diary.id}
-                            onPress={this.props.onDiaryAction}></DiaryActionIcon>
+                        ? <TouchableOpacity onPress={this.props.onDiaryAction}>
+                            <Ionicons name="ios-more" size={24}
+                                      color={Color.inactiveText}
+                                      style={localStyle.moreIcon} />
+                        </TouchableOpacity>
                         : null
                     }
                 </View>
@@ -130,5 +136,20 @@ const localStyle = StyleSheet.create({
         height: 30,
         marginTop: 10,
         justifyContent: 'space-between'
+    },
+    moreIcon: {
+        paddingVertical: 5,
+        paddingHorizontal: 5
+    },
+    commentIconBox: {
+        flexDirection: "row"
+    },
+    buttonIcon: {
+        marginRight: 8,
+        marginLeft: 2
+    },
+    commentIconIext: {
+        fontSize: 15,
+        color: Color.inactiveText
     }
 });

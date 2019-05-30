@@ -16,8 +16,12 @@ import Color from '../../style/color';
 import Touchable from '../touchable';
 
 import DiaryBrief from '../diary/diaryBrief';
-import ListFooter from '../listFooter';
 import NotebookDiaryData from '../../dataLoader/notebookDiaryData';
+import {
+    ListFooterLoading,
+    ListFooterEnd,
+    ListFooterFailed
+} from '../listFooter';
 
 
 export default class NotebookDiaryList extends Component {
@@ -200,14 +204,14 @@ export default class NotebookDiaryList extends Component {
                     }
 
                     if (this.state.loadFailed) {
-                        return ListFooter.renderFooterFailed(this.loadMore.bind(this));
+                        return <ListFooterFailed refresh={this.loadMore.bind(this)}></ListFooterFailed>;
                     }
 
                     if (!this.state.hasMore) {
-                        return ListFooter.renderFooterEnd();
+                        return <ListFooterEnd></ListFooterEnd>;
                     }
 
-                    return ListFooter.renderFooterLoading();
+                    return <ListFooterLoading></ListFooterLoading>;
                 }}
 
                 ItemSeparatorComponent={(sectionID, rowID, adjacentRowHighlighted) =>

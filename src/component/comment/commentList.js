@@ -10,6 +10,7 @@ import {
     Keyboard,
     DeviceEventEmitter
 } from 'react-native';
+import {Navigation} from 'react-native-navigation';
 import {Divider} from "react-native-elements";
 
 import Touchable from '../touchable';
@@ -55,6 +56,26 @@ export default class CommentList extends Component {
 
     _onCommentPress(comment) {
         DeviceEventEmitter.emit(Event.commentPressed, comment);
+    }
+
+    _onUserIconPress(comment) {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'User',
+                options: {
+                    bottomTabs: {
+                        visible: false,
+
+                        // hide bottom tab for android
+                        drawBehind: true,
+                        animate: true
+                    }
+                },
+                passProps: {
+                    user: comment.user
+                }
+            }
+        });
     }
 
     _onCommentAction(comment) {
@@ -107,6 +128,7 @@ export default class CommentList extends Component {
                         return (
                             <Touchable onPress={() => this._onCommentPress(item)}>
                                 <Comment comment={item} editable={this.editable}
+                                    onUserIconPress={() => this._onUserIconPress(item)}
                                     onCommentAction={() => this._onCommentAction(item)}>
                                 </Comment>
                             </Touchable>

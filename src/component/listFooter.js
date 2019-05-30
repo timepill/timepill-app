@@ -20,7 +20,7 @@ const localStyle = StyleSheet.create({
     }
 });
 
-function renderFooterLoading() {
+const ListFooterLoading = () => {
     return (
         <View style={localStyle.footer}>
             <ActivityIndicator animating={true} color={Color.primary}
@@ -29,7 +29,7 @@ function renderFooterLoading() {
     );
 }
 
-function renderFooterEnd() {
+const ListFooterEnd = () => {
     return (
         <View style={localStyle.footer}>
             <Text style={{color: Color.inactiveText, fontSize: 12}}>
@@ -39,15 +39,15 @@ function renderFooterEnd() {
     );
 }
 
-function renderFooterFailed(refresh) {
-    let isRefreshable = refresh && typeof refresh == 'function';
+const ListFooterFailed = (props) => {
+    let isRefreshable = props.refresh ? true : false;
 
     return (
         <View style={localStyle.footer}>
             <TouchableOpacity style={{marginTop: 15}}
                 onPress={() => {
                     if(isRefreshable) {
-                        refresh();
+                        props.refresh();
                     }
                 }}
             >
@@ -60,9 +60,9 @@ function renderFooterFailed(refresh) {
 }
 
 
-export default {
-    renderFooterLoading,
-    renderFooterEnd,
-    renderFooterFailed
+export {
+    ListFooterLoading,
+    ListFooterEnd,
+    ListFooterFailed
 }
 

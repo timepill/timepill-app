@@ -126,8 +126,7 @@ export default class NotebookEditPage extends Component {
                 Msg.showMsg('封面保存成功');
             })
             .catch(e => {
-                // Msg.showMsg('封面保存失败:' + e.message);
-                Alert.alert('封面保存失败:' + e.message);
+                Msg.showMsg('封面保存失败');
             })
             .done(() => {
                 this.setState({uploading: false});
@@ -139,7 +138,15 @@ export default class NotebookEditPage extends Component {
             width: 640,
             height: 480,
             cropping: true
-        }, this.uploadCover.bind(this));
+
+        }, -1, 600*600, (e, imageUri) => {
+            
+            if(e) {
+                Msg.showMsg('操作失败');
+            } else {
+                this.uploadCover(imageUri);
+            }
+        });
     }
 
     _onDelete() {
