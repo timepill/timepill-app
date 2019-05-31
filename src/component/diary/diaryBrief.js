@@ -7,6 +7,8 @@ import Color from '../../style/color';
 import UserIcon from '../userIcon';
 import Photo from '../photo';
 
+import DiaryAction from './diaryAction';
+
 
 export default class DiaryBrief extends Component {
 
@@ -24,6 +26,10 @@ export default class DiaryBrief extends Component {
 
     show(field) {
         return this.showField.indexOf(field) >= 0;
+    }
+
+    onDiaryAction() {
+        DiaryAction.action(this.props.componentId, this.diary);
     }
 
     render() {
@@ -79,7 +85,7 @@ export default class DiaryBrief extends Component {
                     <View style={{flex: 1}} />
                     {
                         this.editable
-                        ? <TouchableOpacity onPress={this.props.onDiaryAction}>
+                        ? <TouchableOpacity onPress={this.onDiaryAction.bind(this)}>
                             <Ionicons name="ios-more" size={24}
                                       color={Color.inactiveText}
                                       style={localStyle.moreIcon} />

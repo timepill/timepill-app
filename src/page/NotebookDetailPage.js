@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, DeviceEventEmitter} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
 import Color from '../style/color';
 import {Icon} from '../style/icon';
+import Event from '../util/event';
 import NotebookDiaryList from '../component/notebook/notebookDiaryList';
 
 
@@ -46,10 +47,21 @@ export default class NotebookDetailPage extends Component {
         });
     }
 
+    componentDidMount() {
+        this.diaryListener = DeviceEventEmitter.addListener(Event.updateDiarys, (param) => {
+            this.diaryList.refresh();
+        });
+    }
+
+    componentWillUnmount() {
+        this.diaryListener.remove();
+    }
+
     render() {
         return (
             <View style={{flex: 1}}>
-                <NotebookDiaryList notebook={this.props.notebook}
+                <NotebookDiaryList ref={(r) => this.diaryList = r}
+                    notebook={this.props.notebook}
                     {...this.props}>
                 </NotebookDiaryList>
             </View>

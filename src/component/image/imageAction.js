@@ -13,7 +13,7 @@ async function resize(uri, oWidth, oHeight, maxPixel) {
         height = Math.sqrt(oHeight * maxPixel / oWidth);
     }
     
-    const newUri = await ImageResizer.createResizedImage(uri, width, height);
+    const newUri = await ImageResizer.createResizedImage(uri, width, height, 'JPEG', 75);
     return 'file://' + newUri.uri;
 }
 

@@ -49,7 +49,6 @@ export default class FollowPage extends Component {
                 }
             }
         });
-        
     }
 
     render() {

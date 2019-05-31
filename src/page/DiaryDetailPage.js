@@ -18,7 +18,8 @@ import Api from '../util/api'
 import Event from '../util/event';
 
 import DiaryFull from '../component/diary/diaryFull';
-import CommentInput from '../component/comment/commentInput'
+import DiaryAction from '../component/diary/diaryAction';
+import CommentInput from '../component/comment/commentInput';
 
 
 export default class DiaryDetailPage extends Component {
@@ -35,31 +36,40 @@ export default class DiaryDetailPage extends Component {
             user: props.user,
 
             editable: props.editable || false,
+            expired: props.expired || false,
             needScrollToBottom: false
         }
-
-        this.onDiaryAction = props.onDiaryAction || (() => {});
     }
 
     static options(passProps) {
-        return {
-            topBar: {
-              title: {
-                  text: '日记详情'
-              },
-              rightButtons: [{
-                  id: 'navButtonMore',
-                  icon: Icon.navButtonMore,
-
-                  color: Color.primary // android
-              }]
+        let topBar = {
+            title: {
+                text: '日记详情'
             }
+        }
+
+        if(!passProps.expired) {
+            topBar.rightButtons = [{
+                id: 'navButtonMore',
+                icon: Icon.navButtonMore,
+
+                color: Color.primary // android
+            }]
+        }
+
+        return {
+            topBar
         };
     }
 
     navigationButtonPressed({buttonId}) {
-        if(this.state.editable) {
-            this.onDiaryAction(this.state.diary);
+        if(this.state.editable || this.state.diary.user_id == this.state.selfInfo.id) {
+            let componentId = this.props.componentId;
+            DiaryAction.action(componentId, this.state.diary, {
+                onDelete: () => {
+                    Navigation.pop(componentId);
+                }
+            });
 
         } else {
             ActionSheet.showActionSheetWithOptions({
@@ -90,7 +100,9 @@ export default class DiaryDetailPage extends Component {
             }).done();
 
         this.diaryListener = DeviceEventEmitter.addListener(Event.updateDiarys, (param) => {
-            this.refreshDiary();
+            if(param != 'del') {
+                this.refreshDiary();
+            }
         });
 
         this.commentListener = DeviceEventEmitter.addListener(Event.updateComments, (param) => {
@@ -131,6 +143,15 @@ export default class DiaryDetailPage extends Component {
     }
 
     render() {
+        if(!this.state.selfInfo || !this.state.diary) {
+            return null;
+        }
+
+        let isMine = false;
+        if(this.state.selfInfo.id == this.state.diary.user_id) {
+            isMine = true;
+        }
+
         return (
             <View style={localStyle.wrap}>
                 <ScrollView ref={(r)=>this.scroll = r}
@@ -144,16 +165,16 @@ export default class DiaryDetailPage extends Component {
                 >
 
                     <DiaryFull ref={(r) => this.diaryFull = r}
+                        {...this.props}
                         diary={this.state.diary}
                         refreshData={() => this.state.diary}
-                        editable={this.state.editable}
-                        {...this.props}
+                        editable={this.state.editable || isMine}
                     ></DiaryFull>
 
                 </ScrollView>
                 
                 {
-                    this.state.selfInfo && this.state.diary ? (
+                    !this.state.expired ? (
                         <CommentInput ref={(r) => this.commentInput = r}
                             diary={this.state.diary}
                             selfInfo={this.state.selfInfo}

@@ -9,7 +9,7 @@ import {
 import {Navigation} from 'react-native-navigation';
 
 import Api from '../util/api';
-import {Icon} from '../style/icon'
+import {Icon} from '../style/icon';
 import Event from "../util/event";
 import Color from '../style/color';
 
@@ -101,6 +101,22 @@ export default class UserPage extends Component {
                 .catch(e => {
                     Alert.alert('取消关注失败');
                 }).done();
+
+        } else if(buttonId == 'setting') {
+            Navigation.push(this.props.componentId, {
+                component: {
+                    name: 'Setting',
+                    options: {
+                        bottomTabs: {
+                            visible: false,
+
+                            // hide bottom tab for android
+                            drawBehind: true,
+                            animate: true
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -130,11 +146,16 @@ export default class UserPage extends Component {
         this.diaryListener = DeviceEventEmitter.addListener(Event.updateDiarys, (param) => {
             this.diaryList.refresh();
         });
+
+        this.userInfoListener = DeviceEventEmitter.addListener(Event.userInfoUpdated, (param) => {
+            this.userIntro.refresh();
+        });
     }
 
     componentWillUnmount() {
         this.notebookListener.remove();
         this.diaryListener.remove();
+        this.userInfoListener.remove();
     }
 
     _renderLabel = props => ({route}) => {
@@ -166,6 +187,7 @@ export default class UserPage extends Component {
 
     _renderScene = SceneMap({
         userIntro: () => <UserIntro
+            ref={(r) => this.userIntro = r}
             user={this.user}
         />,
         diary: () => <DiaryList

@@ -5,6 +5,13 @@ import {Avatar} from "react-native-elements";
 
 export default class UserIcon extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            iconUrl : props.iconUrl
+        };
+    }
+
     _defaultOnPress() {
         // empty
     }
@@ -15,7 +22,7 @@ export default class UserIcon extends Component {
                 containerStyle={localStyle.container}
                 width={this.props.width || 40}
                 height={this.props.height || 40}
-                source={{uri: this.props.iconUrl}}
+                source={{uri: this.state.iconUrl}}
                 onPress={this.props.onPress ? this.props.onPress : this._defaultOnPress.bind(this)}
                 activeOpacity={0.7}
             />

@@ -23,14 +23,19 @@ export default class UserIntro extends Component {
     }
 
     componentDidMount() {
-        InteractionManager.runAfterInteractions(() => {
-            this.loadUser();
-        });
+        Api.getSelfInfoByStore()
+            .then(user => {
+                this.selfInfo = user;
+
+                InteractionManager.runAfterInteractions(() => {
+                    this.refresh();
+                });
+            });
     }
 
-    loadUser() {
-        let user = this.state.user;
-        (user ? Api.getUserInfo(user.id) : Api.getSelfInfoByStore())
+    refresh() {
+        let userId = this.state.user ? this.state.user.id : this.selfInfo.id;
+        Api.getUserInfo(userId)
             .then(user => {
                 this.setState({
                     user: user

@@ -4,6 +4,8 @@ export default {
     updateDiarys: 'updateDiarys',
     updateComments: 'updateComments',
 
-    commentPressed: 'commentPressed'
-    
+    commentPressed: 'commentPressed',
+    passwordUpdated: 'passwordUpdated',
+    updateNewsRead: 'updateNewsRead',
+    userInfoUpdated: 'userInfoUpdated'
 }

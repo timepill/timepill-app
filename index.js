@@ -19,6 +19,60 @@ for(let pageName in PageList) {
     Navigation.registerComponent(pageName, () => PageList[pageName]);
 }
 
+function loginByAccount() {
+    Navigation.setRoot({
+        root: {
+            stack: {
+                children: [{
+                    component: {
+                        name: 'Timepill',
+                        options: {
+                            topBar: {
+                                visible: false,
+
+                                // hide top bar for android
+                                drawBehind: true,
+                                animate: true
+                            }
+                        }
+                    }
+                }]
+            }
+        }
+    });
+}
+
+function loginByPassword() {
+    Navigation.setRoot({
+        root: {
+            stack: {
+                children: [{
+                    component: {
+                        name: 'Password',
+                        options: {
+                            topBar: {
+                                title: {
+                                    text: '请输入密码'
+                                }
+                            },
+                            bottomTabs: {
+                                visible: false,
+
+                                // hide bottom tab for android
+                                drawBehind: true,
+                                animate: true
+                            }
+                        },
+                        passProps: {
+                            type: 'login'
+                        }
+                    }
+                }]
+            }
+        }
+    });
+}
+
 Navigation.events().registerAppLaunchedListener(async () => {
 
     try {
@@ -30,29 +84,16 @@ Navigation.events().registerAppLaunchedListener(async () => {
     let token = await Token.getUserToken();
     // let token;
     if(!token) {
-        Navigation.setRoot({
-            root: {
-                stack: {
-                    children: [{
-                        component: {
-                            name: 'Timepill',
-                            options: {
-                                topBar: {
-                                    visible: false,
-
-                                    // hide top bar for android
-                                    drawBehind: true,
-                                    animate: true
-                                }
-                            }
-                        }
-                    }]
-                }
-            }
-        });
+        loginByAccount();
 
     } else {
-        Navigation.setRoot(BottomNav.config());
+        const password = await Token.getLoginPassword();
+        if(password) {
+            loginByPassword();
+            
+        } else {
+            Navigation.setRoot(BottomNav.config());
+        }
     }
 
 });

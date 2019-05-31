@@ -18,6 +18,7 @@ const IS_IPHONEX = isIphoneX();
 
 
 const baseUrl = 'http://open.timepill.net/api';
+const v2Url = 'http://v2.timepill.net/api';
 
 
 async function login(username, password) {
@@ -42,6 +43,12 @@ async function login(username, password) {
     }
 }
 
+async function logout() {
+    TokenManager.setUserToken('');
+    TokenManager.setUserInfo(false);
+    TokenManager.setLoginPassword('');
+}
+
 async function getSelfInfo() {
     return call('GET', '/users/my');
 }
@@ -53,6 +60,20 @@ async function getSelfInfoByStore() {
 async function getUserInfo(id) {
     return call('GET', '/users/' + id)
 }
+
+async function updateUserIcon(photoUri) {
+    return upload('POST', '/users/icon', {
+        icon: {uri: photoUri, name: 'image.jpg', type: 'image/jpg'}
+    });
+}
+
+async function updateUserInfo(name, intro) {
+    return call('PUT', '/users', {
+        name: name,
+        intro: intro
+    });
+}
+
 
 async function getTodayDiaries(page = 1, page_size = 20, first_id = '') {
     return call('GET', '/diaries/today?page=' + page + '&page_size=' + page_size + `&first_id=${first_id}`)
@@ -216,6 +237,10 @@ async function report(user_id, diary_id) {
     });
 }
 
+async function feedback(content) {
+    return callV2('POST', '/feedback', {content});
+}
+
 
 async function upload(method, api, body) {
     let token = await TokenManager.getUserToken();
@@ -245,9 +270,8 @@ async function upload(method, api, body) {
     , 60000);
 }
 
-async function call(method, api, body, _timeout = 10000) {
+async function call(method, api, body = null, _timeout = 10000) {
     let token = await TokenManager.getUserToken();
-
     return timeout(fetch(baseUrl + api, {
             method: method,
             headers: {
@@ -266,6 +290,31 @@ async function call(method, api, body, _timeout = 10000) {
         .catch(handleCatch)
 
     , _timeout);
+}
+
+async function callV2(method, api, body = null, _timeout = 10000) {
+    let token = await TokenManager.getToken();
+    return timeout(fetch(v2Url + api, {
+            method: method,
+            headers: {
+                'Authorization': token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-TP-OS': OS,
+                'X-TP-OS-Version': OS_VERSION,
+                'X-TP-Version': VERSION,
+                'X-Device-ID': DEVICE_ID,
+            },
+            body: body ? JSON.stringify(body) : null
+        })
+        .then((response) => {
+            return response;
+        })
+        .then(checkStatus)
+        .then(parseJSON)
+        .catch(handleCatch)
+
+    ,_timeout);
 }
 
 async function checkStatus(response) {
@@ -332,8 +381,12 @@ export default {
     IS_IPHONEX,
 
     login,
+    logout,
     getSelfInfoByStore,
     getUserInfo,
+    
+    updateUserIcon,
+    updateUserInfo,
 
     getTodayDiaries,
     getFollowDiaries,
@@ -367,5 +420,6 @@ export default {
     addDiary,
     updateDiary,
 
-    report
+    report,
+    feedback
 }

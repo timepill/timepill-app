@@ -23,7 +23,6 @@ import {Icon} from '../style/icon';
 import Color from '../style/color';
 import Api from '../util/api';
 import Msg from '../util/msg';
-import Token from '../util/token'
 import Event from "../util/event";
 
 import NotebookLine from '../component/notebook/notebookLine';

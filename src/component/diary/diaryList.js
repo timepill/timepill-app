@@ -90,58 +90,8 @@ export default class DiaryList extends Component {
                     diary: diary,
                     user: diary.user,
 
-                    editable: this.editable,
-                    onDiaryAction: this._onDiaryAction.bind(this)
+                    editable: this.editable
                 }
-            }
-        });
-    }
-
-    _onDiaryAction(diary) {
-        ActionSheet.showActionSheetWithOptions({
-            options:['修改','删除', '取消'],
-            cancelButtonIndex: 2,
-            destructiveButtonIndex: 1
-
-        }, (index) => {
-            if(index === 0) {
-                Navigation.push(this.props.componentId, {
-                    component: {
-                        name: 'Write',
-                        options: {
-                            bottomTabs: {
-                                visible: false,
-
-                                // hide bottom tab for android
-                                drawBehind: true,
-                                animate: true
-                            }
-                        },
-                        passProps: {
-                            diary: diary
-                        }
-                    }
-                });
-
-            } else if (index === 1) {
-                Alert.alert('提示', '确认删除日记?', [
-                    {text: '删除', style: 'destructive', onPress: () => {
-                        Api.deleteDiary(diary.id)
-                            .then(() => {
-                                let filterDiaries = this.state.diaries.filter((it) => it.id !== diary.id);
-                                this.setState({
-                                    diaries: filterDiaries
-                                });
-
-                                Msg.showMsg('日记已删除');
-                            })
-                            .catch(e => {
-                                Msg.showMsg('日记删除失败');
-                            })
-                            .done();
-                    }},
-                    {text: '取消', onPress: () => {}},
-                ]);
             }
         });
     }
@@ -253,12 +203,12 @@ export default class DiaryList extends Component {
                     renderItem={({item}) => {
                         return (
                             <Touchable onPress={() => this._onDiaryPress(item)}>
-                                <DiaryBrief diary={item}
+                                <DiaryBrief {...this.props}
+                                    diary={item}
                                     showField={this.props.showField}
                                     editable={this.editable}
 
                                     onUserIconPress={() => this._onUserIconPress(item)}
-                                    onDiaryAction={() => this._onDiaryAction(item)}
                                     onPhotoPress={() => this._onPhotoPress(item.photoUrl)}
                                 >
 

@@ -169,7 +169,8 @@ export default class NotebookDiaryList extends Component {
                 },
                 passProps: {
                     diary: diary,
-                    editable: this.editable
+                    editable: this.editable,
+                    expired: this.notebook.isExpired
                 }
             }
         });

@@ -13,7 +13,10 @@ import {
     Animated,
     LayoutAnimation,
     InteractionManager,
-    Alert, StatusBar, DeviceEventEmitter, Linking
+    Alert,
+    StatusBar,
+    DeviceEventEmitter,
+    Linking
 } from 'react-native';
 import {Input} from "react-native-elements";
 import {Navigation} from 'react-native-navigation';
