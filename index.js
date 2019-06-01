@@ -2,7 +2,7 @@
  * @entry
  */
 
-import {Alert} from 'react-native'
+import {Alert} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {Icon, loadIcon} from './src/style/icon';
 

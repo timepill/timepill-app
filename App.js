@@ -21,12 +21,12 @@ import {
 import {Input} from "react-native-elements";
 import {Navigation} from 'react-native-navigation';
 
-import Color from './src/style/color'
-import Api from './src/util/api'
+import Color from './src/style/color';
+import Api from './src/util/api';
 
-import Loading from './src/component/loading'
-import LoginForm from './src/component/loginForm'
-import RegisterForm from './src/component/registerForm'
+import Loading from './src/component/loading';
+import LoginForm from './src/component/loginForm';
+import RegisterForm from './src/component/registerForm';
 
 
 export default class App extends Component {
