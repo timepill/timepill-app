@@ -36,6 +36,8 @@ export default class WritePage extends Component {
         Navigation.events().bindComponent(this);
 
         let diary = this.diary = props.diary;
+        let topic = this.topic = props.topic;
+
         this.state = {
             notebooks: [],
 
@@ -73,7 +75,7 @@ export default class WritePage extends Component {
     navigationButtonPressed({buttonId}) {
         if(buttonId == 'cancel') {
 
-            if(this.diary) {
+            if(this.diary || this.topic) {
                 Navigation.pop(this.props.componentId);
 
             } else {
@@ -250,7 +252,7 @@ export default class WritePage extends Component {
               Msg.showMsg('日记保存完成');
               DeviceEventEmitter.emit(Event.updateDiarys);
 
-              if(this.diary) {
+              if(this.diary || this.topic) {
                   Navigation.pop(this.props.componentId);
 
               } else {
@@ -313,6 +315,7 @@ export default class WritePage extends Component {
 
                   <View style={{flex: 1}} />
 
+                  {this.renderTopicButton()}
                   {this.renderPhotoButton()}
                   
               </View>
@@ -325,6 +328,20 @@ export default class WritePage extends Component {
 
           </ScrollView>
       );
+    }
+
+    renderTopicButton() {
+        if(!this.topic) {
+            return null;
+        }
+
+        return (
+            <TouchableOpacity>
+                <Text style={{color: Color.light, fontSize: 15, paddingRight: 15}}>
+                  # {this.topic.title}
+                </Text>
+            </TouchableOpacity>
+        )
     }
 
     renderPhotoButton() {

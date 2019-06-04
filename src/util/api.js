@@ -85,6 +85,16 @@ async function getTodayDiaries(page = 1, page_size = 20, first_id = '') {
         });
 }
 
+async function getTodayTopicDiaries(page = 1, page_size = 20, first_id = '') {
+    return call('GET', `/topic/diaries?page=${page}&page_size=${page_size}&first_id=${first_id}`)
+        .then((json) => {
+            json.page = Number(json.page);
+            json.page_size = Number(json.page_size);
+
+            return json;
+        });
+}
+
 async function getFollowDiaries(page = 1, page_size = 20, first_id = '') {
     return call('GET', '/diaries/follow?page=' + page + '&page_size=' + page_size + `&first_id=${first_id}`)
         .then((json) => {
@@ -108,6 +118,11 @@ async function getNotebookDiaries(id, page, page_size) {
 async function getUserTodayDiaries(userId) {
     return call('GET', '/users/' + userId + '/diaries/');
 }
+
+async function getTodayTopic() {
+    return call('GET', '/topic/');
+}
+
 
 async function getDiaryComments(diaryId) {
     return call('GET', '/diaries/' + diaryId + '/comments');
@@ -389,9 +404,12 @@ export default {
     updateUserInfo,
 
     getTodayDiaries,
+    getTodayTopicDiaries,
     getFollowDiaries,
     getNotebookDiaries,
     getUserTodayDiaries,
+
+    getTodayTopic,
 
     getDiary,
     deleteDiary,

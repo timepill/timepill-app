@@ -112,6 +112,10 @@ export default class DiaryList extends Component {
             return;
         }
 
+        if(this.props.refreshHeader) {
+            this.props.refreshHeader();
+        }
+
         this.setState({refreshing: true, refreshFailed: false});
         this.dataSource.refresh()
                 .then(result => {
@@ -219,6 +223,8 @@ export default class DiaryList extends Component {
 
                     ItemSeparatorComponent={({highlighted}) => <Divider style={{backgroundColor: '#eee'}}/>}
                     
+                    ListHeaderComponent={this.props.listHeader}
+
                     ListFooterComponent={() => {
                         if (this.state.refreshing || this.state.loadingMore || this.state.diaries.length == 0) {
                             return null;
