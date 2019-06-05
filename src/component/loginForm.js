@@ -37,7 +37,7 @@ export default class LoginForm extends Component {
     _checkResult(result) {
         InteractionManager.runAfterInteractions(() => {
             if(result.isLoginSucc) {
-                Navigation.setRoot(BottomNav.config());
+                this.props.onLoginSucc();
 
             } else {
                 Alert.alert(

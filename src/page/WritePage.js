@@ -18,7 +18,6 @@ import {Navigation} from 'react-native-navigation';
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import BottomNav from '../nav/bottomNav';
 import {Icon} from '../style/icon';
 import Color from '../style/color';
 import Api from '../util/api';

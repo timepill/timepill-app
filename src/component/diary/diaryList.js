@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {Divider} from "react-native-elements";
-import ActionSheet from 'react-native-actionsheet-api';
 
 import Color from '../../style/color';
 import Msg from '../../util/msg';
@@ -248,7 +247,7 @@ export default class DiaryList extends Component {
                     onEndReached={this.state.hasMore ? this.loadMore.bind(this) : null}
                 >
                 </FlatList>
-                <ActionSheet/>
+                
             </View>
         );
     }

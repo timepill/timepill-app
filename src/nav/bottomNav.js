@@ -1,7 +1,7 @@
 import Color from '../style/color'
 import {Icon} from '../style/icon'
 
-function config() {
+function config(splash) {
     return {
         root: {
             bottomTabs: {
@@ -19,11 +19,23 @@ function config() {
                           name: 'Home',
                           options: {
                             topBar: {
-                              // visible: false,
+                              visible: false,
+                              animate: false
+
+                              /*
                               title: {
                                 text: '首页'
                               }
+                              */
+                            },
+                            bottomTabs: {
+                                visible: false,
+                                animate: false
                             }
+                            
+                          },
+                          passProps: {
+                            splash: splash
                           }
                         }
                       }],

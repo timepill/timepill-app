@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import Api from '../util/api';
-import TokenManager from '../util/token';
+import Token from '../util/token';
 import Event from '../util/event';
 import Color from '../style/color';
 import UpdateInfo from '../updateInfo';
@@ -36,7 +36,7 @@ export default class AboutPage extends Component {
     }
 
     componentDidMount() {
-        TokenManager.setUpdateVersion(UpdateInfo.version)
+        Token.setUpdateVersion(UpdateInfo.version)
             .then(() => {
                 DeviceEventEmitter.emit(Event.updateNewsRead);
             });

@@ -2,7 +2,7 @@ import {Platform, Dimensions} from 'react-native'
 import DeviceInfo from 'react-native-device-info';
 import {isIphoneX} from 'react-native-iphone-x-helper'
 
-import TokenManager from './token'
+import Token from './token'
 
 
 const IS_ANDROID = Platform.OS === 'android';
@@ -22,19 +22,19 @@ const v2Url = 'http://v2.timepill.net/api';
 
 
 async function login(username, password) {
-    const token = TokenManager.generateToken(username, password);
-    await TokenManager.setUserToken(token);
+    const token = Token.generateToken(username, password);
+    await Token.setUserToken(token);
 
     try {
         const userInfo = await getSelfInfo();
 
-        await TokenManager.setUserInfo(userInfo);
-        await TokenManager.setLoginPassword('');
+        await Token.setUserInfo(userInfo);
+        await Token.setLoginPassword('');
 
         return userInfo;
 
     } catch(err) {
-        await TokenManager.setUserToken('');
+        await Token.setUserToken('');
         if (err.code && err.code === 401) {
             return false;
         }
@@ -44,9 +44,38 @@ async function login(username, password) {
 }
 
 async function logout() {
-    TokenManager.setUserToken('');
-    TokenManager.setUserInfo(false);
-    TokenManager.setLoginPassword('');
+    Token.setUserToken('');
+    Token.setUserInfo(false);
+    Token.setLoginPassword('');
+}
+
+async function getSplashByStore() {
+    try {
+        let info = await Token.get('splash');
+        console.log('api get splash:', info);
+        if(info) {
+            const splash = JSON.parse(info);
+            
+            const now = Date.parse(new Date()) / 1000;
+            if((splash.start_time  && splash.start_time > now) ||
+                (splash.end_time && now > splash.end_time)) {
+
+                return null;
+            }
+            
+            return splash;
+        }
+        
+    } catch (e) {}
+
+    return null;
+}
+
+async function syncSplash() {
+    const splash = await callV2('GET', '/splash');
+    await Token.set('splash', JSON.stringify(splash));
+
+    return splash;
 }
 
 async function getSelfInfo() {
@@ -54,7 +83,7 @@ async function getSelfInfo() {
 }
 
 async function getSelfInfoByStore() {
-    return await TokenManager.getUserInfo();
+    return await Token.getUserInfo();
 }
 
 async function getUserInfo(id) {
@@ -258,7 +287,7 @@ async function feedback(content) {
 
 
 async function upload(method, api, body) {
-    let token = await TokenManager.getUserToken();
+    let token = await Token.getUserToken();
     let formData = new FormData();
     for(let prop of Object.keys(body)) {
         formData.append(prop, body[prop]);
@@ -286,7 +315,7 @@ async function upload(method, api, body) {
 }
 
 async function call(method, api, body = null, _timeout = 10000) {
-    let token = await TokenManager.getUserToken();
+    let token = await Token.getUserToken();
     return timeout(fetch(baseUrl + api, {
             method: method,
             headers: {
@@ -308,7 +337,7 @@ async function call(method, api, body = null, _timeout = 10000) {
 }
 
 async function callV2(method, api, body = null, _timeout = 10000) {
-    let token = await TokenManager.getToken();
+    let token = await Token.getUserToken();
     return timeout(fetch(v2Url + api, {
             method: method,
             headers: {
@@ -397,6 +426,8 @@ export default {
 
     login,
     logout,
+    getSplashByStore,
+    syncSplash,
     getSelfInfoByStore,
     getUserInfo,
     

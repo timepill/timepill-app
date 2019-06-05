@@ -23,6 +23,7 @@ import {Navigation} from 'react-native-navigation';
 
 import Color from './src/style/color';
 import Api from './src/util/api';
+import BottomNav from './src/nav/bottomNav';
 
 import Loading from './src/component/loading';
 import LoginForm from './src/component/loginForm';
@@ -55,14 +56,28 @@ export default class App extends Component {
         });
     }
 
+    _onSucc() {
+        Api.getSplashByStore()
+            .then(splash => {
+                Navigation.setRoot(BottomNav.config(splash));
+            })
+            .done();
+    }
+
     render() {
         return (
           <View style={localStyle.wrap}>
             <Loading visible={this.state.isLoading}></Loading>
             <Animated.View style={localStyle.content}>
                 {this.state.isLoginPage
-                  ? (<LoginForm setLoading={this._setLoading.bind(this)}></LoginForm>)
-                  : (<RegisterForm></RegisterForm>)}
+                  ? (<LoginForm
+                        setLoading={this._setLoading.bind(this)}
+                        onLoginSucc={this._onSucc.bind(this)}
+                    ></LoginForm>)
+                  : (<RegisterForm
+                        setLoading={this._setLoading.bind(this)}
+                        onRegisterSucc={this._onSucc.bind(this)}
+                    ></RegisterForm>)}
                 
                 <View style={localStyle.bottom}>
                     <TouchableOpacity onPress={this._switchForm.bind(this)}>

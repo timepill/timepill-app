@@ -11,7 +11,7 @@ import {Navigation} from 'react-native-navigation';
 
 import Color from '../style/color';
 import Api from '../util/api'
-import TokenManager from '../util/token';
+import Token from '../util/token';
 import Event from '../util/event';
 import Msg from '../util/msg';
 
@@ -34,7 +34,7 @@ export default class PasswordPage extends Component {
     }
 
     componentDidMount() {
-        TokenManager.getLoginPassword()
+        Token.getLoginPassword()
             .then(pwd => {
                 if(this.props.type == 'setting') {
                     if(this.props.operation == 'setnew') {
@@ -99,7 +99,7 @@ export default class PasswordPage extends Component {
                 });
 
             } else {
-                TokenManager.setLoginPassword(password)
+                Token.setLoginPassword(password)
                     .then(() => {
                         Keyboard.dismiss();
                         Msg.showMsg('密码已设置');
@@ -142,7 +142,7 @@ export default class PasswordPage extends Component {
             return;
         }
 
-        TokenManager.setLoginPassword('')
+        Token.setLoginPassword('')
             .then(() => {
                 Keyboard.dismiss();
                 Msg.showMsg('密码已清除');

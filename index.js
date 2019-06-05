@@ -9,8 +9,13 @@ import {Icon, loadIcon} from './src/style/icon';
 import App from './App';
 
 import Token from './src/util/token';
+import Api from './src/util/api';
 import PageList from './src/page/_list';
 import BottomNav from './src/nav/bottomNav';
+
+
+// for debug
+// console.disableYellowBox = true;
 
 
 Navigation.registerComponent('Timepill', () => App);
@@ -80,6 +85,11 @@ Navigation.events().registerAppLaunchedListener(async () => {
     } catch (err) {
         Alert.alert("loadIcon err: " + err.toString());
     }
+
+    try {
+        await Api.syncSplash();
+    } catch (err) {}
+
 
     let token = await Token.getUserToken();
     // let token;

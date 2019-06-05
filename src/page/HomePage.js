@@ -1,6 +1,18 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, ImageBackground} from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    ImageBackground,
+    Animated,
+    Modal,
+    TouchableWithoutFeedback,
+    InteractionManager
+} from 'react-native';
 import {Navigation} from 'react-native-navigation';
+import {Button} from 'react-native-elements';
+import ActionSheet from 'react-native-actionsheet-api';
 
 import Color from '../style/color'
 import Api from '../util/api';
@@ -15,8 +27,129 @@ export default class HomePage extends Component {
         super(props);
         this.dataSource = new HomeDiaryData();
 
+        let splash = props.splash;
         this.state = {
+            hasSplash: splash ? true : false,
+
+            showSplash: true,
+            fadeInOpacity: new Animated.Value(0),
+
+            splashTime : 3,
+            splashImage: splash ? splash.image_url : null,
+            splashLink: splash ? splash.link : null,
+
             topic: null
+        }
+    }
+
+    componentDidMount() {
+        if(this.state.hasSplash) {
+            this.openSplash();
+
+        } else {
+            this.closeSplash();
+        }
+    }
+
+    startTimer() {
+        this.timer = setInterval(() => {
+            let newTime = this.state.splashTime - 1;
+            this.setState({
+                splashTime: newTime
+            });
+
+            if(newTime == 0) {
+                this.closeSplash();
+            }
+
+        }, 1000);
+    }
+
+    openSplash() {
+        Animated.timing(
+            this.state.fadeInOpacity,
+            {
+                toValue: 1,
+                duration: 1000,
+            }
+
+        ).start(() => {
+            this.startTimer();
+        });
+    }
+
+    closeSplash() {
+        if(this.timer) {
+            clearTimeout(this.timer);
+        }
+
+        Animated.timing(
+            this.state.fadeInOpacity,
+            {
+                toValue: 0,
+                duration: 500,
+            }
+
+        ).start(() => {
+            
+            Navigation.mergeOptions(this.props.componentId, {
+                topBar: {
+                  visible: true,
+                  title: {
+                    text: '首页'
+                  }
+                },
+                bottomTabs: {
+                    visible: true
+                }
+            });
+            
+            this.setState({
+                showSplash: false
+            })
+
+        });
+    }
+
+    onSplashPress() {
+        if(this.state.splashLink) {
+            if(this.timer) {
+                clearTimeout(this.timer);
+            }
+
+            Navigation.mergeOptions(this.props.componentId, {
+                topBar: {
+                  visible: true,
+                  title: {
+                    text: '首页'
+                  }
+                },
+                bottomTabs: {
+                    visible: true
+                }
+            });
+
+            Navigation.push(this.props.componentId, {
+                component: {
+                    name: 'WebView',
+                    options: {
+                        bottomTabs: {
+                            visible: false,
+
+                            // hide bottom tab for android
+                            drawBehind: true,
+                            animate: true
+                        }
+                    },
+                    passProps: this.state.splashLink.passProps
+                }
+            }).then(() => {
+
+                this.setState({
+                    showSplash: false,
+                    fadeInOpacity: new Animated.Value(0)
+                });
+            });
         }
     }
 
@@ -53,14 +186,19 @@ export default class HomePage extends Component {
 
     render() {
         return (
-          <View style={localStyle.wrap}>
-                <DiaryList ref={(r) => this.list = r}
-                    dataSource={this.dataSource}
-                    listHeader={this.renderHeader.bind(this)}
-                    refreshHeader={this.refreshTopic.bind(this)}
-                    {...this.props}
-                ></DiaryList>
-          </View>
+            <View style={localStyle.wrap}>
+                {
+                    this.state.showSplash ? this.renderModal() : (
+                        <DiaryList ref={(r) => this.list = r}
+                            dataSource={this.dataSource}
+                            listHeader={this.renderHeader.bind(this)}
+                            refreshHeader={this.refreshTopic.bind(this)}
+                            {...this.props}
+                        ></DiaryList>
+                    )
+                }
+                <ActionSheet/>
+            </View>
         );
     }
 
@@ -77,6 +215,36 @@ export default class HomePage extends Component {
                 </TouchableOpacity>
             </View>
         ) : null;
+    }
+
+    renderModal() {
+        return (
+            <Modal visible={this.state.hasSplash}
+                onShow={() => {}}
+                onRequestClose={() => {}}
+            >
+                <Animated.View style={{flex: 1, opacity: this.state.fadeInOpacity}}>
+                    <TouchableWithoutFeedback style={{flex: 1}} onPress={this.onSplashPress.bind(this)}>
+                        <ImageBackground
+                            style={{flex: 1, width: '100%', height: '100%'}}
+                            source={{uri: this.state.splashImage}}
+                        >
+
+                            <View style={localStyle.closeButtonWrap}>
+                                <View style={localStyle.closeButtonContainer}>
+                                    <Button
+                                        buttonStyle={localStyle.closeButton}
+                                        title={'关闭 ' + this.state.splashTime}
+                                        onPress={this.closeSplash.bind(this)}
+                                        textStyle={localStyle.closeButtonText}
+                                    />
+                                </View>
+                            </View>
+                        </ImageBackground>
+                    </TouchableWithoutFeedback>
+                </Animated.View>
+            </Modal>
+        );
     }
 }
 
@@ -116,5 +284,30 @@ const localStyle = StyleSheet.create({
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 2,
         shadowOpacity: 0.5
+    },
+
+    closeButtonWrap: {
+        flexDirection: 'row-reverse',
+        marginTop: Api.IS_IOS ? (Api.IS_IPHONEX ? 50 : 30) : 20
+    },
+    closeButtonContainer: {
+        width: 80,
+        backgroundColor: 'black',
+        opacity: 0.75,
+        borderRadius: 40,
+        marginRight: 15
+    },
+    closeButton: {
+        borderWidth: 1,
+        borderColor: 'black',
+        paddingVertical: 5,
+        paddingHorizontal: 0,
+        backgroundColor: 'black'
+    },
+    closeButtonText: {
+        fontWeight: 'bold',
+        fontSize: 14,
+        color: 'white',
+        fontFamily: 'Helvetica'
     }
 });

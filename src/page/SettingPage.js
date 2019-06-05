@@ -13,7 +13,7 @@ import {Navigation} from 'react-native-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Api from '../util/api';
-import TokenManager from '../util/token';
+import Token from '../util/token';
 import Color from '../style/color';
 
 
@@ -50,7 +50,7 @@ export default class SettingPage extends Component {
     }
 
     refreshPasswordState() {
-        TokenManager.getLoginPassword()
+        Token.getLoginPassword()
             .then((pwd) => this.setState({
                 hasPassword: pwd != null && pwd.length > 0
             }));

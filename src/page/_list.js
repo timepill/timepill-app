@@ -18,5 +18,6 @@ UserInfoEdit: require("./UserInfoEditPage.js").default,
 UserIntroEdit: require("./UserIntroEditPage.js").default,
 UserNameEdit: require("./UserNameEditPage.js").default,
 User: require("./UserPage.js").default,
+WebView: require("./WebViewPage.js").default,
 Write: require("./WritePage.js").default
 }
