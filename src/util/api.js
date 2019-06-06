@@ -49,6 +49,52 @@ async function logout() {
     Token.setLoginPassword('');
 }
 
+async function sendRegisterVerificationCode(mobile) {
+    return callV2('POST', '/verification/register', {
+        'type': 'mobile',
+        'sendTo': mobile
+    });
+}
+
+async function register(nickname, username, password) {
+    const result = await call('POST', '/users', {
+        name: nickname,
+        email: username,
+        password: password
+    });
+
+    if(result) {
+        const token = Token.generateToken(username, password);
+        await Token.setUserToken(token);
+
+        const userInfo = await getSelfInfo();
+        await Token.setUserInfo(userInfo);
+    }
+
+    return result;
+}
+
+async function mobileRegister(nickname, mobile, password, code) {
+    const result = await callV2('POST', '/users', {
+        type: 'mobile',
+        name: nickname,
+        mobile: mobile,
+        password: password,
+        code: code
+    });
+
+    if(result) {
+        const token = Token.generateToken(mobile, password);
+        await Token.setUserToken(token);
+
+        const userInfo = await getSelfInfo();
+        await Token.setUserInfo(userInfo);
+    }
+
+    return result;
+}
+
+
 async function getSplashByStore() {
     try {
         let info = await Token.get('splash');
@@ -426,6 +472,10 @@ export default {
 
     login,
     logout,
+    sendRegisterVerificationCode,
+    register,
+    mobileRegister,
+
     getSplashByStore,
     syncSplash,
     getSelfInfoByStore,

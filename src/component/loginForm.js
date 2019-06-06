@@ -3,9 +3,9 @@ import {Platform, StyleSheet, Text, View, InteractionManager, Alert} from 'react
 import {FormInput, Button} from "react-native-elements";
 import {Navigation} from 'react-native-navigation';
 
-import Color from '../style/color'
-import Api from '../util/api'
-import BottomNav from '../nav/bottomNav'
+import Color from '../style/color';
+import Api from '../util/api';
+import Msg from '../util/msg';
 
 
 export default class LoginForm extends Component {
@@ -53,19 +53,20 @@ export default class LoginForm extends Component {
     }
 
     _clickLogin() {
+        if(!this.state.username) {
+            Msg.showMsg('请输入邮箱/手机');
+            return;
+        }
+        if(!this.state.password) {
+            Msg.showMsg('请输入密码');
+            return;
+        }
+
         this.props.setLoading(true);
         this.login().then(result => {
             this.props.setLoading(false);
             this._checkResult(result);
         });
-    }
-
-    _usernameSubmit() {
-        this.refs.loginPw.focus();
-    }
-
-    _passwordSubmit() {
-        this._clickLogin();
     }
 
     render() {return (
@@ -89,7 +90,7 @@ export default class LoginForm extends Component {
                     returnKeyType="next"
 
                     onChangeText={(text) => this.setState({username: text})}
-                    onSubmitEditing={this._usernameSubmit.bind(this)}
+                    onSubmitEditing={() => {}}
                 />
 
                 <FormInput ref="loginPw"
@@ -107,7 +108,7 @@ export default class LoginForm extends Component {
                     returnKeyType='done'
 
                     onChangeText={(text) => this.setState({password: text})}
-                    onSubmitEditing={this._passwordSubmit.bind(this)}
+                    onSubmitEditing={this._clickLogin.bind(this)}
                 />
             </View>
 

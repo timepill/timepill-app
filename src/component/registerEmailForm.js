@@ -3,11 +3,12 @@ import {Platform, StyleSheet, Text, View, InteractionManager, Alert} from 'react
 import {FormInput, Button} from "react-native-elements";
 import {Navigation} from 'react-native-navigation';
 
-import Color from '../style/color'
-import Api from '../util/api'
+import Color from '../style/color';
+import Api from '../util/api';
+import Msg from '../util/msg';
 
 
-export default class RegisterForm extends Component {
+export default class RegisterEmailForm extends Component {
 
     constructor(props) {
         super(props);
@@ -37,7 +38,7 @@ export default class RegisterForm extends Component {
     _checkResult(result) {
         InteractionManager.runAfterInteractions(() => {
             if(result.isRegisterSucc) {
-                Navigation.setRoot(BottomNav.config());
+                this.props.onRegisterSucc();
 
             } else {
                 Alert.alert(
@@ -53,23 +54,24 @@ export default class RegisterForm extends Component {
     }
 
     _clickRegister() {
+        if(!this.state.nickname) {
+            Msg.showMsg('请输入名字');
+            return;
+        }
+        if(!this.state.username) {
+            Msg.showMsg('请输入邮箱');
+            return;
+        }
+        if(!this.state.password) {
+            Msg.showMsg('请输入密码');
+            return;
+        }
+
         this.props.setLoading(true);
         this.register().then(result => {
             this.props.setLoading(false);
             this._checkResult(result);
         });
-    }
-
-    _nicknameSubmit() {
-        this.refs.inputEmail.focus();
-    }
-
-    _usernameSubmit() {
-        this.refs.registerPw.focus();
-    }
-
-    _passwordSubmit() {
-        this._clickRegister();
     }
 
     render() {return (
@@ -93,7 +95,7 @@ export default class RegisterForm extends Component {
                     returnKeyType='next'
 
                     onChangeText={(text) => this.setState({nickname: text})}
-                    onSubmitEditing={this._nicknameSubmit.bind(this)}
+                    onSubmitEditing={() => {}}
                 />
 
                 <FormInput ref='inputEmail'
@@ -115,7 +117,7 @@ export default class RegisterForm extends Component {
                     onSubmitEditing={() => {}}
                 />
 
-                <FormInput ref='registerPw'
+                <FormInput ref='registerEmailPw'
 
                     selectionColor={Color.primary}
                     underlineColorAndroid='transparent'
@@ -130,7 +132,7 @@ export default class RegisterForm extends Component {
                     returnKeyType='done'
 
                     onChangeText={(text) => this.setState({password: text})}
-                    onSubmitEditing={this._passwordSubmit.bind(this)}
+                    onSubmitEditing={this._clickRegister.bind(this)}
                 />
             </View>
 

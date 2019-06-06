@@ -15,7 +15,7 @@ import BottomNav from './src/nav/bottomNav';
 
 
 // for debug
-// console.disableYellowBox = true;
+console.disableYellowBox = true;
 
 
 Navigation.registerComponent('Timepill', () => App);
