@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
-import Api from '../util/api'
-import {Icon} from '../style/icon'
+import Api from '../util/api';
+import {Icon} from '../style/icon';
+import Color from '../style/color';
 
-import DiaryList from '../component/diary/diaryList'
+import DiaryList from '../component/diary/diaryList';
 import FollowDiaryData from '../dataLoader/followDiaryData';
 
 
@@ -28,7 +29,7 @@ export default class FollowPage extends Component {
                   id: 'followIcon',
                   icon: Icon.followIcon,
 
-                  color: '#aaa' // android
+                  color: Color.primary // android
               }]
             }
         };
@@ -68,7 +69,7 @@ const localStyle = StyleSheet.create({
     wrap: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingTop: 20
+        paddingTop: 1
     },
     header: {
         paddingLeft: 20,

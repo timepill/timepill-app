@@ -200,7 +200,7 @@ export default class DiaryList extends Component {
                     data={this.state.diaries}
 
                     keyExtractor={(item, index) => {
-                        return item.id + item.updated + item.comment_count;
+                        return item.id + item.updated + item.comment_count + item.like_count;
                     }}
 
                     renderItem={({item}) => {

@@ -11,7 +11,7 @@ import Api from '../util/api';
 import Token from '../util/token';
 import Event from '../util/event';
 import Color from '../style/color';
-import UpdateInfo from '../updateInfo';
+import UpdateInfo from '../about/updateInfo';
 
 
 export default class AboutPage extends Component {
@@ -48,7 +48,7 @@ export default class AboutPage extends Component {
         return (
             <View style={{flex: 1, backgroundColor: 'white'}}>
                 <View style={{flex: 1, padding: 15, alignItems: 'center', paddingTop: 80}}>
-                    <Image source={require('../Icon.png')}
+                    <Image source={require('../about/Icon.png')}
                            style={{width: 128, height: 128, borderRadius: 28, borderWidth: 1, borderColor:"#d9d9d9"}} />
                     <Text style={{paddingTop: 20, paddingBottom: 60}}>版本: {Api.VERSION}{label}</Text>
                     <Text style={{color: Color.inactiveText}}>{this.state.news.date} 更新日志</Text>

@@ -260,6 +260,41 @@ async function deleteDiary(id) {
     return call('DELETE', '/diaries/' + id);
 }
 
+async function addDiary(bookId, content, photoUri = null, join_topic = null) {
+    if(!photoUri) {
+        return call('POST', '/notebooks/' + bookId + '/diaries', {
+            content,
+            join_topic
+        });
+
+    } else {
+        return upload('POST', '/notebooks/' + bookId + '/diaries', {
+            content,
+            join_topic,
+            photo: {
+                uri: photoUri,
+                name: 'image.jpg',
+                type: 'image/jpg'
+            }
+        });
+    }
+}
+
+async function updateDiary(id, bookId, content) {
+    return call('PUT', '/diaries/' + id, {
+        content,
+        notebook_id: bookId
+    });
+}
+
+async function likeDiary(id) {
+    return callV2('PUT', '/like/diaries/' + id);
+}
+
+async function cancelLikeDiary(id) {
+    return callV2('DELETE', '/like/diaries/' + id);
+}
+
 
 async function updateNotebookCover(bookId, photoUri) {
     return upload('POST', `/notebooks/${bookId}/cover`, {
@@ -290,33 +325,6 @@ async function updateNotebook(id, subject, description, privacy) {
 
 async function deleteNotebook(id) {
     return call('DELETE', '/notebooks/' + id)
-}
-
-async function addDiary(bookId, content, photoUri = null, join_topic = null) {
-    if(!photoUri) {
-        return call('POST', '/notebooks/' + bookId + '/diaries', {
-            content,
-            join_topic
-        });
-
-    } else {
-        return upload('POST', '/notebooks/' + bookId + '/diaries', {
-            content,
-            join_topic,
-            photo: {
-                uri: photoUri,
-                name: 'image.jpg',
-                type: 'image/jpg'
-            }
-        });
-    }
-}
-
-async function updateDiary(id, bookId, content) {
-    return call('PUT', '/diaries/' + id, {
-        content,
-        notebook_id: bookId
-    });
 }
 
 
@@ -494,6 +502,10 @@ export default {
 
     getDiary,
     deleteDiary,
+    addDiary,
+    updateDiary,
+    likeDiary,
+    cancelLikeDiary,
     
     getDiaryComments,
     deleteComment,
@@ -515,9 +527,6 @@ export default {
     createNotebook,
     updateNotebook,
     deleteNotebook,
-
-    addDiary,
-    updateDiary,
 
     report,
     feedback

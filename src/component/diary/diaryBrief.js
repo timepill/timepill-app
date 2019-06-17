@@ -7,6 +7,8 @@ import Color from '../../style/color';
 import UserIcon from '../userIcon';
 import Photo from '../photo';
 
+import DiaryIconComment from './diaryIconComment';
+import DiaryIconOkB from './diaryIconOkB';
 import DiaryAction from './diaryAction';
 
 
@@ -16,9 +18,10 @@ export default class DiaryBrief extends Component {
         super(props);
 
         this.diary = props.diary;
+        this.diary.isExpired = props.isExpired || false;
         this.editable = props.editable || false;
 
-        this.showField = ['icon', 'userName', 'subject', 'createdTime'];
+        this.showField = ['userIcon', 'userName', 'subject', 'createdTime'];
         if(props.showField && props.showField.length > 0) {
             this.showField = props.showField
         }
@@ -42,7 +45,7 @@ export default class DiaryBrief extends Component {
 
       return (
         <View style={[localStyle.box, this.props.style]}>
-            {(user && user.iconUrl && this.show('icon'))
+            {(user && user.iconUrl && this.show('userIcon'))
                 ? <UserIcon iconUrl={user.iconUrl} onPress={this.props.onUserIconPress}></UserIcon> : null}
 
             <View style={localStyle.body}>
@@ -72,16 +75,13 @@ export default class DiaryBrief extends Component {
                 <Photo uri={diary.photoThumbUrl} onPress={this.props.onPhotoPress}></Photo>
 
                 <View style={localStyle.actionBar}>
-                    {
-                        diary.comment_count > 0
-                        ? <View style={localStyle.commentIconBox}>
-                            <Ionicons name="ios-text-outline" size={18}
-                                  color={Color.inactiveText}
-                                  style={localStyle.buttonIcon} />
-                            <Text style={localStyle.commentIconText}>{diary.comment_count}</Text>
-                        </View>
-                        : null
-                    }
+                    <View style={localStyle.icons}>
+                        <DiaryIconComment count={diary.comment_count}></DiaryIconComment>
+                        <DiaryIconOkB diaryId={diary.id}
+                            count={diary.like_count}
+                            active={diary.liked}
+                            clickable={!diary.isExpired}></DiaryIconOkB>
+                    </View>
                     <View style={{flex: 1}} />
                     {
                         this.editable
@@ -143,19 +143,11 @@ const localStyle = StyleSheet.create({
         marginTop: 10,
         justifyContent: 'space-between'
     },
+    icons: {
+        flexDirection: 'row'
+    },
     moreIcon: {
         paddingVertical: 5,
         paddingHorizontal: 5
-    },
-    commentIconBox: {
-        flexDirection: "row"
-    },
-    buttonIcon: {
-        marginRight: 8,
-        marginLeft: 2
-    },
-    commentIconIext: {
-        fontSize: 15,
-        color: Color.inactiveText
     }
 });

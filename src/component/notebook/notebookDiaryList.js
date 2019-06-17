@@ -81,7 +81,6 @@ export default class NotebookDiaryList extends Component {
             });
         }
 
-        console.log('format result:', result);
         return result;
     }
 
@@ -177,7 +176,13 @@ export default class NotebookDiaryList extends Component {
     }
 
     render() {
-        return this.notebook ? (
+        if(!this.notebook) {
+            return null;
+        }
+
+        let isExpired = this.notebook.isExpired;
+
+        return (
           <View style={localStyle.container}>
             <SectionList
                 
@@ -187,8 +192,9 @@ export default class NotebookDiaryList extends Component {
 
                 renderItem={(rowData) => {
                     return (<Touchable onPress={() => this._onDiaryPress(rowData.item)}>
-                        <DiaryBrief diary={rowData.item}
+                        <DiaryBrief diary={rowData.item} isExpired={isExpired}
                             showField={['createdTime']}>
+                        }
                         </DiaryBrief>
                     </Touchable>);
                 }}
@@ -225,7 +231,7 @@ export default class NotebookDiaryList extends Component {
             />
           </View>
 
-        ) : null;
+        );
     }
 }
 
