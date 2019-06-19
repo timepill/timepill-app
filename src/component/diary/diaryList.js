@@ -52,6 +52,12 @@ export default class DiaryList extends Component {
         });
     }
 
+    scrollToTop() {
+        this.list.scrollToOffset({
+            offset: 0
+        });
+    }
+
     _onUserIconPress(diary) {
         Navigation.push(this.props.componentId, {
             component: {
@@ -72,7 +78,7 @@ export default class DiaryList extends Component {
         });
     }
 
-    _onDiaryPress(diary) {
+    _onDiaryPress(index, diary) {
         Navigation.push(this.props.componentId, {
             component: {
                 name: 'DiaryDetail',
@@ -89,7 +95,8 @@ export default class DiaryList extends Component {
                     diary: diary,
                     user: diary.user,
 
-                    editable: this.editable
+                    editable: this.editable,
+                    refreshBack: this.refreshOne.bind(this, index)
                 }
             }
         });
@@ -104,6 +111,18 @@ export default class DiaryList extends Component {
                 }
             }
         });
+    }
+
+    refreshOne(index, diary) {
+        if(diary) {
+            let list = this.state.diaries;
+            diary.user = list[index].user;
+            list[index] = diary;
+
+            this.setState({
+                diaries: list
+            });
+        }
     }
 
     async refresh() {
@@ -195,7 +214,7 @@ export default class DiaryList extends Component {
 
         return (
             <View style={localStyle.container}>
-                <FlatList style={localStyle.list}
+                <FlatList ref={(r) => this.list = r} style={localStyle.list}
 
                     data={this.state.diaries}
 
@@ -203,20 +222,20 @@ export default class DiaryList extends Component {
                         return item.id + item.updated + item.comment_count + item.like_count;
                     }}
 
-                    renderItem={({item}) => {
+                    renderItem={({item, index}) => {
                         return (
-                            <Touchable onPress={() => this._onDiaryPress(item)}>
-                                <DiaryBrief {...this.props}
-                                    diary={item}
-                                    showField={this.props.showField}
-                                    editable={this.editable}
+                            <DiaryBrief {...this.props}
+                                diary={item}
+                                showField={this.props.showField}
+                                editable={this.editable}
 
-                                    onUserIconPress={() => this._onUserIconPress(item)}
-                                    onPhotoPress={() => this._onPhotoPress(item.photoUrl)}
-                                >
+                                onDiaryPress={this._onDiaryPress.bind(this, index)}
+                                onUserIconPress={() => this._onUserIconPress(item)}
+                                onPhotoPress={() => this._onPhotoPress(item.photoUrl)}
 
-                                </DiaryBrief>
-                            </Touchable>
+                                refreshBack={this.refreshOne.bind(this, index)}
+                            >
+                            </DiaryBrief>
                         )
                     }}
 

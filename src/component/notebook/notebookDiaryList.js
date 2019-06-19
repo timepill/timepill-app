@@ -29,11 +29,12 @@ export default class NotebookDiaryList extends Component {
     constructor(props) {
         super(props);
 
-        this.editable = props.editable || false;
         this.notebook =  props.notebook;
+        this.editable = props.editable || false;
         this.dataSource = new NotebookDiaryData();
 
         this.state = {
+            rawlist: [],
             diaries: [],
 
             refreshing: false,
@@ -84,6 +85,19 @@ export default class NotebookDiaryList extends Component {
         return result;
     }
 
+    refreshOne(index, diary) {
+        console.log('index, diary:', index, diary);
+        if(diary) {
+            let list = this.state.rawlist;
+            diary.user = list[index].user;
+            list[index] = diary;
+
+            this.setState({
+                diaries: this.formatDiaries(list)
+            });
+        }
+    }
+
     refresh() {
         if (this.state.refreshing) {
             return;
@@ -100,6 +114,8 @@ export default class NotebookDiaryList extends Component {
                     } else {
                         let diaries = this.formatDiaries(result.list);
                         this.setState({
+                            rawlist: result.list,
+                            
                             diaries,
                             hasMore: result.more,
                             refreshFailed: false
@@ -134,6 +150,8 @@ export default class NotebookDiaryList extends Component {
                     } else {
                         let diaries = this.formatDiaries(result.list);
                         this.setState({
+                            rawlist: result.list,
+
                             diaries,
                             hasMore: result.more,
                             loadFailed: false
@@ -153,7 +171,7 @@ export default class NotebookDiaryList extends Component {
                 });
     }
 
-    _onDiaryPress(diary) {
+    _onDiaryPress(index, diary) {
         Navigation.push(this.props.componentId, {
             component: {
                 name: 'DiaryDetail',
@@ -169,7 +187,9 @@ export default class NotebookDiaryList extends Component {
                 passProps: {
                     diary: diary,
                     editable: this.editable,
-                    expired: this.notebook.isExpired
+                    expired: this.notebook.isExpired,
+
+                    refreshBack: this.refreshOne.bind(this, index)
                 }
             }
         });
@@ -180,23 +200,31 @@ export default class NotebookDiaryList extends Component {
             return null;
         }
 
-        let isExpired = this.notebook.isExpired;
+        let expired = this.notebook.isExpired;
 
         return (
           <View style={localStyle.container}>
             <SectionList
                 
-                keyExtractor={(item, index) => item.id}
+                keyExtractor={(item, index) => {
+                    return item.id + item.updated + item.comment_count + item.like_count;
+                }}
 
                 sections={this.state.diaries}
 
                 renderItem={(rowData) => {
-                    return (<Touchable onPress={() => this._onDiaryPress(rowData.item)}>
-                        <DiaryBrief diary={rowData.item} isExpired={isExpired}
-                            showField={['createdTime']}>
-                        }
+                    return (
+                        <DiaryBrief
+                            diary={rowData.item}
+                            showField={['createdTime']}
+                            expired={expired}
+                            
+                            onDiaryPress={this._onDiaryPress.bind(this, rowData.index)}
+
+                            refreshBack={this.refreshOne.bind(this, rowData.index)}
+                        >
                         </DiaryBrief>
-                    </Touchable>);
+                    );
                 }}
 
                 renderSectionHeader={(info) => {

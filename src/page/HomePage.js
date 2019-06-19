@@ -16,6 +16,7 @@ import ActionSheet from 'react-native-actionsheet-api';
 
 import Color from '../style/color'
 import Api from '../util/api';
+import Update from '../util/update';
 
 import DiaryList from '../component/diary/diaryList'
 import HomeDiaryData from '../dataLoader/homeDiaryData';
@@ -49,6 +50,24 @@ export default class HomePage extends Component {
         } else {
             this.closeSplash();
         }
+
+        this.bottomTabEventListener = Navigation.events().registerBottomTabSelectedListener(
+            ({ selectedTabIndex, unselectedTabIndex }) => {
+                if(selectedTabIndex == unselectedTabIndex && selectedTabIndex == 0) {
+                    this.diaryList.scrollToTop();
+                }
+            }
+        );
+
+        if(Api.IS_ANDROID) {
+            setTimeout(() => {
+                Update.updateAndroid();
+            }, 2000);
+        }
+    }
+
+    componentWillUnmount() {
+        this.bottomTabEventListener.remove();
     }
 
     startTimer() {
@@ -189,7 +208,7 @@ export default class HomePage extends Component {
             <View style={localStyle.wrap}>
                 {
                     this.state.showSplash ? this.renderModal() : (
-                        <DiaryList ref={(r) => this.list = r}
+                        <DiaryList ref={(r) => this.diaryList = r}
                             dataSource={this.dataSource}
                             listHeader={this.renderHeader.bind(this)}
                             refreshHeader={this.refreshTopic.bind(this)}

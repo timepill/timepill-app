@@ -52,28 +52,29 @@ export default class UserIntro extends Component {
     }
 
     render() {
+        if(this.state.isLoading) {
+            return <Loading visible={this.state.isLoading}></Loading>;
+        }
+
         const user = this.state.user;
+        return user ? (
+            <ScrollView style={localStyle.container} automaticallyAdjustContentInsets={false}>
+                <View style={localStyle.userIcon}>
+                    <UserIcon width={90} height={90} iconUrl={user.coverUrl} />
+                    <Text style={localStyle.userTitle}>{user.name}</Text>
+                </View>
 
-        return this.state.isLoading
-            ? <Loading visible={this.state.isLoading}></Loading>
-            : (
-                <ScrollView style={localStyle.container} automaticallyAdjustContentInsets={false}>
-                    <View style={localStyle.userIcon}>
-                        <UserIcon width={90} height={90} iconUrl={user.coverUrl} />
-                        <Text style={localStyle.userTitle}>{user.name}</Text>
-                    </View>
+                {
+                    user.intro && user.intro.length > 0
+                    ? (<Text style={localStyle.introText}>{user.intro}</Text>) : null
+                }
+                
+                <Text style={localStyle.joinTime}>
+                    {moment(user.created).format('YYYY年M月D日')}加入胶囊
+                </Text>
 
-                    {
-                        user.intro && user.intro.length > 0
-                        ? (<Text style={localStyle.introText}>{user.intro}</Text>) : null
-                    }
-                    
-                    <Text style={localStyle.joinTime}>
-                        {moment(user.created).format('YYYY年M月D日')}加入胶囊
-                    </Text>
-
-                </ScrollView>
-            );
+            </ScrollView>
+        ) : null;
     }
 }
 

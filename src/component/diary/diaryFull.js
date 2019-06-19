@@ -8,6 +8,7 @@ import UserIcon from '../userIcon';
 import Photo from '../photo';
 
 import CommentList from '../comment/commentList';
+import DiaryIconOkB from './diaryIconOkB';
 
 
 export default class DiaryFull extends Component {
@@ -17,16 +18,12 @@ export default class DiaryFull extends Component {
         
         this.state = {
             diary: props.diary,
-            editable: props.editable || false
+            editable: props.editable || false,
+            expired: props.expired || false
         }
     }
 
-    refreshDiaryContent() {
-        if(!this.props.refreshData) {
-            return;
-        }
-
-        let diary = this.props.refreshData();
+    refreshDiaryContent(diary) {
         if(diary) {
             this.setState({diary})
         }
@@ -103,6 +100,14 @@ export default class DiaryFull extends Component {
                         </Text>
 
                         <Photo uri={diary.photoThumbUrl} onPress={() => this._onPhotoPress(diary.photoUrl)}></Photo>
+                    
+                        <View style={localStyle.actionBar}>
+                            <DiaryIconOkB diaryId={diary.id}
+                                count={diary.like_count}
+                                active={diary.liked}
+                                clickable={!this.state.expired}
+                            ></DiaryIconOkB>
+                        </View>
                     </View>
                 </View>
 
@@ -125,7 +130,7 @@ const localStyle = StyleSheet.create({
         overflow: "hidden",
         paddingHorizontal: 15,
         paddingTop: 15,
-        marginBottom: 30
+        marginBottom: 1
     },
     body: {
         flexDirection: "column",
@@ -137,6 +142,7 @@ const localStyle = StyleSheet.create({
     title: {
         flexDirection: "row",
         alignItems: "flex-end",
+        paddingRight: 10,
         paddingBottom: 5
     },
     titleName: {
@@ -153,6 +159,14 @@ const localStyle = StyleSheet.create({
         lineHeight: 24,
         color: Color.text,
         fontSize: 15,
+        paddingRight: 5,
         textAlignVertical: 'bottom'
+    },
+    actionBar: {
+        flexDirection: 'row',
+        width: '100%',
+        height: 30,
+        marginTop: 15,
+        justifyContent: 'flex-end'
     }
 });

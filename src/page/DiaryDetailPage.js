@@ -131,15 +131,10 @@ export default class DiaryDetailPage extends Component {
                     }
                 }
 
-                this.setState({
-                    diary: result
-                }, () => {
-                    this.diaryFull.refreshDiaryContent();
-                })
+                this.props.refreshBack(result);
+                this.diaryFull.refreshDiaryContent(result);
             })
-            .done(() => {
-
-            });
+            .done();
     }
 
     render() {
@@ -167,8 +162,8 @@ export default class DiaryDetailPage extends Component {
                     <DiaryFull ref={(r) => this.diaryFull = r}
                         {...this.props}
                         diary={this.state.diary}
-                        refreshData={() => this.state.diary}
                         editable={this.state.editable || isMine}
+                        expired={this.state.expired}
                     ></DiaryFull>
 
                 </ScrollView>

@@ -193,6 +193,7 @@ export default class UserPage extends Component {
         diary: () => <DiaryList
             ref={(r) => this.diaryList = r}
             dataSource={this.dataSource}
+            showField={['subject', 'createdTime']}
             editable={!this.user}
             {...this.props}
         />,

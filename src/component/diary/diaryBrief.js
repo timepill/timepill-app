@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 
+import Touchable from '../touchable';
 import Color from '../../style/color';
 import UserIcon from '../userIcon';
 import Photo from '../photo';
@@ -17,8 +18,11 @@ export default class DiaryBrief extends Component {
     constructor(props) {
         super(props);
 
-        this.diary = props.diary;
-        this.diary.isExpired = props.isExpired || false;
+        this.state = {
+            diary: props.diary
+        }
+
+        this.expired = props.expired || false;
         this.editable = props.editable || false;
 
         this.showField = ['userIcon', 'userName', 'subject', 'createdTime'];
@@ -32,11 +36,17 @@ export default class DiaryBrief extends Component {
     }
 
     onDiaryAction() {
-        DiaryAction.action(this.props.componentId, this.diary);
+        DiaryAction.action(this.props.componentId, this.state.diary);
+    }
+
+    refreshDiary(diary) {
+        if(diary && this.props.refreshBack) {
+            this.props.refreshBack(diary);
+        }
     }
 
     render() {
-      let diary = this.diary;
+      let diary = this.state.diary;
       if(!diary) {
         return null;
       }
@@ -44,6 +54,7 @@ export default class DiaryBrief extends Component {
       let user = diary.user;
 
       return (
+        <Touchable onPress={() => this.props.onDiaryPress ? this.props.onDiaryPress(this.state.diary) : null}>
         <View style={[localStyle.box, this.props.style]}>
             {(user && user.iconUrl && this.show('userIcon'))
                 ? <UserIcon iconUrl={user.iconUrl} onPress={this.props.onUserIconPress}></UserIcon> : null}
@@ -80,7 +91,9 @@ export default class DiaryBrief extends Component {
                         <DiaryIconOkB diaryId={diary.id}
                             count={diary.like_count}
                             active={diary.liked}
-                            clickable={!diary.isExpired}></DiaryIconOkB>
+                            clickable={!this.expired}
+                            refreshBack={this.refreshDiary.bind(this)}
+                        ></DiaryIconOkB>
                     </View>
                     <View style={{flex: 1}} />
                     {
@@ -96,6 +109,7 @@ export default class DiaryBrief extends Component {
             </View>
             
         </View>
+        </Touchable>
       );
     }
 }

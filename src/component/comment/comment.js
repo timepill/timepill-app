@@ -79,13 +79,15 @@ const localStyle = StyleSheet.create({
     },
     titleText: {
         fontSize: 12,
-        color: Color.inactiveText
+        color: Color.inactiveText,
+        paddingRight: 10
     },
     content: {
         flexGrow: 1,
         lineHeight: 26,
         color: Color.text,
         fontSize: 15,
+        paddingRight: 5,
         marginBottom: 10
     },
     line: {

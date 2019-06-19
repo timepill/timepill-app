@@ -339,6 +339,10 @@ async function feedback(content) {
     return callV2('POST', '/feedback', {content});
 }
 
+async function getUpdateInfo() {
+    return callV2('GET', '/updateInfo');
+}
+
 
 async function upload(method, api, body) {
     let token = await Token.getUserToken();
@@ -529,5 +533,6 @@ export default {
     deleteNotebook,
 
     report,
-    feedback
+    feedback,
+    getUpdateInfo
 }
