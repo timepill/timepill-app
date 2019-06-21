@@ -22,7 +22,7 @@ export default class NotebookDetailPage extends Component {
             }
         }
 
-        if(passProps.editable) {
+        if(passProps.isMine) {
             topBar.rightButtons = [{
                 id: 'navButtonNotebookSetting',
                 icon: Icon.navButtonNotebookSetting,

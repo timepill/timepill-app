@@ -17,7 +17,7 @@ import Touchable from '../touchable';
 import Color from '../../style/color';
 import Api from '../../util/api';
 import Event from '../../util/event';
-import Msg from '../../util/msg'
+import Msg from '../../util/msg';
 
 import Comment from './comment';
 
@@ -27,12 +27,25 @@ export default class CommentList extends Component {
     constructor(props) {
         super(props);
 
-        this.diaryId = props.diaryId;
-        this.editable = props.editable || false;
-
         this.state = {
+            diaryId: props.diaryId,
+            selfInfo: props.selfInfo,
+
+            isMine: props.isMine || false,
+            expired: props.expired || false,
+
             comments: []
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            diaryId: nextProps.diaryId,
+            selfInfo: nextProps.selfInfo,
+
+            isMine: nextProps.isMine || false,
+            expired: nextProps.expired || false
+        });
     }
 
     componentDidMount() {
@@ -42,7 +55,7 @@ export default class CommentList extends Component {
     }
 
     async refresh() {
-        let comments = await Api.getDiaryComments(this.diaryId);
+        let comments = await Api.getDiaryComments(this.state.diaryId);
         if(comments && comments.length > 0) {
             if (comments.length > 1) {
                 comments = comments.reverse();
@@ -59,6 +72,10 @@ export default class CommentList extends Component {
     }
 
     _onUserIconPress(comment) {
+        if(this.state.selfInfo.id == comment.user_id) {
+            return;
+        }
+
         Navigation.push(this.props.componentId, {
             component: {
                 name: 'User',
@@ -114,6 +131,8 @@ export default class CommentList extends Component {
     }
 
     render() {
+        let selfInfo = this.state.selfInfo;
+
         return (
             <View style={localStyle.container}>
                 <FlatList ref={(r) => this.list = r}
@@ -127,7 +146,11 @@ export default class CommentList extends Component {
                     renderItem={({item}) => {
                         return (
                             <Touchable onPress={() => this._onCommentPress(item)}>
-                                <Comment comment={item} editable={this.editable}
+                                <Comment comment={item}
+                                    isMyDiary={this.state.isMine}
+                                    isMyComment={selfInfo.id == item.user_id}
+                                    expired={this.state.expired}
+
                                     onUserIconPress={() => this._onUserIconPress(item)}
                                     onCommentAction={() => this._onCommentAction(item)}>
                                 </Comment>

@@ -30,7 +30,7 @@ export default class DiaryList extends Component {
     constructor(props) {
         super(props);
 
-        this.editable = props.editable || false;
+        this.isMine = props.isMine || false;
         this.dataSource = props.dataSource;
 
         this.state = {
@@ -95,7 +95,7 @@ export default class DiaryList extends Component {
                     diary: diary,
                     user: diary.user,
 
-                    editable: this.editable,
+                    showField: this.props.showField,
                     refreshBack: this.refreshOne.bind(this, index)
                 }
             }
@@ -199,7 +199,7 @@ export default class DiaryList extends Component {
 
     render() {
         if(!this.state.mounting && (!this.state.diaries || this.state.diaries.length == 0)) {
-            let message = this.editable
+            let message = this.isMine
                             ? '今天还没有写日记，马上写一篇吧'
                             : '今天还没有人写日记';
             return (
@@ -227,7 +227,6 @@ export default class DiaryList extends Component {
                             <DiaryBrief {...this.props}
                                 diary={item}
                                 showField={this.props.showField}
-                                editable={this.editable}
 
                                 onDiaryPress={this._onDiaryPress.bind(this, index)}
                                 onUserIconPress={() => this._onUserIconPress(item)}

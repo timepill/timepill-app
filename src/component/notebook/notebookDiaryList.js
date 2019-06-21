@@ -9,7 +9,7 @@ import {
     ActivityIndicator
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
-import moment from 'moment'
+import moment from 'moment';
 
 import Api from '../../util/api';
 import Color from '../../style/color';
@@ -30,7 +30,7 @@ export default class NotebookDiaryList extends Component {
         super(props);
 
         this.notebook =  props.notebook;
-        this.editable = props.editable || false;
+        this.isMine = props.isMine || false;
         this.dataSource = new NotebookDiaryData();
 
         this.state = {
@@ -186,9 +186,9 @@ export default class NotebookDiaryList extends Component {
                 },
                 passProps: {
                     diary: diary,
-                    editable: this.editable,
-                    expired: this.notebook.isExpired,
+                    showField: ['createdTime'],
 
+                    expired: this.notebook.isExpired,
                     refreshBack: this.refreshOne.bind(this, index)
                 }
             }
@@ -201,6 +201,7 @@ export default class NotebookDiaryList extends Component {
         }
 
         let expired = this.notebook.isExpired;
+        let isMine = this.isMine;
 
         return (
           <View style={localStyle.container}>
@@ -218,6 +219,7 @@ export default class NotebookDiaryList extends Component {
                             diary={rowData.item}
                             showField={['createdTime']}
                             expired={expired}
+                            isMine={isMine}
                             
                             onDiaryPress={this._onDiaryPress.bind(this, rowData.index)}
 

@@ -19,11 +19,11 @@ export default class DiaryBrief extends Component {
         super(props);
 
         this.state = {
-            diary: props.diary
-        }
+            diary: props.diary,
 
-        this.expired = props.expired || false;
-        this.editable = props.editable || false;
+            isMine: props.isMine || false,
+            expired: props.expired || false
+        }
 
         this.showField = ['userIcon', 'userName', 'subject', 'createdTime'];
         if(props.showField && props.showField.length > 0) {
@@ -50,6 +50,9 @@ export default class DiaryBrief extends Component {
       if(!diary) {
         return null;
       }
+
+      let isMine = this.state.isMine;
+      let expired = this.state.expired;
 
       let user = diary.user;
 
@@ -91,13 +94,13 @@ export default class DiaryBrief extends Component {
                         <DiaryIconOkB diaryId={diary.id}
                             count={diary.like_count}
                             active={diary.liked}
-                            clickable={!this.expired}
+                            clickable={!this.state.expired}
                             refreshBack={this.refreshDiary.bind(this)}
                         ></DiaryIconOkB>
                     </View>
                     <View style={{flex: 1}} />
                     {
-                        this.editable
+                        isMine && !expired
                         ? <TouchableOpacity onPress={this.onDiaryAction.bind(this)}>
                             <Ionicons name="ios-more" size={24}
                                       color={Color.inactiveText}

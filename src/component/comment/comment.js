@@ -10,10 +10,25 @@ import UserIcon from '../userIcon';
 
 export default class Comment extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            comment: props.comment,
+
+            isMyDiary: props.isMyDiary || false,
+            isMyComment: props.isMyComment || false,
+            expired: props.expired || false
+        };
+    }
+
     render() {
-        let comment = this.props.comment;
+        let comment = this.state.comment;
         let user = comment.user;
-        let editable = this.props.editable;
+
+        let isMyDiary = this.state.isMyDiary;
+        let isMyComment = this.state.isMyComment;
+        let expired = this.state.expired;
 
         return (
             <View>
@@ -39,7 +54,7 @@ export default class Comment extends Component {
                 </View>
 
                 {
-                    editable
+                    (isMyDiary || isMyComment) && !expired
                     ? <TouchableOpacity onPress={this.props.onCommentAction} style={localStyle.moreIcon}>
                         <Ionicons name="ios-more" size={24} color={Color.inactiveText} />
                     </TouchableOpacity>

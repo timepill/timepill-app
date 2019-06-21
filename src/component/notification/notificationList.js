@@ -50,8 +50,6 @@ export default class NotificationList extends Component {
                                         return ret;
 
                                       }, []);
-                
-                    console.log('notifications:', reducedNoti);
 
                     this.setState({
                         notifications: reducedNoti
@@ -77,8 +75,7 @@ export default class NotificationList extends Component {
                     }
                 },
                 passProps: {
-                    diaryId: msg.link_id,
-                    editable: true
+                    diaryId: msg.link_id
                 }
             }
         });

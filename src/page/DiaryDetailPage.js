@@ -10,17 +10,28 @@ import {
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import KeyboardSpacer from "react-native-keyboard-spacer";
+import {Button} from 'react-native-elements';
 
 import Color from '../style/color';
 import {Icon} from '../style/icon';
 import Msg from '../util/msg';
-import Api from '../util/api'
+import Api from '../util/api';
 import Event from '../util/event';
 
 import DiaryFull from '../component/diary/diaryFull';
 import DiaryAction from '../component/diary/diaryAction';
 import CommentInput from '../component/comment/commentInput';
 
+
+function getTodayStr() {
+    let now = new Date();
+    
+    let year = now.getFullYear();
+    let month = now.getMonth() + 1;
+    let date = now.getDate();
+
+    return year + '-' + (month > 9 ? month : '0' + month) + '-' + date;
+}
 
 export default class DiaryDetailPage extends Component {
 
@@ -35,9 +46,13 @@ export default class DiaryDetailPage extends Component {
             diary: props.diary,
             user: props.user,
 
-            editable: props.editable || false,
+            isMine: false,
+            todayCreated: false,
             expired: props.expired || false,
-            needScrollToBottom: false
+
+            needScrollToBottom: false,
+
+            error: null
         }
     }
 
@@ -48,22 +63,17 @@ export default class DiaryDetailPage extends Component {
             }
         }
 
-        if(!passProps.expired) {
-            topBar.rightButtons = [{
-                id: 'navButtonMore',
-                icon: Icon.navButtonMore,
-
-                color: Color.primary // android
-            }]
-        }
-
         return {
             topBar
         };
     }
 
     navigationButtonPressed({buttonId}) {
-        if(this.state.editable || this.state.diary.user_id == this.state.selfInfo.id) {
+        if(!this.state.selfInfo || !this.state.diary) {
+            return;
+        }
+
+        if(this.state.isMine) {
             let componentId = this.props.componentId;
             DiaryAction.action(componentId, this.state.diary, {
                 onDelete: () => {
@@ -87,14 +97,13 @@ export default class DiaryDetailPage extends Component {
     }
 
     componentDidMount() {
-        if(!this.state.diary && this.state.diaryId) {
-            this.refreshDiary();
-        }
-
         Api.getSelfInfoByStore()
             .then(user => {
                 this.setState({
                     selfInfo: user
+
+                }, () =>{
+                    this.refreshDiary(this.state.diary);
                 });
 
             }).done();
@@ -117,34 +126,67 @@ export default class DiaryDetailPage extends Component {
         this.commentListener.remove();
     }
 
-    refreshDiary() {
-        let diaryId = this.state.diaryId;
-        if(!diaryId) {
-            diaryId = this.state.diary.id;
+    async refreshDiary(diary) {
+        if(!diary) {
+            let diaryId = this.state.diaryId;
+            if(!diaryId) {
+                diaryId = this.state.diary.id;
+            }
+
+            try {
+                diary = await Api.getDiary(diaryId);
+            } catch(e) {
+                this.setState({
+                    error: e
+                });
+
+                return;
+            }
         }
 
-        Api.getDiary(diaryId)
-            .then(result => {
-                if(!result) {
-                    throw {
-                        message: 'get diary no result'
-                    }
-                }
+        let isMine = this.state.selfInfo.id == diary.user_id;
 
-                this.props.refreshBack(result);
-                this.diaryFull.refreshDiaryContent(result);
-            })
-            .done();
+        let createdTime = diary.created;
+        let todayCreated = getTodayStr() == createdTime.substring(0, createdTime.indexOf(' '));
+
+        this.setState({
+            diary,
+            isMine,
+            todayCreated
+
+        }, () => {
+            if(this.props.refreshBack) {
+                this.props.refreshBack(diary);
+            }
+
+            if(todayCreated || (this.props.expired && !isMine)) {
+                Navigation.mergeOptions(this.props.componentId, {
+                    topBar: {
+                        rightButtons: [{
+                            id: 'navButtonMore',
+                            icon: Icon.navButtonMore,
+
+                            color: Color.primary // android
+                        }]
+                    }
+                });
+            }
+        });
     }
 
     render() {
-        if(!this.state.selfInfo || !this.state.diary) {
-            return null;
-        }
+        if(this.state.error) {
+            return (
+                <View style={localStyle.container}>
+                    <Text style={localStyle.text}>{'日记加载失败:('}</Text>
+                    <Button fontSize={14} borderRadius={999} backgroundColor={Color.primary}
+                          title={'刷新一下'}
+                          onPress={() => this.refreshDiary()} />
+                </View>
+            );
 
-        let isMine = false;
-        if(this.state.selfInfo.id == this.state.diary.user_id) {
-            isMine = true;
+        } else if(!this.state.selfInfo || !this.state.diary) {
+            return null;
         }
 
         return (
@@ -162,14 +204,15 @@ export default class DiaryDetailPage extends Component {
                     <DiaryFull ref={(r) => this.diaryFull = r}
                         {...this.props}
                         diary={this.state.diary}
-                        editable={this.state.editable || isMine}
-                        expired={this.state.expired}
+                        selfInfo={this.state.selfInfo}
+                        isMine={this.state.isMine}
+                        expired={this.state.expired || !this.state.todayCreated}
                     ></DiaryFull>
 
                 </ScrollView>
                 
                 {
-                    !this.state.expired ? (
+                    this.state.todayCreated  ? (
                         <CommentInput ref={(r) => this.commentInput = r}
                             diary={this.state.diary}
                             selfInfo={this.state.selfInfo}
@@ -189,5 +232,14 @@ const localStyle = StyleSheet.create({
     wrap: {
         flex: 1,
         flexDirection: 'column'
+    },
+    container: {
+        alignItems:'center',
+        justifyContent: 'center',
+        height: '100%'
+    },
+    text: {
+        paddingBottom: 15,
+        color: Color.text
     }
 });

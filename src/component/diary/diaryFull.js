@@ -18,15 +18,30 @@ export default class DiaryFull extends Component {
         
         this.state = {
             diary: props.diary,
-            editable: props.editable || false,
+            selfInfo: props.selfInfo,
+
+            isMine: props.isMine || false,
             expired: props.expired || false
+        }
+
+        this.showField = ['userIcon', 'userName', 'subject', 'createdTime'];
+        if(props.showField && props.showField.length > 0) {
+            this.showField = props.showField
         }
     }
 
-    refreshDiaryContent(diary) {
-        if(diary) {
-            this.setState({diary})
-        }
+    show(field) {
+        return this.showField.indexOf(field) >= 0;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            diary: nextProps.diary,
+            selfInfo: nextProps.selfInfo,
+
+            isMine: nextProps.isMine || false,
+            expired: nextProps.expired || false
+        });
     }
 
     async refreshComment() {
@@ -76,12 +91,12 @@ export default class DiaryFull extends Component {
         return (
             <View>
                 <View style={localStyle.box}>
-                    {user && user.iconUrl
+                    {user && user.iconUrl && this.show('userIcon')
                         ? <UserIcon iconUrl={user.iconUrl} onPress={this._onUserIconPress.bind(this)}></UserIcon> : null}
                     
                     <View style={localStyle.body}>
                         <View style={localStyle.title}>
-                            {user && user.name
+                            {user && user.name && this.show('userName')
                             ? ( <Text style={localStyle.titleName} numberOfLines={1}>
                                     {user.name}
                                 </Text>
@@ -112,10 +127,10 @@ export default class DiaryFull extends Component {
                 </View>
 
                 <CommentList ref={(r) => this.commentList = r}
-                    diaryId={diary.id}
-                    editable={this.state.editable}
-                    onUserIconPress={this._onUserIconPress.bind(this)}
                     {...this.props}
+                    diaryId={diary.id}
+                    isMine={this.state.isMine}
+                    expired={this.state.expired}
                 ></CommentList>
 
             </View>
