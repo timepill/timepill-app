@@ -110,6 +110,8 @@ export default class CommentList extends Component {
                         onPress: () => {
                             Api.deleteComment(comment.id)
                                 .then(() => {
+                                    DeviceEventEmitter.emit(Event.updateComments);
+                                    
                                     const filterComments = this.state.comments.filter(it => it.id !== comment.id);
                                     this.setState({
                                         comments: filterComments

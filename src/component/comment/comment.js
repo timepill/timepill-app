@@ -54,7 +54,7 @@ export default class Comment extends Component {
                 </View>
 
                 {
-                    (isMyDiary || isMyComment) && !expired
+                    (isMyDiary) && !expired
                     ? <TouchableOpacity onPress={this.props.onCommentAction} style={localStyle.moreIcon}>
                         <Ionicons name="ios-more" size={24} color={Color.inactiveText} />
                     </TouchableOpacity>

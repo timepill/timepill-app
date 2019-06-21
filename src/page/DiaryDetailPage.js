@@ -116,7 +116,10 @@ export default class DiaryDetailPage extends Component {
 
         this.commentListener = DeviceEventEmitter.addListener(Event.updateComments, (param) => {
             this.setState({needScrollToBottom: true});
+
+            this.refreshDiary();
             this.diaryFull.refreshComment();
+            
             Keyboard.dismiss();
         });
     }
