@@ -6,7 +6,7 @@ import com.facebook.react.ReactApplication;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
+//import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.facebook.react.ReactNativeHost;
@@ -45,7 +45,7 @@ public class MainApplication extends NavigationApplication {
     return Arrays.<ReactPackage>asList(
             // eg. new VectorIconsPackage()
             new RNFetchBlobPackage(),
-            new RNDeviceInfo(),
+            //new RNDeviceInfo(),
             new VectorIconsPackage(),
             new AsyncStoragePackage(),
 	    new PickerPackage()
