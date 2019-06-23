@@ -3,6 +3,7 @@ package com.timepill;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rain.day.XGPushPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
@@ -23,40 +24,40 @@ import com.reactnativenavigation.react.ReactGateway;
 
 public class MainApplication extends NavigationApplication {
 
-  @Override
-  protected ReactGateway createReactGateway() {
-    ReactNativeHost host = new NavigationReactNativeHost(this, isDebug(), createAdditionalReactPackages()) {
-      @Override
-      protected String getJSMainModuleName() {
-        return "index";
-      }
-    };
-    return new ReactGateway(this, isDebug(), host);
-  }
+    @Override
+    protected ReactGateway createReactGateway() {
+        ReactNativeHost host = new NavigationReactNativeHost(this, isDebug(), createAdditionalReactPackages()) {
+            @Override
+            protected String getJSMainModuleName() {
+                return "index";
+            }
+        };
+        return new ReactGateway(this, isDebug(), host);
+    }
 
-  @Override
-  public boolean isDebug() {
-    return BuildConfig.DEBUG;
-  }
+    @Override
+    public boolean isDebug() {
+        return BuildConfig.DEBUG;
+    }
 
-  protected List<ReactPackage> getPackages() {
-    // Add additional packages you require here
-    // No need to add RnnPackage and MainReactPackage
-    return Arrays.<ReactPackage>asList(
-            // eg. new VectorIconsPackage()
-            new RNFetchBlobPackage(),
-            //new RNDeviceInfo(),
-            new VectorIconsPackage(),
-            new AsyncStoragePackage(),
-	    new PickerPackage()
-    );
-  }
+    protected List<ReactPackage> getPackages() {
+        // Add additional packages you require here
+        // No need to add RnnPackage and MainReactPackage
+        return Arrays.<ReactPackage>asList(
+                // eg. new VectorIconsPackage()
+                new RNFetchBlobPackage(),
+                //new RNDeviceInfo(),
+                new VectorIconsPackage(),
+                new AsyncStoragePackage(),
+                new PickerPackage(),
+                new XGPushPackage()
+        );
+    }
 
-  @Override
-  public List<ReactPackage> createAdditionalReactPackages() {
-    return getPackages();
-  }
-
+    @Override
+    public List<ReactPackage> createAdditionalReactPackages() {
+        return getPackages();
+    }
 
 
 }
