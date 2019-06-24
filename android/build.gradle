@@ -7,6 +7,14 @@ buildscript {
         compileSdkVersion = 28
         targetSdkVersion = 28
         supportLibVersion = "28.0.0"
+
+        /*
+        解决 react-native-device-info 依赖冲突问题
+        react-native-device-info 默认引用最新版 gcm 包，进而依赖 androidx 包
+        0.59 react native 不兼容 androidx
+        所以这里指定 gcm 版本
+         */
+        googlePlayServicesVersion = "11.0.4"
     }
     repositories {
         google()

@@ -1,0 +1,52 @@
+import {NativeModules, Platform} from 'react-native';
+import XGPushModule from 'react-native-smart-xgpush';
+const XGPushNativeModules = NativeModules.XGPushModule;
+
+function init(cb) {
+    XGPushNativeModules.enableDebug(true);
+    if(Platform.OS ==='android'){
+        XGPushModule.notifyJSDidLoad(() => {
+            XGPushModule.registerPush();
+            initOtherPush();
+            cb()
+        });
+    } else {
+        cb()
+    }
+}
+
+function initOtherPush() {
+    XGPushNativeModules.enableOtherPush(true);
+
+    const appId = '2882303761517764099';
+    const appKey = '5341776464099';
+    XGPushNativeModules.initXiaomi(appId, appKey);
+
+    addReceiveNotificationListener(null);
+}
+
+function setAccount(uid, cb) {
+    if(Platform.OS === 'ios'){
+        XGPushModule.setAccount(uid,cb);
+    }else{
+        XGPushModule.bindAccount(uid,cb);
+    }
+}
+
+function addReceiveNotificationListener(cb) {
+    XGPushModule.addReceiveNotificationListener((map) => {
+        console.log("[ReceiveNotification]", map)
+    });
+
+    XGPushModule.addReceiveOpenNotificationListener((msg) => {
+        console.log("[addReceiveOpenNotificationListener]", msg)
+
+    })
+}
+
+
+
+export default {
+    init,
+    setAccount,
+}

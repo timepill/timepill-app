@@ -160,7 +160,7 @@ dependencies {
     implementation project(':react-native-image-crop-picker')
     implementation project(':react-native-image-resizer')
 
-//    implementation project(':react-native-device-info')
+    implementation project(':react-native-device-info')
     implementation project(':react-native-vector-icons')
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-navigation')
@@ -170,15 +170,10 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation  'com.tencent.xinge:xinge:4.3.2-release'
-    //jg包
     implementation'com.tencent.jg:jg:1.1'
-    //wup包
     implementation 'com.tencent.wup:wup:1.0.0.E-Release'
-    //mid包，minSdkVersion 14
     implementation 'com.tencent.mid:mid:4.0.7-Release'
-    compile 'com.tencent.xinge:xghw:2.5.2.300-release'
-    compile 'com.tencent.xinge:mipush:3.2.2-release'
-    compile 'com.tencent.xinge:xgmz:3.2.2-release'
+    implementation 'com.tencent.xinge:mipush:4.3.2-xiaomi-release'
 }
 
 // Run this once to be able to run the application with BUCK

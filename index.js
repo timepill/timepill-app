@@ -13,6 +13,7 @@ import Api from './src/util/api';
 import PageList from './src/page/_list';
 import BottomNav from './src/nav/bottomNav';
 
+import Push from './src/util/push';
 
 // for debug
 console.disableYellowBox = true;
@@ -106,5 +107,8 @@ Navigation.events().registerAppLaunchedListener(async () => {
         }
     }
 
+    Push.init((msg) => {
+        console.log("push init: " + msg)
+    })
 });
 
