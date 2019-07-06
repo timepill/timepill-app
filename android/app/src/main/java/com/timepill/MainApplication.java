@@ -3,6 +3,7 @@ package com.timepill;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rain.day.XGPushPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
