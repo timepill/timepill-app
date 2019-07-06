@@ -42,6 +42,8 @@ export default class UserPage extends Component {
     static options(passProps) {
         return passProps.user ? {
             topBar: {
+                noBorder: true, // ios
+                elevation: 0, // android
                 title: {
                     text: passProps.user.name
                 },
@@ -52,6 +54,8 @@ export default class UserPage extends Component {
             }
         } : {
             topBar: {
+                noBorder: true, // ios
+                elevation: 0, // android
                 title: {
                     text: '我'
                 },
