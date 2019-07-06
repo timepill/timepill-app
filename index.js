@@ -108,7 +108,12 @@ Navigation.events().registerAppLaunchedListener(async () => {
     }
 
     Push.init((msg) => {
-        console.log("push init: " + msg)
+        console.log("push init: " + msg);
+        Push.setAccount("12", (msg) => {
+            console.log("push setAccount:", JSON.stringify(msg))
+        })
+
+        Push.addReceiveNotificationListener(() => {});
     })
 });
 

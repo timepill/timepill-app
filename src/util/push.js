@@ -3,7 +3,7 @@ import XGPushModule from 'react-native-smart-xgpush';
 const XGPushNativeModules = NativeModules.XGPushModule;
 
 function init(cb) {
-    if(Platform.OS ==='android'){
+    if(Platform.OS === 'android'){
         XGPushNativeModules.enableDebug(true);
         XGPushModule.notifyJSDidLoad(() => {
             XGPushModule.registerPush();
@@ -13,9 +13,6 @@ function init(cb) {
     } else {
         cb();
     }
-    setAccount("12", (r) => {
-        console.log('setAccount:', r)
-    })
 }
 
 function initOtherPush() {
@@ -24,14 +21,11 @@ function initOtherPush() {
     const appId = '2882303761517764099';
     const appKey = '5341776464099';
     XGPushNativeModules.initXiaomi(appId, appKey);
-
-    addReceiveNotificationListener(null);
 }
 
 function setAccount(uid, cb) {
     if(Platform.OS === 'ios'){
         XGPushModule.setAccount(uid,cb);
-
     }else{
         XGPushModule.bindAccount(uid,cb);
     }
@@ -39,13 +33,14 @@ function setAccount(uid, cb) {
 
 function addReceiveNotificationListener(cb) {
     XGPushModule.addReceiveNotificationListener((map) => {
-        console.log("[ReceiveNotification]", map)
+        console.log("[ReceiveNotification]", map);
+        cb(map);
     });
 
-    XGPushModule.addReceiveOpenNotificationListener((msg) => {
-        console.log("[addReceiveOpenNotificationListener]", msg)
-
-    })
+    // XGPushModule.addReceiveOpenNotificationListener((msg) => {
+    //     console.log("[addReceiveOpenNotificationListener]", msg)
+    //
+    // })
 }
 
 
@@ -53,4 +48,5 @@ function addReceiveNotificationListener(cb) {
 export default {
     init,
     setAccount,
+    addReceiveNotificationListener,
 }
