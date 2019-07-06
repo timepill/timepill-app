@@ -17,8 +17,8 @@ const VERSION = DeviceInfo.getVersion();
 const IS_IPHONEX = isIphoneX();
 
 
-const baseUrl = 'http://open.timepill.net/api';
-const v2Url = 'http://v2.timepill.net/api';
+const baseUrl = 'https://open.timepill.net/api';
+const v2Url = 'https://v2.timepill.net/api';
 
 
 async function login(username, password) {
