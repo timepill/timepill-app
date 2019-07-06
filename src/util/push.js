@@ -3,16 +3,19 @@ import XGPushModule from 'react-native-smart-xgpush';
 const XGPushNativeModules = NativeModules.XGPushModule;
 
 function init(cb) {
-    XGPushNativeModules.enableDebug(true);
     if(Platform.OS ==='android'){
+        XGPushNativeModules.enableDebug(true);
         XGPushModule.notifyJSDidLoad(() => {
             XGPushModule.registerPush();
             initOtherPush();
             cb()
         });
     } else {
-        cb()
+        cb();
     }
+    setAccount("12", (r) => {
+        console.log('setAccount:', r)
+    })
 }
 
 function initOtherPush() {
@@ -28,6 +31,7 @@ function initOtherPush() {
 function setAccount(uid, cb) {
     if(Platform.OS === 'ios'){
         XGPushModule.setAccount(uid,cb);
+
     }else{
         XGPushModule.bindAccount(uid,cb);
     }
