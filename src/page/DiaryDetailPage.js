@@ -235,6 +235,7 @@ const localStyle = StyleSheet.create({
     wrap: {
         flex: 1,
         flexDirection: 'column'
+        , backgroundColor: 'white'
     },
     container: {
         alignItems:'center',

@@ -236,6 +236,7 @@ export default class UserPage extends Component {
 const localStyle = StyleSheet.create({
     container: {
         flex: 1
+        , backgroundColor: 'white'
     },
     tabBar: {
         backgroundColor: '#fff',

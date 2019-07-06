@@ -274,6 +274,7 @@ export default class DiaryList extends Component {
 const localStyle = StyleSheet.create({
     container: {
         flex: 1
+        , backgroundColor: 'white'
     },
     list: {
         height: '100%'

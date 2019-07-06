@@ -136,7 +136,7 @@ export default class NotebookList extends Component {
     render() {
         let hasData = this.state.notebooks && this.state.notebooks.length > 0;
         return hasData ? (
-            <FlatList style={{marginTop: 15}}
+            <FlatList style={{marginTop: 15, backgroundColor: 'white'}}
                 data={this.state.notebooks}
 
                 keyExtractor={(item, index) => {
