@@ -247,9 +247,16 @@ async function addFollow(user_id) {
     return call('POST', '/relation/' + user_id);
 }
 
+async function getMessages() {
+    return call('GET', '/tip');
+}
 
 async function getMessagesHistory() {
     return call('GET', '/tip/history');
+}
+
+async function deleteMessage(ids) {
+    return call('POST', '/tip/read/' + ids.join(','))
 }
 
 async function getDiary(id) {
@@ -341,6 +348,10 @@ async function feedback(content) {
 
 async function getUpdateInfo() {
     return callV2('GET', '/updateInfo');
+}
+
+export async function updatePushInfo() {
+    return callV2('POST', '/push');
 }
 
 
@@ -525,7 +536,9 @@ export default {
     deleteFollowBy,
     addFollow,
 
+    getMessages,
     getMessagesHistory,
+    deleteMessage,
 
     updateNotebookCover,
     createNotebook,
@@ -534,5 +547,7 @@ export default {
 
     report,
     feedback,
-    getUpdateInfo
+    getUpdateInfo,
+
+    updatePushInfo,
 }

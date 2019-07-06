@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, FlatList, InteractionManager} from 'react-native';
+import {StyleSheet, Text, View, FlatList, InteractionManager, ActivityIndicator, Platform} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
 import Api from '../../util/api';
 import Notification from './notification';
+import Color from "../../style/color";
+import {ListEmptyRefreshable} from "../listEmpty";
 
 
 export default class NotificationList extends Component {
@@ -13,7 +15,8 @@ export default class NotificationList extends Component {
 
         this.state = {
             notifications: [],
-            refreshing: false
+            refreshing: false,
+            error: false
         };
     }
 
@@ -23,42 +26,79 @@ export default class NotificationList extends Component {
         });
     }
 
-    refresh() {
-        this.setState({refreshing: true});
-        Api.getMessagesHistory()
-            .then(notifications => {
-                if(notifications) {
-                    let reducedNoti = notifications.reduce((ret, v) => {
-                                        if(v.type == 1) {
-                                            let items = ret.filter(x => x.type === 1 && x.link_id === v.link_id);
-                                            if(items.length > 0) {
-                                                items[0].list.push(v);
+    refresh(showRefreshing = true) {
+        if(showRefreshing) {
+            this.setState({refreshing: true});
+        }
 
-                                            } else {
-                                                ret.push({
-                                                    type: 1,
-                                                    link_id: v.link_id,
-                                                    created: v.created,
-                                                    list: [v]
-                                                });
-                                            }
+        (async () => {
+            try {
+                let notifications = await this.getMessages()
+                this.notificationsData = notifications;
+                this.setNotifications(notifications);
+            } catch (e) {
+                this.setState({error: true});
+            }
+            this.setState({refreshing: false});
+        })();
 
-                                        } else if (v.type == 2) {
-                                            ret.push(v);
-                                        }
-                                        
-                                        return ret;
+        this.props.onRefresh && this.props.onRefresh();
+    }
 
-                                      }, []);
+    setNotifications(notifications){
+        if(notifications) {
+            let reducedNoti = notifications.reduce((ret, v) => {
+                if(v.type == 1) {
+                    let items = ret.filter(x => x.type === 1 && x.link_id === v.link_id);
+                    if(items.length > 0) {
+                        items[0].list.push(v);
 
-                    this.setState({
-                        notifications: reducedNoti
-                    });
+                    } else {
+                        ret.push({
+                            type: 1,
+                            link_id: v.link_id,
+                            created: v.created,
+                            list: [v]
+                        });
+                    }
+
+                } else if (v.type == 2) {
+                    ret.push(v);
                 }
 
-            }).done(() => {
-                this.setState({refreshing: false});
+                return ret;
+
+            }, []);
+
+            this.setState({
+                notifications: reducedNoti
             });
+        }
+    }
+
+    getMessages() {
+        if(this.props.isHistory) {
+            return Api.getMessagesHistory();
+        } else {
+            return Api.getMessages();
+        }
+    }
+
+    async _setRead(msg) {
+        let ids = null;
+        if (msg.type === 1) {    //回复
+            ids = msg.list.map(it => it.id);
+        } else if (msg.type === 2) {     //关注
+            ids = [msg.id];
+        }
+
+        try {
+            this.notificationsData = this.notificationsData.filter((msg) => ids.indexOf(msg.id) === -1);
+            this.setNotifications(this.notificationsData);
+            await Api.deleteMessage(ids);
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     _onCommentPress(msg) {
@@ -79,6 +119,10 @@ export default class NotificationList extends Component {
                 }
             }
         });
+
+        if(this.props.isSetRead) {
+            this._setRead(msg);
+        }
     }
 
     _onFollowPress(msg) {
@@ -99,6 +143,10 @@ export default class NotificationList extends Component {
                 }
             }
         });
+
+        if(this.props.isSetRead) {
+            this._setRead(msg);
+        }
     }
 
     render() {
@@ -124,13 +172,35 @@ export default class NotificationList extends Component {
                 onRefresh={this.refresh.bind(this)}
 
             />
-        ) : null;
+        ) : this.renderEmpty();
+    }
+
+    renderEmpty() {
+        if (this.state.refreshing) {
+            return (
+                <View style={{alignItems:'center', justifyContent: 'center' , height: '100%'}}>
+                    <ActivityIndicator animating={true} color={Color.primary} size={Platform.OS === 'android' ? 'large' : 'small'}/>
+                </View>
+            )
+        }
+        let text = this.state.error ? '出错了 :(':'没有提醒 :)';
+        return (
+            <ListEmptyRefreshable message={text} onPress={this.refresh.bind(this)}/>
+        );
     }
 }
 
-const localStyle = StyleSheet.create({
+// NotificationList.propTypes = {
+//     isHistory: PropTypes.boolean,
+//     onRefresh: PropTypes.func,
+//     isSetRead: PropTypes.boolean
+// };
+//
+// NotificationList.defaultProps = {
+//     isHistory: true,
+//     isSetRead: false,
+// };
 
-});
 
 
 
