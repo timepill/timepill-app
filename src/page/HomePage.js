@@ -119,7 +119,10 @@ export default class HomePage extends Component {
                   }
                 },
                 bottomTabs: {
-                    visible: true
+                    visible: true,
+
+                    drawBehind: false,
+                    animate: false
                 }
             });
             
