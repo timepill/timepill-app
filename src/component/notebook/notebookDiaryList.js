@@ -86,10 +86,10 @@ export default class NotebookDiaryList extends Component {
     }
 
     refreshOne(index, diary) {
-        console.log('index, diary:', index, diary);
         if(diary) {
             let list = this.state.rawlist;
             diary.user = list[index].user;
+
             list[index] = diary;
 
             this.setState({
@@ -188,8 +188,7 @@ export default class NotebookDiaryList extends Component {
                     diary: diary,
                     showField: ['createdTime'],
 
-                    expired: this.notebook.isExpired,
-                    refreshBack: this.refreshOne.bind(this, index)
+                    expired: this.notebook.isExpired
                 }
             }
         });
@@ -215,7 +214,7 @@ export default class NotebookDiaryList extends Component {
 
                 renderItem={(rowData) => {
                     return (
-                        <DiaryBrief
+                        <DiaryBrief {...this.props}
                             diary={rowData.item}
                             showField={['createdTime']}
                             expired={expired}

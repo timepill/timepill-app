@@ -244,10 +244,18 @@ export default class WritePage extends Component {
         let photoUri = this.state.photoUri;
         let topic = this.props.topic ? 1 : 0;
 
+        let waitingToast = Msg.showMsg('正在保存中', {
+            duration: 10000,
+            position: -150,
+            shadow: false,
+            hideOnPress: false
+        });
+
         (this.diary
           ? Api.updateDiary(this.diary.id, this.state.targetbookId, this.state.content)
           : Api.addDiary(this.state.targetbookId, this.state.content, photoUri, topic)
         ).then(result => {
+              Msg.hideMsg(waitingToast);
               Msg.showMsg('日记保存完成');
               DeviceEventEmitter.emit(Event.updateDiarys);
 
@@ -271,6 +279,7 @@ export default class WritePage extends Component {
               }
           })
           .catch(e => {
+              Msg.hideMsg(waitingToast);
               Msg.showMsg('保存失败');
           })
           .done();
