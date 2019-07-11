@@ -241,12 +241,16 @@ export default class WritePage extends Component {
     }
 
     saveDiary() {
+        if(!this.state.content) {
+            return;
+        }
+
         let photoUri = this.state.photoUri;
         let topic = this.props.topic ? 1 : 0;
 
         let waitingToast = Msg.showMsg('正在保存中', {
             duration: 10000,
-            position: -150,
+            position: -75,
             shadow: false,
             hideOnPress: false
         });
