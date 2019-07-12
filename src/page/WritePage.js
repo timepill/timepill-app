@@ -100,6 +100,7 @@ export default class WritePage extends Component {
 
     componentDidMount() {
         this.loadNotebook();
+        this.contentInput.focus();
 
         this.notebookListener = DeviceEventEmitter.addListener(Event.updateNotebooks, (param) => {
             this.loadNotebook(true);
@@ -111,6 +112,7 @@ export default class WritePage extends Component {
     }
 
     openModal() {
+        this.contentInput.blur();
         this.setState({modalVisible: true});
 
         if(this.state.notebooks.length == 0) {
@@ -120,15 +122,14 @@ export default class WritePage extends Component {
         }
     }
 
-    closeModal(showKeyboard = true) {
-        this.contentInput.blur();
+    closeModal(showKeyboard = true, callback) {
         Animated.parallel([
             Animated.timing(
                 this.state.fadeAnimOpacity,
                 {
                     toValue: 0,
                     duration: 350,
-                    easing: Easing.out(Easing.cubic)
+                    easing: Easing.out(Easing.linear)
                 }
             ),
             Animated.timing(
@@ -136,26 +137,35 @@ export default class WritePage extends Component {
                 {
                     toValue: 0,
                     duration: 350,
-                    easing: Easing.out(Easing.cubic)
+                    easing: Easing.out(Easing.linear)
                 }
             )
         ]).start(({finished}) => {
-            this.setState({modalVisible: false});
             if(!finished) {
                 return;
             }
-            if(showKeyboard) {
-                setTimeout(() => this.contentInput.focus(), 100);
-            }
+
+            this.setState({modalVisible: false}, () => {
+                setTimeout(() => {
+                    if(showKeyboard) {
+                        this.contentInput.focus()
+                    } else {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                }, 100);
+            });
         });
     }
 
     _onCreateNotebook() {
-        this.closeModal(false);
-        Navigation.push(this.props.componentId, {
-            component: {
-                name: 'NotebookEdit'
-            }
+        this.closeModal(false, () => {
+            Navigation.push(this.props.componentId, {
+                component: {
+                    name: 'NotebookEdit'
+                }
+            });
         });
     }
 

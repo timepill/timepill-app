@@ -52,10 +52,20 @@ export default class FollowPage extends Component {
         });
     }
 
+    componentDidMount() {
+        this.bottomTabEventListener = Navigation.events().registerBottomTabSelectedListener(
+            ({ selectedTabIndex, unselectedTabIndex }) => {
+                if(selectedTabIndex == unselectedTabIndex && selectedTabIndex == 1) {
+                    this.diaryList.scrollToTop();
+                }
+            }
+        );
+    }
+
     render() {
         return (
           <View style={localStyle.wrap}>
-                <DiaryList ref={(r) => this.list = r}
+                <DiaryList ref={(r) => this.diaryList = r}
                     dataSource={this.dataSource}
                     {...this.props}
 
