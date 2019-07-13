@@ -30,7 +30,7 @@ export default class UserPage extends Component {
         this.dataSource = new UserDiaryData(this.userId);
 
         this.state = {
-            index: 1,
+            index: this.user ? 0 : 1,
             routes: [
                 { key: 'userIntro', title: '简介' },
                 { key: 'diary', title: '日记' },

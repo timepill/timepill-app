@@ -194,6 +194,17 @@ export default class NotebookDiaryList extends Component {
         });
     }
 
+    _onPhotoPress(photoUrl) {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'Photo',
+                passProps: {
+                    url: photoUrl
+                }
+            }
+        });
+    }
+
     render() {
         if(!this.notebook) {
             return null;
@@ -221,6 +232,7 @@ export default class NotebookDiaryList extends Component {
                             isMine={isMine}
                             
                             onDiaryPress={this._onDiaryPress.bind(this, rowData.index)}
+                            onPhotoPress={() => this._onPhotoPress(rowData.item.photoUrl)}
 
                             refreshBack={this.refreshOne.bind(this, rowData.index)}
                         >
