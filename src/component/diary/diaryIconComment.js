@@ -29,9 +29,11 @@ export default class DiaryIconComment extends Component {
 const localStyle = StyleSheet.create({
     wrap: {
         flexDirection: 'row',
-        marginRight: 6
+        marginRight: 6,
+        marginTop: -1
     },
     icon: {
+        color: Color.inactiveText,
         marginLeft: 2,
         marginRight: 4
     },

@@ -157,7 +157,7 @@ const localStyle = StyleSheet.create({
     title: {
         flexDirection: "row",
         alignItems: "flex-end",
-        paddingRight: 10,
+        paddingRight: 9,
         paddingBottom: 5
     },
     titleName: {
