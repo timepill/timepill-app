@@ -136,8 +136,9 @@ export default class NotificationPage extends Component {
         //const push = settings['pushMessage'];
         const push = true;
         const alias = push ? user.id.toString() : user.id.toString() + '_close';
+        console.log("Push.setAccount...");
         Push.setAccount(alias, success => {
-            console.log('JPushModule.setAlias ' + alias + '  ' + success);
+            console.log('Push.setAccount ' + alias + '  ', success);
         });
 
         // Crashlytics.setUserName(user.name);

@@ -36,7 +36,6 @@ export default class Notification extends Component {
     }
 
     renderComment(msg) {
-        console.log(msg);
         const users = unique(msg.list.map(it => it.content.author.name)).join('、');
         const body = `${users} 回复了你`;
 
@@ -64,7 +63,6 @@ export default class Notification extends Component {
     }
 
     renderLike(msg) {
-        console.log(msg);
         const body = `${msg.content.user.name} 给了你一个创可贴`;
 
         return (
