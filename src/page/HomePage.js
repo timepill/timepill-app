@@ -64,7 +64,9 @@ export default class HomePage extends Component {
         this.bottomTabEventListener = Navigation.events().registerBottomTabSelectedListener(
             ({ selectedTabIndex, unselectedTabIndex }) => {
                 if(selectedTabIndex == unselectedTabIndex && selectedTabIndex == 0) {
-                    this.diaryList.scrollToTop();
+                    if(this.diaryList) {
+                        this.diaryList.scrollToTop();
+                    }
                 }
             }
         );
