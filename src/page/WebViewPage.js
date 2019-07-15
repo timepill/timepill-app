@@ -37,6 +37,10 @@ export default class WebViewPage extends Component {
                     id: "open",
                     icon: Icon.navButtonOpen
                 }]
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         };
     }

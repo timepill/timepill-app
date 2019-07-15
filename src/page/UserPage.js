@@ -51,6 +51,10 @@ export default class UserPage extends Component {
                     id: 'followIcon',
                     icon: Icon.followIcon
                 }]
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         } : {
             topBar: {
@@ -65,6 +69,10 @@ export default class UserPage extends Component {
 
                     color: Color.primary
                 }]
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         }
     }

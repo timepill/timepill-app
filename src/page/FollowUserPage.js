@@ -36,6 +36,10 @@ export default class FollowUserPage extends Component {
                 title: {
                     text: '关注用户'
                 }
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         };
     }

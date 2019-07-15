@@ -30,6 +30,10 @@ export default class FeedbackPage extends Component {
               title: {
                   text: '意见反馈'
               }
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         };
     }

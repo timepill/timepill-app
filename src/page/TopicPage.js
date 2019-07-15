@@ -30,6 +30,10 @@ export default class TopicPage extends Component {
 
                     color: '#aaa' // android
               }]
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         };
     }

@@ -31,6 +31,15 @@ export default class UserInfoEditPage extends Component {
         };
     }
 
+    static options(passProps) {
+        return {
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
+            }
+        };
+    }
+
     componentDidMount() {
         this.loadUser();
         this.userInfoListener = DeviceEventEmitter.addListener(Event.userInfoUpdated, this.loadUser.bind(this));

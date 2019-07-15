@@ -12,6 +12,15 @@ export default class EmptyPage extends Component {
         }
     }
 
+    static options(passProps) {
+        return {
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
+            }
+        };
+    }
+
     componentDidMount() {
         this.navigationEventListener = Navigation.events().bindComponent(this);
     }

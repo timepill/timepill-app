@@ -36,6 +36,10 @@ export default class SettingPage extends Component {
                 title: {
                     text: '设置'
                 }
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         };
     }

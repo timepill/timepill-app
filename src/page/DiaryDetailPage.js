@@ -64,7 +64,11 @@ export default class DiaryDetailPage extends Component {
         }
 
         return {
-            topBar
+            topBar,
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
+            }
         };
     }
 

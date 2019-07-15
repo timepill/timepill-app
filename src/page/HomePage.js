@@ -8,7 +8,8 @@ import {
     Animated,
     Modal,
     TouchableWithoutFeedback,
-    InteractionManager
+    InteractionManager,
+    StatusBar
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {Button} from 'react-native-elements';
@@ -23,6 +24,15 @@ import HomeDiaryData from '../dataLoader/homeDiaryData';
 
 
 export default class HomePage extends Component {
+
+    static options(passProps) {
+        return {
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
+            }
+        };
+    }
 
     constructor(props) {
         super(props);

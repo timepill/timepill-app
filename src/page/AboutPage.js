@@ -31,6 +31,10 @@ export default class AboutPage extends Component {
               title: {
                   text: '关于'
               }
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         };
     }

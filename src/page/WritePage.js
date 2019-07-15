@@ -67,6 +67,10 @@ export default class WritePage extends Component {
                   id: 'save',
                   icon: Icon.navButtonSave
               }]
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         };
     }

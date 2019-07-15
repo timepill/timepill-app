@@ -30,6 +30,10 @@ export default class NotificationPage extends Component {
 
                     color: Color.primary // android
                 }]
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         };
     }

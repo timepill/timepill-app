@@ -46,6 +46,10 @@ export default class UserNameEditPage extends Component {
                 // hide bottom tab for android
                 drawBehind: true,
                 animate: true
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         };
     }

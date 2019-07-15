@@ -33,6 +33,15 @@ export default class PasswordPage extends Component {
         };
     }
 
+    static options(passProps) {
+        return {
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
+            }
+        };
+    }
+
     componentDidMount() {
         Token.getLoginPassword()
             .then(pwd => {

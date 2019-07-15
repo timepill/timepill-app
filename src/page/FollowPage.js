@@ -31,6 +31,10 @@ export default class FollowPage extends Component {
 
                   color: Color.primary // android
               }]
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         };
     }

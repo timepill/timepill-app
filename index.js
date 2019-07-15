@@ -39,6 +39,10 @@ function loginByAccount() {
                                 // hide top bar for android
                                 drawBehind: true,
                                 animate: true
+                            },
+                            statusBar: {
+                                backgroundColor: 'white',
+                                style: 'dark'
                             }
                         }
                     }
@@ -67,6 +71,10 @@ function loginByPassword() {
                                 // hide bottom tab for android
                                 drawBehind: true,
                                 animate: true
+                            },
+                            statusBar: {
+                                backgroundColor: 'white',
+                                style: 'dark'
                             }
                         },
                         passProps: {
@@ -109,11 +117,6 @@ Navigation.events().registerAppLaunchedListener(async () => {
 
     Push.init((msg) => {
         console.log("push init: " + msg);
-        Push.setAccount("12", (msg) => {
-            console.log("push setAccount:", JSON.stringify(msg))
-        })
-
-        Push.addReceiveNotificationListener(() => {});
     })
 });
 

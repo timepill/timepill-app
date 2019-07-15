@@ -33,6 +33,11 @@ export default class NotebookDetailPage extends Component {
 
         return {
             topBar
+            ,
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
+            }
         };
     }
 

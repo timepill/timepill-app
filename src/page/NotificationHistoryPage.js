@@ -21,6 +21,10 @@ export default class NotificationHistoryPage extends Component {
               title: {
                   text: '提醒历史'
               }
+            },
+            statusBar: {
+                backgroundColor: 'white',
+                style: 'dark'
             }
         };
     }
