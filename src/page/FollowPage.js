@@ -56,7 +56,9 @@ export default class FollowPage extends Component {
         this.bottomTabEventListener = Navigation.events().registerBottomTabSelectedListener(
             ({ selectedTabIndex, unselectedTabIndex }) => {
                 if(selectedTabIndex == unselectedTabIndex && selectedTabIndex == 1) {
-                    this.diaryList.scrollToTop();
+                    if(this.diaryList) {
+                        this.diaryList.scrollToTop();
+                    }
                 }
             }
         );
