@@ -9,7 +9,7 @@ function config(splash) {
               options: {
                   bottomTabs: {
                       currentTabIndex: 0,
-                      titleDisplayMode: 'alwaysShow' // android
+                      titleDisplayMode: 'alwaysHide' // android
                   }
               },
               children: [{
@@ -48,8 +48,8 @@ function config(splash) {
                           selectedIcon: Icon.homeSelectedIcon,
 
                           // android
-                          iconColor: '#ccc',
-                          selectedIconColor: Color.primary
+                          iconColor: '#aaa',
+                          selectedIconColor: Color.primary,
                         }
                       }
                     }
@@ -69,7 +69,7 @@ function config(splash) {
                           selectedIcon: Icon.followSelectedIcon,
 
                           // android
-                          iconColor: '#ccc',
+                          iconColor: '#aaa',
                           selectedIconColor: Color.primary
                         }
                       }
@@ -96,7 +96,7 @@ function config(splash) {
                           selectedIcon: Icon.writeSelectedIcon,
 
                           // android
-                          iconColor: '#ccc',
+                          iconColor: '#aaa',
                           selectedIconColor: Color.primary
                         }
                       }
@@ -124,7 +124,7 @@ function config(splash) {
                           selectedIcon: Icon.tipSelectedIcon,
 
                           // android
-                          iconColor: '#ccc',
+                          iconColor: '#aaa',
                           selectedIconColor: Color.primary
                         }
                       }
@@ -152,7 +152,7 @@ function config(splash) {
                           selectedIcon: Icon.mySelectIcon,
 
                           // android
-                          iconColor: '#ccc',
+                          iconColor: '#aaa',
                           selectedIconColor: Color.primary
                         }
                       }
