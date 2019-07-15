@@ -62,7 +62,7 @@ export default class NotificationList extends Component {
                         });
                     }
 
-                } else if (v.type == 2) {
+                } else if (v.type == 2 || v.type == 3) {
                     ret.push(v);
                 }
 
@@ -149,6 +149,30 @@ export default class NotificationList extends Component {
         }
     }
 
+    _onLikePress(msg) {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'User',
+                options: {
+                    bottomTabs: {
+                        visible: false,
+
+                        // hide bottom tab for android
+                        drawBehind: true,
+                        animate: true
+                    }
+                },
+                passProps: {
+                    user: msg.content.user
+                }
+            }
+        });
+
+        if(this.props.isSetRead) {
+            //this._setRead(msg);
+        }
+    }
+
     render() {
         let hasData = this.state.notifications && this.state.notifications.length > 0;
         return hasData ? (
@@ -164,6 +188,7 @@ export default class NotificationList extends Component {
                         <Notification msg={item}
                             onCommentPress={this._onCommentPress.bind(this)}
                             onFollowPress={this._onFollowPress.bind(this)}
+                                      onLikePress={this._onLikePress.bind(this)}
                         ></Notification>
                     );
                 }}

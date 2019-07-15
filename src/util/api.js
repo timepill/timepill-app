@@ -248,7 +248,7 @@ async function addFollow(user_id) {
 }
 
 async function getMessages() {
-    return call('GET', '/tip');
+    return callV2('GET', '/tips');
 }
 
 async function getMessagesHistory() {

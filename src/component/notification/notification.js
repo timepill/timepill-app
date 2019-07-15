@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Touchable from '../touchable';
@@ -27,6 +27,8 @@ export default class Notification extends Component {
 
             } else if(msg.type == 2) {
                 return this.renderFollow(msg);
+            } else if(msg.type == 3) {
+                return this.renderLike(msg);
             }
         }
 
@@ -34,6 +36,7 @@ export default class Notification extends Component {
     }
 
     renderComment(msg) {
+        console.log(msg);
         const users = unique(msg.list.map(it => it.content.author.name)).join('、');
         const body = `${users} 回复了你`;
 
@@ -59,6 +62,26 @@ export default class Notification extends Component {
             </Touchable>
         )
     }
+
+    renderLike(msg) {
+        console.log(msg);
+        const body = `${msg.content.user.name} 给了你一个创可贴`;
+
+        return (
+            <Touchable key={msg.link_id} onPress={() => this.props.onLikePress(msg)}>
+                <View style={localStyle.container}>
+                    <Image
+                        source={
+
+                                require('../../img/ok-beng2.png')
+                        }
+                        style={localStyle.icon2}
+                    />
+                    <Text style={localStyle.text}>{body}</Text>
+                </View>
+            </Touchable>
+        )
+    }
 }
 
 const localStyle = StyleSheet.create({
@@ -76,5 +99,11 @@ const localStyle = StyleSheet.create({
     text: {
         flex: 1,
         lineHeight: 20
-    }
+    },
+    icon2: {
+        width: 14,
+        height: 14,
+        marginRight: 10,
+        marginTop: 4,
+    },
 });
