@@ -89,6 +89,8 @@ export default class DiaryBrief extends Component {
                 <Photo uri={diary.photoThumbUrl} onPress={this.props.onPhotoPress}></Photo>
 
                 <View style={localStyle.actionBar}>
+                    <View style={{flex: 1}} />
+
                     <View style={localStyle.icons}>
                         <DiaryIconComment count={diary.comment_count}></DiaryIconComment>
                         <DiaryIconOkB diaryId={diary.id}
@@ -98,7 +100,7 @@ export default class DiaryBrief extends Component {
                             refreshBack={this.refreshDiary.bind(this)}
                         ></DiaryIconOkB>
                     </View>
-                    <View style={{flex: 1}} />
+                    
                     {
                         isMine && !expired
                         ? <TouchableOpacity onPress={this.onDiaryAction.bind(this)}>
@@ -134,7 +136,8 @@ const localStyle = StyleSheet.create({
     title: {
         flexDirection: "row",
         alignItems: "flex-end",
-        paddingBottom: 5
+        paddingBottom: 5,
+        paddingRight: 9
     },
     titleName: {
         fontWeight: 'bold',
@@ -164,7 +167,7 @@ const localStyle = StyleSheet.create({
         flexDirection: 'row'
     },
     moreIcon: {
-        paddingVertical: 5,
-        paddingHorizontal: 5
+        marginLeft: 7,
+        marginRight: 13
     }
 });

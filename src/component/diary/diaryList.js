@@ -53,6 +53,15 @@ export default class DiaryList extends Component {
     }
 
     scrollToTop() {
+        if(!this.scrollY) {
+            this.scrollY = 0;
+        }
+        
+        if(this.scrollY <= 10) {
+            this.refresh();
+            return;
+        }
+
         this.list.scrollToOffset({
             offset: 0
         });
@@ -263,6 +272,10 @@ export default class DiaryList extends Component {
                     
                     onEndReachedThreshold={2}
                     onEndReached={this.state.hasMore ? this.loadMore.bind(this) : null}
+
+                    onScroll={(event) => {
+                        this.scrollY = event.nativeEvent.contentOffset.y;
+                    }}
                 >
                 </FlatList>
                 

@@ -14,9 +14,14 @@ function showMsg(msg, option) {
         }
     }
 
-    Toast.show(msg, option);
+    return Toast.show(msg, option);
+}
+
+function hideMsg(toast) {
+    Toast.hide(toast);
 }
 
 export default {
-    showMsg
+    showMsg,
+    hideMsg
 }

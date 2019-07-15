@@ -114,6 +114,14 @@ export default class SettingPage extends Component {
         Alert.alert('提示','确认退出登录?',[
             {text: '退出', style: 'destructive', onPress: () => {
                 Api.logout();
+
+                /*
+                *  clear ActionSheet instance
+                */
+                if(global.__action_sheet) {
+                    global.__action_sheet = null;
+                }
+
                 Navigation.setRoot({
                     root: {
                         stack: {

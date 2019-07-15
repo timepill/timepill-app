@@ -30,7 +30,7 @@ function getTodayStr() {
     let month = now.getMonth() + 1;
     let date = now.getDate();
 
-    return year + '-' + (month > 9 ? month : '0' + month) + '-' + date;
+    return year + '-' + (month > 9 ? month : '0' + month) + '-' + (date > 9 ? date : '0' + date);
 }
 
 export default class DiaryDetailPage extends Component {

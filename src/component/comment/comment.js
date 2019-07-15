@@ -114,7 +114,7 @@ const localStyle = StyleSheet.create({
     moreIcon: {
         position: 'absolute',
         bottom: 0,
-        right: 10,
+        right: 15,
         paddingHorizontal: 12,
         paddingVertical: 5
     }

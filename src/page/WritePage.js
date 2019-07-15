@@ -100,6 +100,7 @@ export default class WritePage extends Component {
 
     componentDidMount() {
         this.loadNotebook();
+        this.contentInput.focus();
 
         this.notebookListener = DeviceEventEmitter.addListener(Event.updateNotebooks, (param) => {
             this.loadNotebook(true);
@@ -111,6 +112,7 @@ export default class WritePage extends Component {
     }
 
     openModal() {
+        this.contentInput.blur();
         this.setState({modalVisible: true});
 
         if(this.state.notebooks.length == 0) {
@@ -120,15 +122,14 @@ export default class WritePage extends Component {
         }
     }
 
-    closeModal(showKeyboard = true) {
-        this.contentInput.blur();
+    closeModal(showKeyboard = true, callback) {
         Animated.parallel([
             Animated.timing(
                 this.state.fadeAnimOpacity,
                 {
                     toValue: 0,
                     duration: 350,
-                    easing: Easing.out(Easing.cubic)
+                    easing: Easing.out(Easing.linear)
                 }
             ),
             Animated.timing(
@@ -136,26 +137,35 @@ export default class WritePage extends Component {
                 {
                     toValue: 0,
                     duration: 350,
-                    easing: Easing.out(Easing.cubic)
+                    easing: Easing.out(Easing.linear)
                 }
             )
         ]).start(({finished}) => {
-            this.setState({modalVisible: false});
             if(!finished) {
                 return;
             }
-            if(showKeyboard) {
-                setTimeout(() => this.contentInput.focus(), 100);
-            }
+
+            this.setState({modalVisible: false}, () => {
+                setTimeout(() => {
+                    if(showKeyboard) {
+                        this.contentInput.focus()
+                    } else {
+                        if(typeof callback == 'function') {
+                            callback();
+                        }
+                    }
+                }, 100);
+            });
         });
     }
 
     _onCreateNotebook() {
-        this.closeModal(false);
-        Navigation.push(this.props.componentId, {
-            component: {
-                name: 'NotebookEdit'
-            }
+        this.closeModal(false, () => {
+            Navigation.push(this.props.componentId, {
+                component: {
+                    name: 'NotebookEdit'
+                }
+            });
         });
     }
 
@@ -241,13 +251,25 @@ export default class WritePage extends Component {
     }
 
     saveDiary() {
+        if(!this.state.content) {
+            return;
+        }
+
         let photoUri = this.state.photoUri;
         let topic = this.props.topic ? 1 : 0;
+
+        let waitingToast = Msg.showMsg('正在保存中', {
+            duration: 10000,
+            position: -75,
+            shadow: false,
+            hideOnPress: false
+        });
 
         (this.diary
           ? Api.updateDiary(this.diary.id, this.state.targetbookId, this.state.content)
           : Api.addDiary(this.state.targetbookId, this.state.content, photoUri, topic)
         ).then(result => {
+              Msg.hideMsg(waitingToast);
               Msg.showMsg('日记保存完成');
               DeviceEventEmitter.emit(Event.updateDiarys);
 
@@ -271,6 +293,7 @@ export default class WritePage extends Component {
               }
           })
           .catch(e => {
+              Msg.hideMsg(waitingToast);
               Msg.showMsg('保存失败');
           })
           .done();

@@ -8,7 +8,13 @@ export default class UserIcon extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            iconUrl : props.iconUrl
+            iconUrl: props.iconUrl
+        };
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        return {
+            iconUrl: nextProps.iconUrl
         };
     }
 

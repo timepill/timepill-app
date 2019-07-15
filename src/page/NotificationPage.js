@@ -147,7 +147,9 @@ export default class NotificationPage extends Component {
     }
 
     refresh() {
-        this.list.refresh(false);
+        if(this.list) {
+            this.list.refresh(false);
+        }
     }
 
     _onDeletePress(msg) {
