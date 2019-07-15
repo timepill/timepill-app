@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>24</string>
+	<string>26</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -38,10 +38,6 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
-	<key>NSPhotoLibraryUsageDescription</key>
 	<string></string>
 	<key>UIAppFonts</key>
 	<array>
@@ -71,5 +67,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>胶囊需要访问你的相册</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>胶囊需要获取你的位置</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>胶囊需要获取你的位置</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>胶囊需要保存图片到相册</string>
 </dict>
 </plist>
