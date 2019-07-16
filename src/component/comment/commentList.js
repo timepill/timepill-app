@@ -149,6 +149,8 @@ export default class CommentList extends Component {
                         return (
                             <Touchable onPress={() => this._onCommentPress(item)}>
                                 <Comment comment={item}
+                                    {...this.props}
+
                                     isMyDiary={this.state.isMine}
                                     isMyComment={selfInfo.id == item.user_id}
                                     expired={this.state.expired}

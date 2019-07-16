@@ -201,7 +201,7 @@ export default class DiaryDetailPage extends Component {
                 <ScrollView ref={(r)=>this.scroll = r}
                     style={{flex: 1}}
                     onContentSizeChange={(width, height) => {
-                        if(this.state.needScrollToBottom) {
+                        if(this.props.needScrollToBottom || this.state.needScrollToBottom) {
                             this.scroll.scrollTo({y: height});
                             this.setState({needScrollToBottom: false});
                         }

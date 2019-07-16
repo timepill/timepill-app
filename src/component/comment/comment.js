@@ -30,8 +30,13 @@ export default class Comment extends Component {
         let isMyComment = this.state.isMyComment;
         let expired = this.state.expired;
 
+        const isNewComment = this.props.newCommentIds != null
+            && this.props.newCommentIds.some(it => it === comment.id);
+
+        const bgActive = isNewComment ? {backgroundColor: Color.textSelect} : null;
+
         return (
-            <View>
+            <View style={bgActive}>
                 <View style={localStyle.box}>
                     <UserIcon iconUrl={user.iconUrl} onPress={this.props.onUserIconPress}></UserIcon>
 

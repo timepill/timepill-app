@@ -115,7 +115,9 @@ export default class NotificationList extends Component {
                     }
                 },
                 passProps: {
-                    diaryId: msg.link_id
+                    diaryId: msg.link_id,
+                    newCommentIds: msg.list.map(it => it.content.comment_id),
+                    needScrollToBottom: true
                 }
             }
         });

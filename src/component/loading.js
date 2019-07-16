@@ -32,7 +32,7 @@ const localStyle = StyleSheet.create({
         position: 'absolute',
         left: 0,
         width: Api.DEVICE_WINDOW.width,
-        top: 200,
+        top: '50%',
         justifyContent: 'center',
         alignItems: 'center'
     }

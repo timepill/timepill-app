@@ -14,8 +14,10 @@ import moment from 'moment';
 import Api from '../../util/api';
 import Color from '../../style/color';
 import Touchable from '../touchable';
+import Loading from '../loading';
 
 import DiaryBrief from '../diary/diaryBrief';
+import {ListEmptyRefreshable} from '../listEmpty';
 import NotebookDiaryData from '../../dataLoader/notebookDiaryData';
 import {
     ListFooterLoading,
@@ -34,6 +36,8 @@ export default class NotebookDiaryList extends Component {
         this.dataSource = new NotebookDiaryData();
 
         this.state = {
+            mounting: true,
+
             rawlist: [],
             diaries: [],
 
@@ -129,6 +133,7 @@ export default class NotebookDiaryList extends Component {
 
                 }).done(() => {
                     this.setState({
+                        mounting: false,
                         refreshing: false
                     });
                 });
@@ -208,6 +213,21 @@ export default class NotebookDiaryList extends Component {
     render() {
         if(!this.notebook) {
             return null;
+        }
+
+        if(this.state.refreshing) {
+            return (<Loading visible={true} color={Color.primary}></Loading>);
+        }
+
+        if(!this.state.mounting && (!this.state.diaries || this.state.diaries.length == 0)) {
+            return (
+                <ListEmptyRefreshable
+                    error={this.state.refreshFailed}
+                    message={'没有日记'}
+                    onPress={this.refresh.bind(this)}
+
+                ></ListEmptyRefreshable>
+            );
         }
 
         let expired = this.notebook.isExpired;
