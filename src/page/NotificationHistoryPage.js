@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import {Navigation} from 'react-native-navigation';
+import firebase from 'react-native-firebase';
 
 import Color from '../style/color';
 import {Icon} from '../style/icon';

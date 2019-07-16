@@ -12,6 +12,7 @@ import Api from "../util/api";
 import Event from "../util/event";
 import Notification from "../component/notification/notification";
 import NotificationList from "../component/notification/notificationList";
+import firebase from 'react-native-firebase';
 
 const LOOP_TIME_SHORT = 30 * 1000;
 const LOOP_TIME_LONG = 60 * 1000;
@@ -141,9 +142,12 @@ export default class NotificationPage extends Component {
             console.log('Push.setAccount ' + alias + '  ', success);
         });
 
-        // Crashlytics.setUserName(user.name);
-        // Crashlytics.setUserEmail(user.email);
-        // Crashlytics.setUserIdentifier(user.id.toString());
+        console.log(user, user.email);
+
+        firebase.crashlytics().setUserIdentifier(user.id.toString());
+        firebase.crashlytics().setUserName(user.name);
+        //todo:现在用户信息里没有 email
+        //firebase.crashlytics().setUserEmail(user.email);
     }
 
 

@@ -1,4 +1,6 @@
 apply plugin: "com.android.application"
+apply plugin: "io.fabric"
+
 
 import com.android.build.OutputFile
 
@@ -107,10 +109,10 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         missingDimensionStrategy "RNN.reactNativeVersion", "reactNative57_5"
-        versionCode 21
-        versionName "2.0.1"
+        versionCode 22
+        versionName "2.0.2"
         vectorDrawables.useSupportLibrary = true
-
+        multiDexEnabled true
         ndk {
             //根据需要 自行选择添加的对应cpu类型的.so库。
             abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
@@ -166,12 +168,15 @@ android {
 
 
 dependencies {
+    implementation project(':react-native-firebase')
     implementation project(':react-native-smart-xgpush')
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-image-crop-picker')
     implementation project(':react-native-image-resizer')
 
-    implementation project(':react-native-device-info')
+    implementation (project(':react-native-device-info')){
+        exclude group: 'com.google.android.gms'
+    }
     implementation project(':react-native-vector-icons')
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-navigation')
@@ -185,6 +190,16 @@ dependencies {
     implementation 'com.tencent.wup:wup:1.0.0.E-Release'
     implementation 'com.tencent.mid:mid:4.0.7-Release'
     implementation 'com.tencent.xinge:mipush:4.3.2-xiaomi-release'
+
+    // Firebase dependencies
+    implementation "com.google.android.gms:play-services-base:16.1.0"
+    implementation "com.google.firebase:firebase-core:16.0.9"
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
+        transitive = true
+    }
+
+    apply plugin: 'com.google.gms.google-services'
+
 }
 
 // Run this once to be able to run the application with BUCK

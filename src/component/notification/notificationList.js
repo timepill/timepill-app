@@ -171,7 +171,7 @@ export default class NotificationList extends Component {
         });
 
         if(this.props.isSetRead) {
-            //this._setRead(msg);
+            this._setRead(msg);
         }
     }
 

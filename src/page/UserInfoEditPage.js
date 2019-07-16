@@ -33,6 +33,11 @@ export default class UserInfoEditPage extends Component {
 
     static options(passProps) {
         return {
+            topBar: {
+                title: {
+                    text: '修改个人信息'
+                }
+            },
             statusBar: {
                 backgroundColor: 'white',
                 style: 'dark'

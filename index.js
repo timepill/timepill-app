@@ -14,6 +14,8 @@ import PageList from './src/page/_list';
 import BottomNav from './src/nav/bottomNav';
 
 import Push from './src/util/push';
+import firebase from 'react-native-firebase';
+
 
 // for debug
 console.disableYellowBox = true;
@@ -96,6 +98,8 @@ Navigation.events().registerAppLaunchedListener(async () => {
     }
 
     try {
+        //todo:当服务器不可用时，可能会卡在这里很长时间
+        //之前的做法是异步更新数据，在下一次打开 app 时从本地读取
         await Api.syncSplash();
     } catch (err) {}
 
@@ -118,5 +122,7 @@ Navigation.events().registerAppLaunchedListener(async () => {
     Push.init((msg) => {
         console.log("push init: " + msg);
     })
+
+    firebase.crashlytics().log('Test Message!');
 });
 

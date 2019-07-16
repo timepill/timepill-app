@@ -3,6 +3,8 @@ package com.timepill;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
 import com.rain.day.XGPushPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
@@ -50,7 +52,9 @@ public class MainApplication extends NavigationApplication {
                 new VectorIconsPackage(),
                 new AsyncStoragePackage(),
                 new PickerPackage(),
-                new XGPushPackage()
+                new XGPushPackage(),
+                new RNFirebasePackage(),
+                new RNFirebaseCrashlyticsPackage()
         );
     }
 
