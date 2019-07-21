@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1050261158757",
+    "firebase_url": "https://timepill-34b5f.firebaseio.com",
+    "project_id": "timepill-34b5f",
+    "storage_bucket": "timepill-34b5f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050261158757:android:a6e6d8680df2c71f",
+        "android_client_info": {
+          "package_name": "com.timepill.diary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1050261158757-5m32lpav53ashkedlot5hrnq4k6v6a2t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.timepill.diary",
+            "certificate_hash": "50d79b28c1a096ad900a05d2fc2aa8be0f0a08ea"
+          }
+        },
+        {
+          "client_id": "1050261158757-oqdmbf79kn9pu54c5udl6vbh1s9t4c4r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsCqh3tWD7bmrzzQZUSES8TudJJcSb7w4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1050261158757-oqdmbf79kn9pu54c5udl6vbh1s9t4c4r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
