@@ -16,6 +16,7 @@
 #import <UserNotifications/UserNotifications.h>
 #endif
 #import "RCTXGPushModule.h"
+#import <Firebase.h>
 
 @interface AppDelegate ()<XGPushDelegate>
 @end
@@ -35,6 +36,8 @@
   [[XGPush defaultManager] setXgApplicationBadgeNumber:0];
   [[XGPush defaultManager] reportXGNotificationInfo:launchOptions];
 
+  [FIRApp configure];
+  
   NSURL *jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
   [ReactNativeNavigation bootstrap:jsCodeLocation launchOptions:launchOptions];
   
