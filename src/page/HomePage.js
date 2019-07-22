@@ -194,7 +194,7 @@ export default class HomePage extends Component {
                     this.setState({topic});
                 }
             })
-            .done();
+            .catch((err) => console.log(err))
     }
 
     openTopicPage() {

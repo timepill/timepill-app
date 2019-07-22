@@ -91,7 +91,7 @@ export default class UserInfoEditPage extends Component {
             .catch(e => {
                 Msg.showMsg('头像更新失败:' + e.message);
             })
-            .done(() => {
+            .finally(() => {
                 this.setState({uploading: false});
             });
     }

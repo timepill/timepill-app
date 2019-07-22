@@ -47,7 +47,6 @@ export default class FeedbackPage extends Component {
             .catch(e => {
                 Msg.showMsg('反馈失败');
             })
-            .done();
     }
 
     render() {

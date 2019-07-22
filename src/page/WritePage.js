@@ -186,17 +186,17 @@ export default class WritePage extends Component {
     loadNotebook(resetTargetbook = false) {
         Api.getSelfNotebooks()
             .then(notebooks => {
-                if(!notebooks || !notebooks.filter) {
+                if (!notebooks || !notebooks.filter) {
                     notebooks = [];
                 }
 
                 let unExpiredBooks = notebooks.filter(it => !it.isExpired);
-                if(unExpiredBooks.length > 0) {
+                if (unExpiredBooks.length > 0) {
                     let st = {
                         notebooks: unExpiredBooks
                     }
 
-                    if(resetTargetbook || this.state.targetbookId == 0) {
+                    if (resetTargetbook || this.state.targetbookId == 0) {
                         st.targetbookId = unExpiredBooks[0].id;
                         st.targetbookSubject = unExpiredBooks[0].subject;
                     }
@@ -204,7 +204,8 @@ export default class WritePage extends Component {
                     this.setState(st);
                 }
 
-            }).done();
+            })
+            .catch((err) => { console.error(err) })
     }
 
     _onPickPhoto() {
@@ -300,7 +301,6 @@ export default class WritePage extends Component {
               Msg.hideMsg(waitingToast);
               Msg.showMsg('保存失败');
           })
-          .done();
     }
 
     render() {

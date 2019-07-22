@@ -89,7 +89,7 @@ export default class App extends Component {
             .then(splash => {
                 Navigation.setRoot(BottomNav.config(splash));
             })
-            .done();
+            .catch((err) => console.log(err))
     }
 
     render() {

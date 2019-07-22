@@ -67,18 +67,18 @@ export default class NotificationPage extends Component {
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
             if (Platform.OS === 'android') {
-                this.initAndroid().done()
+                this.initAndroid().catch((err) => console.log(err))
             } else {
-                this.initIOS().done()
+                this.initIOS().catch((err) => console.log(err))
             }
 
-            this.restartTipTimer().done();
+            this.restartTipTimer().catch((err) => console.log(err))
         });
         this.loginListener = DeviceEventEmitter.addListener(Event.login, () => {
-            this.registerUser().done();
-            this.restartTipTimer().done();
+            this.registerUser().catch((err) => console.log(err))
+            this.restartTipTimer().catch((err) => console.log(err))
         });
-        this.updatePushInfo().done();
+        this.updatePushInfo();
     }
 
     componentWillUnmount() {
@@ -86,14 +86,8 @@ export default class NotificationPage extends Component {
         //todo:删除 push 事件注册，删除定时器
     }
 
-    async updatePushInfo() {
-        let info;
-        try {
-            info = await Api.updatePushInfo()
-        } catch (err) {
-            console.error(err)
-        }
-        // console.log('updatePushInfo', info)
+    updatePushInfo() {
+        Api.updatePushInfo().catch((err) => console.log(err))
     }
 
     /**
@@ -115,7 +109,7 @@ export default class NotificationPage extends Component {
             console.log("push init: " + msg);
             this.registerUser();
             Push.addReceiveNotificationListener((msg) => {
-                this.restartTipTimer().done();
+                this.restartTipTimer().catch((err) => console.log(err))
             });
         })
     }
@@ -125,7 +119,7 @@ export default class NotificationPage extends Component {
             console.log("push init: " + msg);
             this.registerUser();
             Push.addReceiveNotificationListener((msg) => {
-                this.restartTipTimer().done();
+                this.restartTipTimer().catch((err) => console.log(err))
             });
         })
     }
@@ -153,7 +147,7 @@ export default class NotificationPage extends Component {
 
     _onRefresh() {
         console.log(this.props.componentId);
-        this.restartTipTimer().done();
+        this.restartTipTimer().catch((err) => console.log(err))
     }
 
     _onRefreshed(msgCount) {
@@ -174,7 +168,7 @@ export default class NotificationPage extends Component {
     }
 
     _onDeletePress(msg) {
-        this._setRead(msg).done();
+        this._setRead(msg).catch((err) => console.log(err))
     }
 
 

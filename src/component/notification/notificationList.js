@@ -36,7 +36,6 @@ export default class NotificationList extends Component {
                 let notifications = await this.getMessages();
                 this.notificationsData = notifications;
                 this.setNotifications(notifications);
-                this.props.onRefreshed && this.props.onRefreshed(notifications.length);
             } catch (e) {
                 this.setState({error: true});
             }
@@ -74,6 +73,8 @@ export default class NotificationList extends Component {
             this.setState({
                 notifications: reducedNoti
             });
+
+            this.props.onRefreshed && this.props.onRefreshed(notifications.length);
         }
     }
 

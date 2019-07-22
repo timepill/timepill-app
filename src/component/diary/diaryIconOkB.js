@@ -56,8 +56,7 @@ export default class DiaryIconOkB extends Component {
                         if(result) {
                             this.refreshBack(result);
                         }
-                    })
-                    .done();
+                    }).catch((err) => console.log(err))
 
                 } else {
                     DeviceEventEmitter.emit(Event.updateDiarys);
@@ -66,7 +65,6 @@ export default class DiaryIconOkB extends Component {
             .catch(e => {
                 Msg.showMsg('操作失败');
             })
-            .done();
     }
 
     render() {

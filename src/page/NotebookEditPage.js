@@ -132,7 +132,7 @@ export default class NotebookEditPage extends Component {
             .catch(e => {
                 Msg.showMsg('封面保存失败');
             })
-            .done(() => {
+            .finally(() => {
                 this.setState({uploading: false});
             });
     }

@@ -48,7 +48,6 @@ export default class RegisterMobileForm extends Component {
             .catch(e => {
                 Msg.showMsg('验证码发送失败');
             })
-            .done();
     };
 
     async register() {

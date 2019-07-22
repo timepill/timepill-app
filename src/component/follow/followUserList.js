@@ -64,7 +64,7 @@ export default class FollowUserList extends Component {
         Alert.alert('提示', '确定删除关注?', [
             {text: '删除', style: 'destructive', onPress: () => {
                 this.props.onDeletePress(user.id)
-                    .done(() => {
+                    .finally(() => {
                         let filterUsers = this.state.users.filter((it) => it.id !== user.id);
                         this.setState({
                             users: filterUsers
@@ -103,7 +103,7 @@ export default class FollowUserList extends Component {
                         refreshFailed: true
                     });
 
-                }).done(() => {
+                }).finally(() => {
                     this.setState({
                         refreshing: false
                     });
@@ -139,7 +139,7 @@ export default class FollowUserList extends Component {
                         loadFailed: true
                     });
 
-                }).done(() => {
+                }).finally(() => {
                     this.setState({
                         loadingMore: false
                     });

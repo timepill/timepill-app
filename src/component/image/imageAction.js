@@ -49,7 +49,6 @@ function action(imageOption, maxSize, maxPixel, callback) {
 
                 callback(e);
             })
-            .done();
         }
     });
 }

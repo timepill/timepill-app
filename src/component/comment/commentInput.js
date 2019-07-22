@@ -103,7 +103,7 @@ export default class CommentInput extends Component {
             .catch(e => {
                 Alert.alert('回复失败');
             })
-            .done(() => {
+            .finally(() => {
                 this.setState({comment_sending: false});
             });
     }

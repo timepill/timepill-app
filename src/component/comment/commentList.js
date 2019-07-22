@@ -120,7 +120,6 @@ export default class CommentList extends Component {
                                 .catch(e => {
                                     Msg.showMsg('删除失败');
                                 })
-                                .done();
                         }
                     },
                     {

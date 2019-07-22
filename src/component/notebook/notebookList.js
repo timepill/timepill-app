@@ -107,7 +107,9 @@ export default class NotebookList extends Component {
                     notebooks: groups
                 });
 
-            }).done(() => {
+            })
+            .catch((err) => { console.error(err) })
+            .finally(() => {
                 this.setState({refreshing: false});
             });
     }

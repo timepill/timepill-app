@@ -48,7 +48,6 @@ function action(componentId, diary, callbacks) {
                         .catch(e => {
                             Msg.showMsg('日记删除失败' + e.message);
                         })
-                        .done();
                 }},
                 {text: '取消', onPress: () => {}},
             ]);

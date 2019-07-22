@@ -164,7 +164,7 @@ export default class DiaryList extends Component {
                         refreshFailed: true
                     });
 
-                }).done(() => {
+                }).finally(() => {
                     this.setState({
                         mounting: false,
                         refreshing: false
@@ -199,7 +199,7 @@ export default class DiaryList extends Component {
                         loadFailed: true
                     });
 
-                }).done(() => {
+                }).finally(() => {
                     this.setState({
                         loadingMore: false
                     });

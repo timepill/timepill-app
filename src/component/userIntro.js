@@ -44,7 +44,7 @@ export default class UserIntro extends Component {
             .catch(e => {
                 Msg.showMsg('用户信息加载失败');
             })
-            .done(() => {
+            .finally(() => {
                 this.setState({
                     isLoading: false
                 })

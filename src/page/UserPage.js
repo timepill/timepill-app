@@ -94,7 +94,7 @@ export default class UserPage extends Component {
                 })
                 .catch(e => {
                     Alert.alert('关注失败');
-                }).done();
+                })
 
         } else if(buttonId == 'navButtonFollowSelected') {
             Api.deleteFollow(this.userId)
@@ -112,7 +112,7 @@ export default class UserPage extends Component {
                 })
                 .catch(e => {
                     Alert.alert('取消关注失败');
-                }).done();
+                })
 
         } else if(buttonId == 'setting') {
             Navigation.push(this.props.componentId, {

@@ -93,7 +93,7 @@ export default class DiaryDetailPage extends Component {
 
             }, (index) => {
                 if(index == 0) {
-                    Api.report(this.state.diary.user_id, this.state.diary.id).done();
+                    Api.report(this.state.diary.user_id, this.state.diary.id).catch((err) => console.log(err))
                     Msg.showMsg('举报成功，感谢你的贡献 :)');
                 }
             });
@@ -110,7 +110,7 @@ export default class DiaryDetailPage extends Component {
                     this.refreshDiary(this.state.diary);
                 });
 
-            }).done();
+            }).catch((err) => console.log(err))
 
         this.diaryListener = DeviceEventEmitter.addListener(Event.updateDiarys, (param) => {
             if(param != 'del') {

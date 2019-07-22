@@ -131,7 +131,7 @@ export default class NotebookDiaryList extends Component {
                         refreshFailed: true
                     });
 
-                }).done(() => {
+                }).finally(() => {
                     this.setState({
                         mounting: false,
                         refreshing: false
@@ -169,7 +169,7 @@ export default class NotebookDiaryList extends Component {
                         loadFailed: true
                     });
 
-                }).done(() => {
+                }).finally(() => {
                     this.setState({
                         loadingMore: false
                     });

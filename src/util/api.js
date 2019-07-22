@@ -378,7 +378,10 @@ async function upload(method, api, body) {
         })
         .then(checkStatus)
         .then(parseJSON)
-        .catch(handleCatch)
+        .catch((err) => {
+            err.message += ' api:' + api;
+            handleCatch(err);
+        })
 
     , 60000);
 }
@@ -400,8 +403,10 @@ async function call(method, api, body = null, _timeout = 10000) {
         })
         .then(checkStatus)
         .then(parseJSON)
-        .catch(handleCatch)
-
+        .catch((err) => {
+            err.message += ' api:' + api;
+            handleCatch(err);
+        })
     , _timeout);
 }
 
@@ -425,8 +430,10 @@ async function callV2(method, api, body = null, _timeout = 10000) {
         })
         .then(checkStatus)
         .then(parseJSON)
-        .catch(handleCatch)
-
+        .catch((err) => {
+            err.message += ' api:' + api;
+            handleCatch(err);
+        })
     ,_timeout);
 }
 
@@ -475,8 +482,9 @@ function parseJSON(response) {
 }
 
 function handleCatch(err) {
-    if (err.message === 'Network request failed') {
-        throw new Error('网络连接失败', err.id)
+    if (err.message.indexOf('Network request failed') >= 0) {
+        err.message = err.message.replace('Network request failed', '网络连接失败');
+        throw err;
     } else {
         throw err;
     }

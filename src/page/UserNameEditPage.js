@@ -87,7 +87,6 @@ export default class UserNameEditPage extends Component {
             .catch(e => {
                 Msg.showMsg('修改失败');
             })
-            .done();
     }
 
     render() {
