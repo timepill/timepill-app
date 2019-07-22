@@ -91,6 +91,8 @@ function loginByPassword() {
 
 Navigation.events().registerAppLaunchedListener(async () => {
 
+    firebase.crashlytics().enableCrashlyticsCollection();
+
     try {
         await loadIcon();
     } catch (err) {
@@ -123,6 +125,6 @@ Navigation.events().registerAppLaunchedListener(async () => {
         console.log("push init: " + msg);
     })
 
-    firebase.crashlytics().log('Test Message!');
+
 });
 

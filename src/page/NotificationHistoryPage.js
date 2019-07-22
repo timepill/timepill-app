@@ -14,6 +14,7 @@ export default class NotificationHistoryPage extends Component {
     constructor(props) {
         super(props);
         Navigation.events().bindComponent(this);
+        // firebase.crashlytics().crash();
     }
 
     static options(passProps) {
