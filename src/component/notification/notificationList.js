@@ -91,6 +91,8 @@ export default class NotificationList extends Component {
             ids = msg.list.map(it => it.id);
         } else if (msg.type === 2) {     //关注
             ids = [msg.id];
+        } else if(msg.type === 3) {
+            ids = [msg.id];
         }
 
         try {
