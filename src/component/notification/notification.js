@@ -63,7 +63,7 @@ export default class Notification extends Component {
     }
 
     renderLike(msg) {
-        const body = `${msg.content.user.name} 给了你一个创可贴`;
+        const body = `${msg.content.user.name} 给了你一个OK绷`;
 
         return (
             <Touchable key={msg.link_id} onPress={() => this.props.onLikePress(msg)}>
@@ -99,8 +99,8 @@ const localStyle = StyleSheet.create({
         lineHeight: 20
     },
     icon2: {
-        width: 14,
-        height: 14,
+        width: 15,
+        height: 15,
         marginRight: 10,
         marginTop: 4,
     },

@@ -152,7 +152,19 @@ export default class NotificationPage extends Component {
 
 
     _onRefresh() {
+        console.log(this.props.componentId);
         this.restartTipTimer().done();
+    }
+
+    _onRefreshed(msgCount) {
+        if(msgCount > 99) {
+            msgCount = 99;
+        }
+        Navigation.mergeOptions(this.props.componentId, {
+            bottomTab: {
+                badge: msgCount > 0 ? msgCount.toString() : null,
+            }
+        });
     }
 
     refresh() {
@@ -172,6 +184,7 @@ export default class NotificationPage extends Component {
                 <NotificationList ref={(r) => {this.list = r}}
                                   isHistory={false}
                                   onRefresh={this._onRefresh.bind(this)}
+                                  onRefreshed={this._onRefreshed.bind(this)}
                                   isSetRead={true}
                                   {...this.props}/>
             </View>
