@@ -52,11 +52,11 @@ export default class CommentInput extends Component {
                 content: content,
                 replyUserId: comment.user.id,
                 replyUserName: comment.user.name
+            }, () => {
+                if(this.refs.commentInput) {
+                    this.refs.commentInput.focus();
+                }
             });
-
-            if(this.refs.commentInput) {
-                // this.refs.commentInput.focus();
-            }
         });
     }
 
@@ -125,9 +125,16 @@ export default class CommentInput extends Component {
                            underlineColorAndroid="transparent"
                            
                            onChangeText={(text) => {
-                                this.setState({
+                                let state = {
                                     content: text
-                                })
+                                }
+
+                                if(!text || !text.startsWith('@'+this.state.replyUserName)) {
+                                    state.replyUserId = 0;
+                                    state.replyUserName = '';
+                                }
+
+                                this.setState(state);
                            }}
                 />
                 <TouchableOpacity style={localStyle.buttonWrap}
@@ -145,12 +152,6 @@ export default class CommentInput extends Component {
                     </View>
                 ) : null}
 
-                {
-                    !Api.IS_ANDROID
-                    ? <KeyboardSpacer topSpacing={Api.IS_IPHONEX ? -30 : 0} />
-                    : null
-                }
-
             </View>
         );
     }
@@ -158,7 +159,7 @@ export default class CommentInput extends Component {
 
 const localStyle = StyleSheet.create({
     container: {
-        height: 56,
+        height: Api.IS_IPHONEX ? 66 : 56,
         backgroundColor: '#eee',
         elevation: 3,
         borderColor: '#bbb',
@@ -182,7 +183,7 @@ const localStyle = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         right: 0,
-        paddingBottom: 12,
+        paddingBottom: Api.IS_IPHONEX ? 22 : 12,
         paddingRight:12,
         paddingTop: 12
     },

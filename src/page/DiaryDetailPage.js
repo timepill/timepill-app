@@ -228,7 +228,7 @@ export default class DiaryDetailPage extends Component {
                 }
 
                 {
-                    Api.IS_IOS ? <KeyboardSpacer topSpacing={Api.IS_IPHONEX ? -30 : 0} /> : null
+                    Api.IS_IOS ? <KeyboardSpacer topSpacing={Api.IS_IPHONEX ? -10 : 0} /> : null
                 }
             </View>
         );
