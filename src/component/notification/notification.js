@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Touchable from '../touchable';
@@ -19,6 +19,10 @@ function unique(array) {
 
 export default class Notification extends Component {
 
+    _onDeletePress(msg) {
+        this.props.onDeletePress && this.props.onDeletePress(msg)
+    }
+
     render() {
         let msg = this.props.msg;
         if(msg && msg.type) {
@@ -35,6 +39,14 @@ export default class Notification extends Component {
         return null;
     }
 
+    renderDeleteButton(msg) {
+        return this.props.showDelete ? (
+            <TouchableOpacity onPress={() => this._onDeletePress(msg)}>
+                <Ionicons name="md-close" size={16} style={localStyle.delete} color={Color.inactiveText} />
+            </TouchableOpacity>
+        ) : null;
+    }
+
     renderComment(msg) {
         const users = unique(msg.list.map(it => it.content.author.name)).join('、');
         const body = `${users} 回复了你`;
@@ -44,6 +56,7 @@ export default class Notification extends Component {
                 <View style={localStyle.container}>
                     <Ionicons name="ios-text" size={16} style={localStyle.icon} color={Color.light} />
                     <Text style={localStyle.text}>{body}</Text>
+                    {this.renderDeleteButton(msg)}
                 </View>
             </Touchable>
         )
@@ -57,6 +70,7 @@ export default class Notification extends Component {
                 <View style={localStyle.container}>
                     <Ionicons name="ios-heart" size={16} style={localStyle.icon} color='#d9534f' />
                     <Text key={msg.link_id} style={localStyle.text}>{body}</Text>
+                    {this.renderDeleteButton(msg)}
                 </View>
             </Touchable>
         )
@@ -76,10 +90,13 @@ export default class Notification extends Component {
                         style={localStyle.icon2}
                     />
                     <Text style={localStyle.text}>{body}</Text>
+                    {this.renderDeleteButton(msg)}
                 </View>
             </Touchable>
         )
     }
+
+
 }
 
 const localStyle = StyleSheet.create({
@@ -104,4 +121,8 @@ const localStyle = StyleSheet.create({
         marginRight: 10,
         marginTop: 4,
     },
+    delete: {
+        lineHeight: 20,
+        paddingHorizontal: 8,
+    }
 });

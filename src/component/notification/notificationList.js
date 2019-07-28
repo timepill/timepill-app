@@ -179,6 +179,12 @@ export default class NotificationList extends Component {
         }
     }
 
+    _onDeletePress(msg) {
+        if(this.props.isSetRead) {
+            this._setRead(msg);
+        }
+    }
+
     render() {
         let hasData = this.state.notifications && this.state.notifications.length > 0;
         return hasData ? (
@@ -192,10 +198,12 @@ export default class NotificationList extends Component {
                 renderItem={({item}) => {
                     return (
                         <Notification msg={item}
-                            onCommentPress={this._onCommentPress.bind(this)}
-                            onFollowPress={this._onFollowPress.bind(this)}
+                                      onCommentPress={this._onCommentPress.bind(this)}
+                                      onFollowPress={this._onFollowPress.bind(this)}
                                       onLikePress={this._onLikePress.bind(this)}
-                        ></Notification>
+                                      onDeletePress={this._onDeletePress.bind(this)}
+                                      showDelete={this.props.isSetRead}
+                        />
                     );
                 }}
 
