@@ -12,7 +12,8 @@ import {
     TouchableWithoutFeedback,
     DeviceEventEmitter,
     Alert,
-    Image
+    Image,
+    SafeAreaView
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import KeyboardSpacer from "react-native-keyboard-spacer";
@@ -26,6 +27,7 @@ import Event from "../util/event";
 
 import NotebookLine from '../component/notebook/notebookLine';
 import ImageAction from '../component/image/imageAction'
+import { getBottomSpace } from 'react-native-iphone-x-helper';
 
 
 export default class WritePage extends Component {
@@ -305,6 +307,7 @@ export default class WritePage extends Component {
 
     render() {
       return (
+          <SafeAreaView style={{flex: 1, backgroundColor: Color.navBackground}}>
           <ScrollView style={localStyle.container}
               contentContainerStyle={{flex: 1}}
               keyboardShouldPersistTaps='always'>
@@ -347,12 +350,13 @@ export default class WritePage extends Component {
               </View>
 
               {
-                  Api.IS_IOS ? <KeyboardSpacer topSpacing={Api.IS_IPHONEX ? -30 : 0} /> : null
+                  Api.IS_IOS ? <KeyboardSpacer topSpacing={-getBottomSpace()} /> : null
               }
 
               {this.renderModal()}
 
           </ScrollView>
+          </SafeAreaView>
       );
     }
 
@@ -410,7 +414,7 @@ export default class WritePage extends Component {
                             this.state.fadeAnimHeight,
                             {
                                 toValue: Api.IS_IOS
-                                    ? (Api.IS_IPHONEX ? 280 : 250)
+                                    ? 250
                                     : 260,
                                 duration: 350,
                                 easing: Easing.out(Easing.cubic)
@@ -452,7 +456,6 @@ const localStyle = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Color.navBackground,
-        paddingBottom: Api.IS_IPHONEX ? 30 : 0
     },
     textContent: {
         flex: 1,
