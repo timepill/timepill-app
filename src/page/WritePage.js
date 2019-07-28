@@ -361,10 +361,15 @@ export default class WritePage extends Component {
             return null;
         }
 
+        let topicTitle = this.topic.title;
+        if(topicTitle && topicTitle.length > 6) {
+            topicTitle = topicTitle.substring(0, 6) + '..';
+        }
+
         return (
             <TouchableOpacity>
                 <Text style={{color: Color.light, fontSize: 15, paddingRight: 15}}>
-                  # {this.topic.title}
+                  # {topicTitle}
                 </Text>
             </TouchableOpacity>
         )
