@@ -159,8 +159,8 @@ export default class CommentInput extends Component {
 
 const localStyle = StyleSheet.create({
     container: {
-        height: Api.IS_IPHONEX ? 66 : 56,
-        backgroundColor: '#eee',
+        height: 56,
+        backgroundColor: Color.navBackground,
         elevation: 3,
         borderColor: '#bbb',
         borderTopWidth: StyleSheet.hairlineWidth
@@ -183,7 +183,7 @@ const localStyle = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         right: 0,
-        paddingBottom: Api.IS_IPHONEX ? 22 : 12,
+        paddingBottom: 12,
         paddingRight:12,
         paddingTop: 12
     },

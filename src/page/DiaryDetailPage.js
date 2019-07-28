@@ -6,7 +6,8 @@ import {
     View,
     ScrollView,
     DeviceEventEmitter,
-    Keyboard
+    Keyboard,
+    SafeAreaView
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import KeyboardSpacer from "react-native-keyboard-spacer";
@@ -21,7 +22,7 @@ import Event from '../util/event';
 import DiaryFull from '../component/diary/diaryFull';
 import DiaryAction from '../component/diary/diaryAction';
 import CommentInput from '../component/comment/commentInput';
-
+import { getBottomSpace } from 'react-native-iphone-x-helper';
 
 function getTodayStr() {
     let now = new Date();
@@ -197,9 +198,9 @@ export default class DiaryDetailPage extends Component {
         }
 
         return (
-            <View style={localStyle.wrap}>
+            <SafeAreaView style={localStyle.wrap}>
                 <ScrollView ref={(r)=>this.scroll = r}
-                    style={{flex: 1}}
+                    style={{flex: 1, backgroundColor: 'white'}}
                     onContentSizeChange={(width, height) => {
                         if(this.props.needScrollToBottom || this.state.needScrollToBottom) {
                             this.scroll.scrollTo({y: height});
@@ -228,9 +229,9 @@ export default class DiaryDetailPage extends Component {
                 }
 
                 {
-                    Api.IS_IOS ? <KeyboardSpacer topSpacing={Api.IS_IPHONEX ? -10 : 0} /> : null
+                    Api.IS_IOS ? <KeyboardSpacer topSpacing={-getBottomSpace()} /> : null
                 }
-            </View>
+            </SafeAreaView>
         );
     }
 }
@@ -238,8 +239,8 @@ export default class DiaryDetailPage extends Component {
 const localStyle = StyleSheet.create({
     wrap: {
         flex: 1,
-        flexDirection: 'column'
-        , backgroundColor: 'white'
+        flexDirection: 'column',
+        backgroundColor: Color.navBackground,
     },
     container: {
         alignItems:'center',
