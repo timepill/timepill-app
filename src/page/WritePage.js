@@ -135,7 +135,7 @@ export default class WritePage extends Component {
                 {
                     toValue: 0,
                     duration: 350,
-                    easing: Easing.out(Easing.linear)
+                    easing: Easing.out(Easing.cubic)
                 }
             ),
             Animated.timing(
@@ -143,7 +143,7 @@ export default class WritePage extends Component {
                 {
                     toValue: 0,
                     duration: 350,
-                    easing: Easing.out(Easing.linear)
+                    easing: Easing.out(Easing.cubic)
                 }
             )
         ]).start(({finished}) => {
