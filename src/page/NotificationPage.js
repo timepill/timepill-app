@@ -83,7 +83,8 @@ export default class NotificationPage extends Component {
 
     componentWillUnmount() {
         this.loginListener.remove();
-        //todo:删除 push 事件注册，删除定时器
+        clearTimeout(this.tipTimer);
+        Push.removeReceiveNotificationListener(this.receiveNotification);
     }
 
     updatePushInfo() {
@@ -108,9 +109,7 @@ export default class NotificationPage extends Component {
         Push.init((msg) => {
             console.log("push init: " + msg);
             this.registerUser();
-            Push.addReceiveNotificationListener((msg) => {
-                this.restartTipTimer().catch((err) => console.log(err))
-            });
+            Push.addReceiveNotificationListener(this.receiveNotification);
         })
     }
 
@@ -118,11 +117,13 @@ export default class NotificationPage extends Component {
         Push.init((msg) => {
             console.log("push init: " + msg);
             this.registerUser();
-            Push.addReceiveNotificationListener((msg) => {
-                this.restartTipTimer().catch((err) => console.log(err))
-            });
+            Push.addReceiveNotificationListener(this.receiveNotification);
         })
     }
+
+    receiveNotification = (msg) => {
+        this.restartTipTimer().catch((err) => console.log(err))
+    };
 
     async registerUser() {
         const user = await Api.getSelfInfoByStore();

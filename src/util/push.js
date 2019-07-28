@@ -32,15 +32,11 @@ function setAccount(uid, cb) {
 }
 
 function addReceiveNotificationListener(cb) {
-    XGPushModule.addReceiveNotificationListener((map) => {
-        console.log("[ReceiveNotification]", map);
-        cb(map);
-    });
+    XGPushModule.addReceiveNotificationListener(cb);
+}
 
-    // XGPushModule.addReceiveOpenNotificationListener((msg) => {
-    //     console.log("[addReceiveOpenNotificationListener]", msg)
-    //
-    // })
+function removeReceiveNotificationListener(cb) {
+    XGPushModule.removeReceiveNotificationListener(cb)
 }
 
 
@@ -49,4 +45,5 @@ export default {
     init,
     setAccount,
     addReceiveNotificationListener,
+    removeReceiveNotificationListener,
 }
