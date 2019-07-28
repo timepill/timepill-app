@@ -96,6 +96,7 @@ export default class PhotoPage extends Component {
             Msg.showMsg('照片已保存', msgOption);
 
         } catch (err) {
+            console.error(err);
             Msg.showMsg('照片保存失败', msgOption);
         }
     }

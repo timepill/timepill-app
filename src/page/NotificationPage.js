@@ -101,6 +101,7 @@ export default class NotificationPage extends Component {
         }
 
         this.tipTimer = setTimeout(() => {
+            console.log('get tips, time:', Date());
             this.refresh();
         }, this.loopTime)
     }
@@ -147,7 +148,6 @@ export default class NotificationPage extends Component {
 
 
     _onRefresh() {
-        console.log(this.props.componentId);
         this.restartTipTimer().catch((err) => console.log(err))
     }
 
