@@ -80,12 +80,16 @@ export default class DiaryIconOkB extends Component {
                         style={localStyle.icon}
                     />
 
-                    <Text style={[localStyle.text, {
-                            color: !this.state.active
-                            ? Color.inactiveText
-                            : Color.primary
-                        }]}
-                    >{this.state.count > 0 ? this.state.count : ''}</Text>
+                    {
+                        this.state.count > 0 ?
+                        <Text style={[localStyle.text, {
+                                color: !this.state.active
+                                ? Color.inactiveText
+                                : Color.primary
+                            }]}
+                        >{this.state.count}</Text>
+                        : null
+                    }
                 </View>
             </TouchableOpacity>
         );
@@ -101,8 +105,7 @@ const localStyle = StyleSheet.create({
     icon: {
         width: 18,
         height: 18,
-        marginLeft: 4,
-        marginRight: 1
+        marginLeft: 4
     },
     text: {
         fontSize: 15,

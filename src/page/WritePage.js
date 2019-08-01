@@ -13,6 +13,7 @@ import {
     DeviceEventEmitter,
     Alert,
     Image,
+    InteractionManager,
     SafeAreaView
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
@@ -105,8 +106,25 @@ export default class WritePage extends Component {
     }
 
     componentDidMount() {
-        this.loadNotebook();
-        this.contentInput.focus();
+        this.loadNotebook().then(notebookCount => {
+            if(notebookCount > 0) {
+                setTimeout(() => {
+                    this.contentInput.focus();
+                }, 500);
+
+            } else {
+                Alert.alert('提示', '没有可用日记本，无法写日记',[
+                    {text: '取消', onPress: () => {}},
+                    {text: '创建一个', onPress: () => {
+                        Navigation.push(this.props.componentId, {
+                            component: {
+                                name: 'NotebookEdit'
+                            }
+                        });
+                    }}
+                ]);
+            }
+        });
 
         this.notebookListener = DeviceEventEmitter.addListener(Event.updateNotebooks, (param) => {
             this.loadNotebook(true);
@@ -120,12 +138,6 @@ export default class WritePage extends Component {
     openModal() {
         this.contentInput.blur();
         this.setState({modalVisible: true});
-
-        if(this.state.notebooks.length == 0) {
-            Alert.alert('提示', '没有可用日记本，无法写日记', [
-                {text: '确定', onPress: () =>  {}}
-            ]);
-        }
     }
 
     closeModal(showKeyboard = true, callback) {
@@ -185,29 +197,27 @@ export default class WritePage extends Component {
         });
     }
 
-    loadNotebook(resetTargetbook = false) {
-        Api.getSelfNotebooks()
-            .then(notebooks => {
-                if (!notebooks || !notebooks.filter) {
-                    notebooks = [];
-                }
+    async loadNotebook(resetTargetbook = false) {
+        let notebooks = await Api.getSelfNotebooks();
+        if(!notebooks || !notebooks.filter) {
+            notebooks = [];
+        }
 
-                let unExpiredBooks = notebooks.filter(it => !it.isExpired);
-                if (unExpiredBooks.length > 0) {
-                    let st = {
-                        notebooks: unExpiredBooks
-                    }
+        let unExpiredBooks = notebooks.filter(it => !it.isExpired);unExpiredBooks=[];
+        if(unExpiredBooks && unExpiredBooks.length > 0) {
+            let st = {
+                notebooks: unExpiredBooks
+            }
 
-                    if (resetTargetbook || this.state.targetbookId == 0) {
-                        st.targetbookId = unExpiredBooks[0].id;
-                        st.targetbookSubject = unExpiredBooks[0].subject;
-                    }
+            if(resetTargetbook || this.state.targetbookId == 0) {
+                st.targetbookId = unExpiredBooks[0].id;
+                st.targetbookSubject = unExpiredBooks[0].subject;
+            }
 
-                    this.setState(st);
-                }
+            this.setState(st);
+        }
 
-            })
-            .catch((err) => { console.error(err) })
+        return unExpiredBooks && unExpiredBooks.length > 0 ? unExpiredBooks.length : 0;
     }
 
     _onPickPhoto() {
@@ -259,6 +269,29 @@ export default class WritePage extends Component {
 
     saveDiary() {
         if(!this.state.content) {
+            return;
+        }
+
+        if(this.state.targetbookId == 0) {
+            if(this.state.notebooks.length == 0) {
+                this.contentInput.blur();
+                Alert.alert('提示', '没有可用日记本，无法写日记',[
+                    {text: '取消', onPress: () => {}},
+                    {text: '创建一个', onPress: () => {
+                        Navigation.push(this.props.componentId, {
+                            component: {
+                                name: 'NotebookEdit'
+                            }
+                        });
+                    }}
+                ]);
+
+            } else {
+                Alert.alert('提示', '选择一个日记本先',[
+                    {text: '确定', onPress: () => this.openModal()}
+                ]);
+            }
+
             return;
         }
 
@@ -431,9 +464,13 @@ export default class WritePage extends Component {
 
                     <Animated.View style={{height: this.state.fadeAnimHeight, backgroundColor: '#fff'}}>
                         <View style={localStyle.modalBanner}>
-                            <TouchableOpacity onPress={this._onCreateNotebook.bind(this)} style={localStyle.modalButton}>
-                                <Text style={localStyle.modalButtonText}>新添</Text>
-                            </TouchableOpacity>
+                            {
+                                !this.diary ?
+                                <TouchableOpacity onPress={this._onCreateNotebook.bind(this)} style={localStyle.modalButton}>
+                                    <Text style={localStyle.modalButtonText}>新添</Text>
+                                </TouchableOpacity> : <Text/>
+                            }
+
                             <Text style={{padding: 10, color: Color.text}}>选择日记本</Text>
                             <TouchableOpacity onPress={this.closeModal.bind(this)} style={localStyle.modalButton}>
                                 <Text style={localStyle.modalButtonText}>取消</Text>

@@ -22,7 +22,7 @@ export default class DateInput extends Component {
 
         this.updateDate();
         this.state = {
-            date: this.formatDate(this.nowDate)
+            date: this.minDate
         };
     }
 
@@ -36,11 +36,11 @@ export default class DateInput extends Component {
         this.nowDate = now();
         let nowMSec = this.nowDate.getTime();
 
-        let minExpiredMSec =  7 * 24 * 3600000; // at least 7 days to expire
+        let minExpiredMSec =  8 * 24 * 3600000; // at least 7 days to expire
         let minExpiredDate = new Date(nowMSec + minExpiredMSec);
         this.minDate = this.formatDate(minExpiredDate);
 
-        let maxExpiredMSec = 3650 * 24 * 3600000; // at most 10 years to expire
+        let maxExpiredMSec = 364 * 24 * 3600000; // at most 1 years to expire
         let maxExpireDate = new Date(nowMSec + maxExpiredMSec);
         this.maxDate = this.formatDate(maxExpireDate);
     }

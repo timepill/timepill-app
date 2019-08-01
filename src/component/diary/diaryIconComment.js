@@ -16,13 +16,15 @@ export default class DiaryIconComment extends Component {
     }
 
     render() {
-        return this.state.count > 0 ? (
+        return (
             <View style={localStyle.wrap}>
                 <Ionicons name="ios-text-outline" size={18}
                       style={localStyle.icon} />
-                <Text style={localStyle.text}>{this.state.count}</Text>
+                <Text style={localStyle.text}>
+                    {this.state.count > 0 ? this.state.count : ''}
+                </Text>
             </View>
-        ) : null;
+        );
     }
 }
 
