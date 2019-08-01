@@ -203,7 +203,7 @@ export default class WritePage extends Component {
             notebooks = [];
         }
 
-        let unExpiredBooks = notebooks.filter(it => !it.isExpired);unExpiredBooks=[];
+        let unExpiredBooks = notebooks.filter(it => !it.isExpired);
         if(unExpiredBooks && unExpiredBooks.length > 0) {
             let st = {
                 notebooks: unExpiredBooks
