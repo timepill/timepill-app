@@ -274,26 +274,31 @@ export default class WritePage extends Component {
     }
 
     saveDiary() {
-        if(!this.state.content) {
+        if (!this.state.content) {
             return;
         }
 
-        if(this.state.targetbookId == 0) {
-            if(this.state.notebooks.length == 0) {
+        if (this.state.targetbookId == 0) {
+            if (this.state.notebooks.length == 0) {
                 this.contentInput.blur();
-                Alert.alert('提示', '没有可用日记本，无法写日记',[
-                    {text: '取消', onPress: () => {}},
-                    {text: '创建一个', onPress: () => {
-                        Navigation.push(this.props.componentId, {
-                            component: {
-                                name: 'NotebookEdit'
-                            }
-                        });
-                    }}
+                Alert.alert('提示', '没有可用日记本，无法写日记', [
+                    {
+                        text: '取消', onPress: () => {
+                        }
+                    },
+                    {
+                        text: '创建一个', onPress: () => {
+                            Navigation.push(this.props.componentId, {
+                                component: {
+                                    name: 'NotebookEdit'
+                                }
+                            });
+                        }
+                    }
                 ]);
 
             } else {
-                Alert.alert('提示', '选择一个日记本先',[
+                Alert.alert('提示', '选择一个日记本先', [
                     {text: '确定', onPress: () => this.openModal()}
                 ]);
             }
@@ -312,36 +317,17 @@ export default class WritePage extends Component {
         });
 
         (this.diary
-          ? Api.updateDiary(this.diary.id, this.state.targetbookId, this.state.content)
-          : Api.addDiary(this.state.targetbookId, this.state.content, photoUri, topic)
+                ? Api.updateDiary(this.diary.id, this.state.targetbookId, this.state.content)
+                : Api.addDiary(this.state.targetbookId, this.state.content, photoUri, topic)
         ).then(result => {
-              Msg.hideMsg(waitingToast);
-              Msg.showMsg('日记保存完成');
-              DeviceEventEmitter.emit(Event.updateDiarys);
-
-              if(this.diary || this.topic) {
-                  Navigation.pop(this.props.componentId);
-
-              } else {
-                  Navigation.setStackRoot(this.props.componentId, {
-                      component: {
-                          name: 'Empty',
-                          options: {
-                              bottomTabs: {
-                                  visible: true
-                              }
-                          },
-                          passProps: {
-                              from: 'write'
-                          }
-                      }
-                  });
-              }
-          })
-          .catch(e => {
-              Msg.hideMsg(waitingToast);
-              Msg.showMsg('保存失败');
-          })
+            Msg.hideMsg(waitingToast);
+            Msg.showMsg('日记保存完成');
+            DeviceEventEmitter.emit(Event.updateDiarys);
+            this.closePage();
+        }).catch(e => {
+            Msg.hideMsg(waitingToast);
+            Msg.showMsg('保存失败');
+        });
     }
 
     render() {
