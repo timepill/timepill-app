@@ -497,6 +497,7 @@
 		5A9A3F91EEC9C9970CE72D43 /* Pods-TimepillTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TimepillTests.release.xcconfig"; path = "Target Support Files/Pods-TimepillTests/Pods-TimepillTests.release.xcconfig"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		62865F98E711415DBA4DAFF9 /* libRCTXGPushModule.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTXGPushModule.a; sourceTree = "<group>"; };
+		692AC7FE22F71BE3000A150F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		693ABB6B22D0925E0044FDF8 /* Timepill.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Timepill.entitlements; path = Timepill/Timepill.entitlements; sourceTree = "<group>"; };
 		693ABBB622D093C20044FDF8 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		693ABBB822D093CE0044FDF8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -1101,6 +1102,7 @@
 				English,
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -1771,6 +1773,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				13B07FB21A68108700A75B9A /* Base */,
+				692AC7FE22F71BE3000A150F /* zh-Hans */,
 			);
 			name = LaunchScreen.xib;
 			path = Timepill;
