@@ -247,7 +247,7 @@ export default class DiaryList extends Component {
                         )
                     }}
 
-                    ItemSeparatorComponent={({highlighted}) => <Divider style={{backgroundColor: '#eee'}}/>}
+                    ItemSeparatorComponent={({highlighted}) => <Divider style={{backgroundColor: '#eee', height: StyleSheet.hairlineWidth}}/>}
                     
                     ListHeaderComponent={this.props.listHeader}
 
