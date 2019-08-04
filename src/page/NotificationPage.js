@@ -75,7 +75,7 @@ export default class NotificationPage extends Component {
             this.restartTipTimer().catch((err) => console.log(err))
         });
         this.loginListener = DeviceEventEmitter.addListener(Event.login, () => {
-            this.registerUser().catch((err) => console.log(err))
+            this.registerUser().catch((err) => console.log(err));
             this.restartTipTimer().catch((err) => console.log(err))
         });
         this.updatePushInfo();
@@ -123,6 +123,7 @@ export default class NotificationPage extends Component {
     }
 
     receiveNotification = (msg) => {
+        this.refresh();
         this.restartTipTimer().catch((err) => console.log(err))
     };
 
