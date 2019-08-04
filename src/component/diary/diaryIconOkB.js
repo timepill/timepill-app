@@ -103,9 +103,11 @@ const localStyle = StyleSheet.create({
         marginTop: -1
     },
     icon: {
-        width: 18,
-        height: 18,
-        marginLeft: 4
+        width: 16,
+        height: 16,
+        marginLeft: 4,
+        marginTop: 2,
+        marginBottom: 2,
     },
     text: {
         fontSize: 15,
