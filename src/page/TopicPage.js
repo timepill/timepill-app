@@ -7,6 +7,7 @@ import Event from '../util/event'
 
 import DiaryList from '../component/diary/diaryList'
 import TopicDiaryData from '../dataLoader/TopicDiaryData';
+import Color from "../style/color";
 
 
 export default class TopicPage extends Component {
@@ -27,8 +28,7 @@ export default class TopicPage extends Component {
               rightButtons: [{
                     id: 'write',
                     icon: Icon.navButtonWrite,
-
-                    color: '#aaa' // android
+                    color: Color.primary
               }]
             },
             statusBar: {
