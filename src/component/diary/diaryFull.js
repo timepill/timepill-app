@@ -110,7 +110,7 @@ export default class DiaryFull extends Component {
                             </Text>
                         </View>
 
-                        <Text style={localStyle.content}>
+                        <Text style={localStyle.content} selectable={true} selectionColor={Color.textSelect}>
                             {diary.content.trim()}
                         </Text>
 

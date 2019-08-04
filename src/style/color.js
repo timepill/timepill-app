@@ -5,7 +5,7 @@ export default {
     warning: '#ffdd57',
     danger: '#ff3860',
 
-    inactiveText: '#9B9B9B',
+    inactiveText: '#9C9C9C',
     darkText: '#333333',
     lightText: '#7F91A7',
 
