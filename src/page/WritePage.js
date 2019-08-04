@@ -81,27 +81,33 @@ export default class WritePage extends Component {
     navigationButtonPressed({buttonId}) {
         if(buttonId == 'cancel') {
 
-            if(this.diary || this.topic) {
-                Navigation.pop(this.props.componentId);
-
-            } else {
-                Navigation.setStackRoot(this.props.componentId, {
-                    component: {
-                        name: 'Empty',
-                        options: {
-                            bottomTabs: {
-                                visible: true
-                            }
-                        },
-                        passProps: {
-                            from: 'write'
+            if(this.state.content.length > 0) {
+                Alert.alert('提示', '日记还没保存，退出将删除日记内容', [
+                    {
+                        text: '取消', onPress: () => {}
+                    },
+                    {
+                        text: '删除并退出', onPress: () => {
+                            this.closePage();
                         }
                     }
-                });
+                ]);
+            } else {
+                this.closePage();
             }
 
         } else if(buttonId == 'save') {
             this.saveDiary();
+        }
+    }
+
+    closePage() {
+        this.contentInput.blur();
+        if (this.diary || this.topic) {
+            Navigation.pop(this.props.componentId);
+
+        } else {
+            Navigation.dismissModal(this.props.componentId);
         }
     }
 

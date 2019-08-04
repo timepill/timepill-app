@@ -23,57 +23,47 @@ export default class EmptyPage extends Component {
 
     componentDidMount() {
         this.navigationEventListener = Navigation.events().bindComponent(this);
+        this.bottomTabEventListener = Navigation.events().registerBottomTabSelectedListener(({ selectedTabIndex, unselectedTabIndex }) => {
+            if(selectedTabIndex === 2) {
+                Navigation.showModal({
+                    stack: {
+                        children: [{
+                            component: {
+                                name: 'Write',
+                                passProps: {
+                                    text: 'stack with one child'
+                                },
+                                bottomTabs: {
+                                    visible: false,
+
+                                    // hide bottom tab for android
+                                    drawBehind: true,
+                                    animate: true
+                                }
+                            }
+                        }]
+                    }
+                });
+
+                setTimeout(() => {
+                    Navigation.mergeOptions(this.props.componentId, {
+                        bottomTabs: {
+                            currentTabIndex: unselectedTabIndex
+                        }
+                    });
+                }, 1000)
+            }
+        });
     }
 
     componentWillUnmount() {
         this.navigationEventListener.remove();
+        this.bottomTabEventListener.remove();
     }
 
     
     componentDidAppear() {
-        let forword = true;
-        if(this.state.from == 'write') {
-            forword = false;
-            this.setState({from: ''});
-        }
 
-        if(!forword) {
-            
-            Navigation.mergeOptions(this.props.componentId, {
-                bottomTabs: {
-                    currentTabIndex: 4
-                }
-            });
-            
-
-        } else {
-            Navigation.push(this.props.componentId, {
-                component: {
-                    name: 'Write',
-                    options: {
-                        animations: {
-                            push: {
-                                enabled: false
-                            },
-                            pop: {
-                                enabled: false
-                            }
-                        },
-                        bottomTabs: {
-                            visible: false,
-
-                            // hide bottom tab for android
-                            drawBehind: true,
-                            animate: true
-                        }
-                    },
-                    passProps: {
-
-                    }
-                }
-            });
-        }
-        
     }
     
 
