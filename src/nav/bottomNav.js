@@ -1,7 +1,15 @@
 import Color from '../style/color'
 import {Icon} from '../style/icon'
 
+let insets = { // add this to change icon position (optional, iOS only).
+  top: 6, // optional, default is 0.
+  left: 0, // optional, default is 0.
+  bottom: -6, // optional, default is 0.
+  right: 0 // optional, default is 0.
+};
+
 function config(splash) {
+
     return {
         root: {
             bottomTabs: {
@@ -41,7 +49,7 @@ function config(splash) {
                       }],
                       options: {
                         bottomTab: {
-                          text: '首页',
+                          text: '', //首页
                           icon: Icon.homeIcon,
 
                           // ios
@@ -50,6 +58,7 @@ function config(splash) {
                           // android
                           iconColor: '#aaa',
                           selectedIconColor: Color.primary,
+                          iconInsets: insets,
                         }
                       }
                     }
@@ -62,7 +71,7 @@ function config(splash) {
                       }],
                       options: {
                         bottomTab: {
-                          text: '关注',
+                          text: '', //关注
                           icon: Icon.followIcon,
 
                           // ios
@@ -70,7 +79,8 @@ function config(splash) {
 
                           // android
                           iconColor: '#aaa',
-                          selectedIconColor: Color.primary
+                          selectedIconColor: Color.primary,
+                          iconInsets: insets,
                         }
                       }
                     }
@@ -89,7 +99,7 @@ function config(splash) {
                       }],
                       options: {
                         bottomTab: {
-                          text: '写日记',
+                          text: '', //写日记
                           icon: Icon.writeIcon,
 
                           // ios
@@ -97,7 +107,8 @@ function config(splash) {
 
                           // android
                           iconColor: '#aaa',
-                          selectedIconColor: Color.primary
+                          selectedIconColor: Color.primary,
+                          iconInsets: insets,
                         }
                       }
                     }
@@ -117,7 +128,7 @@ function config(splash) {
                       }],
                       options: {
                         bottomTab: {
-                          text: '提醒',
+                          text: '', //提醒
                           icon: Icon.tipIcon,
 
                           // ios
@@ -125,7 +136,8 @@ function config(splash) {
 
                           // android
                           iconColor: '#aaa',
-                          selectedIconColor: Color.primary
+                          selectedIconColor: Color.primary,
+                          iconInsets: insets,
                         }
                       }
                     }
@@ -145,7 +157,7 @@ function config(splash) {
                       }],
                       options: {
                         bottomTab: {
-                          text: '我',
+                          text: '', //我
                           icon: Icon.myIcon,
 
                           // ios
@@ -153,7 +165,8 @@ function config(splash) {
 
                           // android
                           iconColor: '#aaa',
-                          selectedIconColor: Color.primary
+                          selectedIconColor: Color.primary,
+                          iconInsets: insets,
                         }
                       }
                     }
