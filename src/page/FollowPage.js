@@ -27,7 +27,7 @@ export default class FollowPage extends Component {
               },
               rightButtons: [{
                   id: 'followIcon',
-                  icon: Icon.followIcon,
+                  icon: Icon.navButtonUserList,
 
                   color: Color.primary // android
               }]
