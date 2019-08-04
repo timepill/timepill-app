@@ -81,13 +81,13 @@ export default class WritePage extends Component {
     navigationButtonPressed({buttonId}) {
         if(buttonId == 'cancel') {
 
-            if(this.state.content.length > 0) {
-                Alert.alert('提示', '日记还没保存，退出将删除日记内容', [
+            if(!(this.state.content.length === 0 || (this.diary && this.diary.content === this.state.content))) {
+                Alert.alert('提示', '你编辑的日记尚未保存，离开会使内容丢失', [
                     {
                         text: '取消', onPress: () => {}
                     },
                     {
-                        text: '删除并退出', onPress: () => {
+                        text: '确定离开', onPress: () => {
                             this.closePage();
                         }
                     }
