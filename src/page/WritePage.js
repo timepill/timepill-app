@@ -114,10 +114,9 @@ export default class WritePage extends Component {
     componentDidMount() {
         this.loadNotebook().then(notebookCount => {
             if(notebookCount > 0) {
-                setTimeout(() => {
+                InteractionManager.runAfterInteractions(() => {
                     this.contentInput.focus();
-                }, 500);
-
+                });
             } else {
                 Alert.alert('提示', '没有可用日记本，无法写日记',[
                     {text: '取消', onPress: () => {}},
