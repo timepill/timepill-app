@@ -36,6 +36,7 @@ export default class NotificationList extends Component {
                 let notifications = await this.getMessages();
                 this.notificationsData = notifications;
                 this.setNotifications(notifications);
+                this.setState({error: false});
             } catch (e) {
                 this.setState({error: true});
             }
