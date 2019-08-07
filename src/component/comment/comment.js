@@ -49,7 +49,7 @@ export default class Comment extends Component {
                             comment.recipient == null
                             ? <Text style={localStyle.content}>{comment.content}</Text>
                             : (
-                                <Text style={localStyle.content} selectable={true} selectionColor={Color.textSelect}>
+                                <Text style={localStyle.content}>
                                     <Text style={{color: Color.primary}}>@{comment.recipient.name} </Text>
                                     {comment.content}
                                 </Text>

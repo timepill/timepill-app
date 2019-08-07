@@ -8,7 +8,8 @@ import {
     View,
     Alert,
     Keyboard,
-    DeviceEventEmitter
+    DeviceEventEmitter,
+    Clipboard,
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {Divider} from "react-native-elements";
@@ -131,6 +132,17 @@ export default class CommentList extends Component {
         });
     }
 
+    _onCommentLongPress = (comment) => {
+        ActionSheet.showActionSheetWithOptions({
+            options: ['复制内容', '取消'],
+            cancelButtonIndex: 1,
+        }, (index) => {
+            if (index === 0) {
+                Clipboard.setString(comment.content);
+            }
+        });
+    };
+
     render() {
         let selfInfo = this.state.selfInfo;
 
@@ -146,7 +158,10 @@ export default class CommentList extends Component {
 
                     renderItem={({item}) => {
                         return (
-                            <Touchable onPress={() => this._onCommentPress(item)}>
+                            <Touchable
+                                onPress={() => this._onCommentPress(item)}
+                                onLongPress={() => this._onCommentLongPress(item)}
+                            >
                                 <Comment comment={item}
                                     {...this.props}
 
