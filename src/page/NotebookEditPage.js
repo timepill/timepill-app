@@ -37,7 +37,7 @@ export default class NotebookEditPage extends Component {
             notebook: props.notebook,
 
             subject: props.notebook ? props.notebook.subject : '',
-            isPublic: props.notebook ? props.notebook.isPublic : false,
+            isPublic: props.notebook ? props.notebook.isPublic : true,
 
             uploading: false,
             saving: false
