@@ -95,6 +95,10 @@ Navigation.events().registerAppLaunchedListener(async () => {
         firebase.crashlytics().enableCrashlyticsCollection();
     }
 
+    Navigation.setDefaultOptions({
+        layout: { orientation: ['portrait'] },
+    })
+
     try {
         await loadIcon();
     } catch (err) {
