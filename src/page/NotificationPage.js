@@ -141,10 +141,12 @@ export default class NotificationPage extends Component {
 
         console.log(user, user.email);
 
-        firebase.crashlytics().setUserIdentifier(user.id.toString());
-        firebase.crashlytics().setUserName(user.name);
-        //todo:现在用户信息里没有 email
-        //firebase.crashlytics().setUserEmail(user.email);
+        if(Platform.OS === 'ios') { //todo: android会弹出设备不支持 gppgle play 服务，暂时没解决
+            firebase.crashlytics().setUserIdentifier(user.id.toString());
+            firebase.crashlytics().setUserName(user.name);
+            //todo:现在用户信息里没有 email
+            //firebase.crashlytics().setUserEmail(user.email);
+        }
     }
 
 

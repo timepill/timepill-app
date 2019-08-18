@@ -2,7 +2,7 @@
  * @entry
  */
 
-import {Alert} from 'react-native';
+import {Alert, Platform} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {Icon, loadIcon} from './src/style/icon';
 
@@ -91,7 +91,9 @@ function loginByPassword() {
 
 Navigation.events().registerAppLaunchedListener(async () => {
 
-    firebase.crashlytics().enableCrashlyticsCollection();
+    if(Platform.OS === 'ios') { //todo: android会弹出设备不支持 gppgle play 服务，暂时没解决
+        firebase.crashlytics().enableCrashlyticsCollection();
+    }
 
     try {
         await loadIcon();
