@@ -160,7 +160,7 @@ export default class NotificationPage extends Component {
         }
         Navigation.mergeOptions(this.props.componentId, {
             bottomTab: {
-                badge: msgCount > 0 ? msgCount.toString() : null,
+                badge: msgCount > 0 ? msgCount.toString() : (Platform.OS === 'ios' ? null : ''),
             }
         });
     }
