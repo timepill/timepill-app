@@ -50,6 +50,7 @@ public class MainApplication extends NavigationApplication {
                 new RNFetchBlobPackage(),
                 new RNDeviceInfo(),
                 new VectorIconsPackage(),
+                new ImageResizerPackage(),
                 new AsyncStoragePackage(),
                 new PickerPackage(),
                 new XGPushPackage(),

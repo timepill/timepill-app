@@ -258,7 +258,8 @@ export default class WritePage extends Component {
 
             }, 1024 * 1024 * 2, 2560 * 1920, (e, imageUri) => {
                 if(e) {
-                    Msg.showMsg('操作失败');
+                    console.error(e);
+                    Msg.showMsg('操作失败' + e.toString());
                 } else {
                     this.setState({
                         photoSource: {
