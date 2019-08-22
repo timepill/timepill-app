@@ -115,7 +115,7 @@ export default class WritePage extends Component {
         this.loadNotebook().then(notebookCount => {
             if(notebookCount > 0) {
                 InteractionManager.runAfterInteractions(() => {
-                    this.contentInput.focus();
+                    this && this.contentInput && this.contentInput.focus();
                 });
             } else {
                 Alert.alert('提示', '没有可用日记本，无法写日记',[
@@ -171,7 +171,7 @@ export default class WritePage extends Component {
             this.setState({modalVisible: false}, () => {
                 setTimeout(() => {
                     if(showKeyboard) {
-                        this.contentInput.focus()
+                        this && this.contentInput && this.contentInput.focus()
                     } else {
                         if(typeof callback == 'function') {
                             callback();
