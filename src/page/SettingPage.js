@@ -168,15 +168,15 @@ export default class SettingPage extends Component {
                                 thumbColor={Api.IS_ANDROID && this.state.hasPassword ? Color.light : null}
                                 onValueChange={this.changePassword} />
                     </View>
-                    <View style={localStyle.line} />
+                    {/*<View style={localStyle.line} />*/}
 
-                    <View style={localStyle.item}>
-                        <Text style={localStyle.title}>提醒推送</Text>
-                        <Switch value={this.state.settings['pushMessage']}
-                                trackColor={Api.IS_ANDROID ? Color.textSelect : null}
-                                thumbColor={Api.IS_ANDROID && this.state.settings['pushMessage'] ? Color.light : null}
-                                onValueChange={this.changePush} />
-                    </View>
+                    {/*<View style={localStyle.item}>*/}
+                    {/*    <Text style={localStyle.title}>提醒推送</Text>*/}
+                    {/*    <Switch value={this.state.settings['pushMessage']}*/}
+                    {/*            trackColor={Api.IS_ANDROID ? Color.textSelect : null}*/}
+                    {/*            thumbColor={Api.IS_ANDROID && this.state.settings['pushMessage'] ? Color.light : null}*/}
+                    {/*            onValueChange={this.changePush} />*/}
+                    {/*</View>*/}
                 </View>
 
                 <View style={localStyle.group}>
