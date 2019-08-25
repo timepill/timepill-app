@@ -172,6 +172,26 @@ export default class NotebookEditPage extends Component {
             });
     }
 
+    openMargePage() {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'NotebookMerge',
+                passProps: {
+                    notebook: this.props.notebook
+                },
+                options: {
+                    bottomTabs: {
+                        visible: false,
+
+                        // hide bottom tab for android
+                        drawBehind: true,
+                        animate: true
+                    }
+                }
+            }
+        });
+    }
+
     render() {
         const tip = this.props.notebook ? (
             <View style={{padding: 15}}>
@@ -241,7 +261,16 @@ export default class NotebookEditPage extends Component {
                                     onPress={this._onEditCover.bind(this)}>
                                     <Text style={localStyle.editCover}>设置封面</Text>
                                 </TouchableOpacity>
+                                {(this.state.notebook.isExpired) && (
+                                    <>
+                                        <View style={localStyle.line} />
+                                        <TouchableOpacity style={localStyle.item} onPress={this.openMargePage.bind(this)}>
+                                            <Text style={localStyle.editCover}>合并日记本</Text>
+                                        </TouchableOpacity>
+                                    </>
+                                )}
                             </View>
+
                             <View style={localStyle.group}>
                                 <TouchableOpacity style={localStyle.item}
                                     onPress={this._onDelete.bind(this)}>

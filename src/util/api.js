@@ -349,6 +349,9 @@ async function deleteNotebook(id) {
     return call('DELETE', '/notebooks/' + id)
 }
 
+async function margeNotebook(from, to) {
+    return callV2('POST', `/notebooks/${from}/marge_to/${to}`);
+}
 
 async function report(user_id, diary_id) {
     return call('POST', '/reports/', {
@@ -567,6 +570,7 @@ export default {
     createNotebook,
     updateNotebook,
     deleteNotebook,
+    margeNotebook,
 
     report,
     feedback,

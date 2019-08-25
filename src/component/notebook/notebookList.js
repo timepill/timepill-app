@@ -13,6 +13,7 @@ import {Navigation} from 'react-native-navigation';
 import Api from '../../util/api';
 import Notebook from './notebook'
 import NotebookAdd from './notebookAdd'
+import {Icon} from "../../style/icon";
 
 
 export default class NotebookList extends Component {
@@ -72,6 +73,11 @@ export default class NotebookList extends Component {
     }
 
     _onNotebookPress(notebook) {
+        if(this.props.onPress) {
+            this.props.onPress(notebook);
+            return
+        }
+
         Navigation.push(this.props.componentId, {
             component: {
                 name: 'NotebookDetail',
@@ -100,6 +106,10 @@ export default class NotebookList extends Component {
             .then(notebooks => {
                 if(!user) {
                     notebooks.unshift({id: 'new'});
+                }
+
+                if(this.props.filter) {
+                    notebooks = notebooks.filter(this.props.filter);
                 }
 
                 let groups = this.createGroup(notebooks, this.itemsPerRow);
