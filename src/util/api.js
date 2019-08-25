@@ -121,6 +121,14 @@ async function syncSplash() {
     let load = (async () => {
         const splash = await callV2('GET', '/splash');
         await Token.set('splash', JSON.stringify(splash));
+
+        const now = Date.parse(new Date()) / 1000;
+        if((splash.start_time  && splash.start_time > now) ||
+            (splash.end_time && now > splash.end_time)) {
+
+            return null;
+        }
+
         return splash;
     })();
 
