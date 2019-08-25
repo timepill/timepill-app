@@ -105,10 +105,9 @@ Navigation.events().registerAppLaunchedListener(async () => {
         Alert.alert("loadIcon err: " + err.toString());
     }
 
+    var splash;
     try {
-        //todo:当服务器不可用时，可能会卡在这里很长时间
-        //之前的做法是异步更新数据，在下一次打开 app 时从本地读取
-        await Api.syncSplash();
+        splash = await Api.syncSplash();
     } catch (err) {}
 
 
@@ -121,9 +120,15 @@ Navigation.events().registerAppLaunchedListener(async () => {
         const password = await Token.getLoginPassword();
         if(password) {
             loginByPassword();
-            
         } else {
-            Navigation.setRoot(BottomNav.config());
+            if(!splash) {
+                try {
+                    splash = await Api.getSplashByStore();
+                } catch(e) {
+                    console.error(e)
+                }
+            }
+            Navigation.setRoot(BottomNav.config(splash));
         }
     }
 
