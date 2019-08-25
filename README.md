@@ -16,3 +16,8 @@
         [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
     }
 ```
+
+### android 上的问题
+1. react-native-actionsheet-api bug
+
+https://github.com/qfight/react-native-actionsheet-api/issues/4
