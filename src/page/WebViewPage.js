@@ -59,18 +59,18 @@ export default class WebViewPage extends Component {
 
         } else if(buttonId == 'open') {
             Linking.openURL(this.webViewState.url);
-
         }
     }
 
-    goBack() {
+    goBack = () => {
         if (this.webViewState.canGoBack) {
             this.webView.injectJavaScript('window.history.back();');
 
         } else {
             Navigation.pop(this.props.componentId);
         }
-    }
+        return true;
+    };
 
     onNavigationStateChange(event) {
         this.webViewState = event;
