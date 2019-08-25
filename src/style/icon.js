@@ -1,5 +1,7 @@
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {Platform} from "react-native";
+import Color from '../style/color';
+
 
 let Icon = {
     homeIcon : null,
@@ -35,7 +37,7 @@ let Icon = {
 };
 
 const outline = Platform.OS === 'ios' ? '-outline' : '';
-const iconColor = '#333333';
+const iconColor = Platform.OS === 'ios' ? Color.primary : '#333333';
 
 async function loadIcon() {
 

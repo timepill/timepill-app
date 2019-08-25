@@ -49,7 +49,7 @@ export default class UserPage extends Component {
                 },
                 rightButtons: [{
                     id: 'followIcon',
-                    icon: Icon.followIcon
+                    icon: Icon.navButtonFollow
                 }]
             },
             statusBar: {
@@ -66,8 +66,6 @@ export default class UserPage extends Component {
                 rightButtons: [{
                     id: 'setting',
                     icon: Icon.navButtonSetting,
-
-                    color: Color.primary
                 }]
             },
             statusBar: {
@@ -103,7 +101,7 @@ export default class UserPage extends Component {
                         topBar: {
                             rightButtons: [{
                                 id: 'followIcon',
-                                icon: Icon.followIcon
+                                icon: Icon.navButtonFollow
                             }]
                         }
                     });

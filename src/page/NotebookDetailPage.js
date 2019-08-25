@@ -26,8 +26,6 @@ export default class NotebookDetailPage extends Component {
             topBar.rightButtons = [{
                 id: 'navButtonNotebookSetting',
                 icon: Icon.navButtonNotebookSetting,
-
-                color: Color.primary
             }];
         }
 

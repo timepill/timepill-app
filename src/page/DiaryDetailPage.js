@@ -184,8 +184,6 @@ export default class DiaryDetailPage extends Component {
                         rightButtons: [{
                             id: 'navButtonMore',
                             icon: Icon.navButtonMore,
-
-                            color: Color.primary // android
                         }]
                     }
                 });

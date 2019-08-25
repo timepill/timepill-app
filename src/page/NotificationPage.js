@@ -28,8 +28,6 @@ export default class NotificationPage extends Component {
                 rightButtons: [{
                     id: 'history',
                     icon: Icon.navButtonTime,
-
-                    color: Color.primary // android
                 }]
             },
             statusBar: {

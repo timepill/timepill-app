@@ -28,7 +28,6 @@ export default class TopicPage extends Component {
               rightButtons: [{
                     id: 'write',
                     icon: Icon.navButtonWrite,
-                    color: Color.primary
               }]
             },
             statusBar: {
