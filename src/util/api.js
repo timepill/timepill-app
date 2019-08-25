@@ -118,10 +118,17 @@ async function getSplashByStore() {
 }
 
 async function syncSplash() {
-    const splash = await callV2('GET', '/splash');
-    await Token.set('splash', JSON.stringify(splash));
+    let load = (async () => {
+        const splash = await callV2('GET', '/splash');
+        await Token.set('splash', JSON.stringify(splash));
+        return splash;
+    })();
 
-    return splash;
+    let timer = new Promise((resolve, reject) => {
+        setTimeout(resolve, 500)
+    });
+
+    return Promise.race([load, timer]);
 }
 
 async function getSelfInfo() {
