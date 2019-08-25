@@ -85,11 +85,7 @@ export default class App extends Component {
     }
 
     _onSucc() {
-        Api.getSplashByStore()
-            .then(splash => {
-                Navigation.setRoot(BottomNav.config(splash));
-            })
-            .catch((err) => console.log(err))
+        Navigation.setRoot(BottomNav.config());
     }
 
     render() {
