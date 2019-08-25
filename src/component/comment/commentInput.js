@@ -7,7 +7,8 @@ import {
     TextInput,
     TouchableOpacity,
     Alert,
-    DeviceEventEmitter
+    DeviceEventEmitter,
+    Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import KeyboardSpacer from "react-native-keyboard-spacer";
@@ -17,6 +18,7 @@ import Color from '../../style/color';
 import Api from '../../util/api';
 import Event from '../../util/event';
 
+const DefaultInputHeight = 56;
 
 export default class CommentInput extends Component {
 
@@ -31,7 +33,8 @@ export default class CommentInput extends Component {
 
             content: '',
             replyUserId: 0,
-            replyUserName: ''
+            replyUserName: '',
+            inputHeight: DefaultInputHeight,
         };
     }
 
@@ -93,8 +96,8 @@ export default class CommentInput extends Component {
                 this.setState({
                     content: '',
                     replyUserId: 0,
-                    replyUserName: ''
-
+                    replyUserName: '',
+                    inputHeight: DefaultInputHeight,
                 }, () => {
                     DeviceEventEmitter.emit(Event.updateComments);
                 });
@@ -108,9 +111,34 @@ export default class CommentInput extends Component {
             });
     }
 
+    resetInputHeight(event) {
+        let height = 0;
+        if(Platform.OS === "ios") {
+            //iOS 一开始是 29，只要一编辑就变成每行 18，36
+            const h = event.nativeEvent.contentSize.height + 37;
+            const max = 74 + 37;
+            height = h > max ? max : h
+        } else {
+            //android 一开始是 41.5，57，75
+            const h = event.nativeEvent.contentSize.height;
+            const max = 107;
+            if (h < DefaultInputHeight) {
+                height = DefaultInputHeight;
+            } else {
+                height = h + (DefaultInputHeight - 40);
+                height = height > max ? max : height;
+            }
+        }
+        if (this.state.inputHeight !== height) {
+            this.setState({
+                inputHeight: height,
+            });
+        }
+    }
+
     render() {
         return (
-            <View style={localStyle.container}>
+            <View style={[localStyle.container, { height: this.state.inputHeight }]}>
                 <TextInput style={localStyle.input}
                            selectionColor={Color.light}
 
@@ -136,6 +164,7 @@ export default class CommentInput extends Component {
 
                                 this.setState(state);
                            }}
+                           onContentSizeChange={this.resetInputHeight.bind(this)}
                 />
                 <TouchableOpacity style={localStyle.buttonWrap}
                     onPress={this.sendComment.bind(this)}>
@@ -166,6 +195,7 @@ const localStyle = StyleSheet.create({
         borderTopWidth: StyleSheet.hairlineWidth
     },
     input: {
+        flexGrow: 1,
         borderColor: '#bbb',
         backgroundColor: '#fff',
         borderWidth: StyleSheet.hairlineWidth,
