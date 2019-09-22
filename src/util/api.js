@@ -368,10 +368,22 @@ async function getUpdateInfo() {
     return callV2('GET', '/updateInfo');
 }
 
+async function addUserBlock(user_id) {
+    return call('POST', `blocks/${user_id}`);
+}
+
+
+async function deleteUserBlock(user_id) {
+    return call('DELETE', `blocks/${user_id}`);
+}
+
+async function getBlockUsers() {
+    return call('GET', `blocks`);
+}
+
 export async function updatePushInfo() {
     return callV2('POST', '/push');
 }
-
 
 async function upload(method, api, body) {
     let token = await Token.getUserToken();
@@ -577,4 +589,8 @@ export default {
     getUpdateInfo,
 
     updatePushInfo,
+
+    addUserBlock,
+    deleteUserBlock,
+    getBlockUsers,
 }
