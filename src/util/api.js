@@ -140,7 +140,7 @@ async function syncSplash() {
 }
 
 async function getSelfInfo() {
-    return call('GET', '/users/my');
+    return callV2('GET', '/users/my');
 }
 
 async function getSelfInfoByStore() {
@@ -148,7 +148,7 @@ async function getSelfInfoByStore() {
 }
 
 async function getUserInfo(id) {
-    return call('GET', '/users/' + id)
+    return callV2('GET', '/users/' + id)
 }
 
 async function updateUserIcon(photoUri) {
@@ -267,7 +267,7 @@ async function getMessages() {
 }
 
 async function getMessagesHistory() {
-    return call('GET', '/tip/history');
+    return callV2('GET', '/tips/history');
 }
 
 async function deleteMessage(ids) {
