@@ -24,8 +24,7 @@ export default class UserIcon extends Component {
 
     render() {
         return (
-            <Avatar rounded
-                containerStyle={localStyle.container}
+            <Avatar rounded containerStyle={localStyle.container}
                 width={this.props.width || 40}
                 height={this.props.height || 40}
                 source={{uri: this.state.iconUrl}}

@@ -40,15 +40,6 @@ export default class NotificationPage extends Component {
     constructor(props) {
         super(props);
         Navigation.events().bindComponent(this);
-
-        // const ds = new ListView.DataSource({
-        //     rowHasChanged: (r1, r2) => r1 !== r2
-        // });
-        // this.state = ({
-        //     messages: [],
-        //     messagesDataSource: ds,
-        //     refreshing: true,
-        // });
     }
 
     navigationButtonPressed({buttonId}) {
