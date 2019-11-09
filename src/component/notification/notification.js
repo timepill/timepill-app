@@ -81,13 +81,17 @@ export default class Notification extends Component {
     }
 
     renderFollow(msg) {
-        const body = `${msg.content.user.name} 关注了你`;
+        const userIcon = msg.link_user_icon;
 
         return (
             <Touchable key={msg.link_id} onPress={() => this.props.onFollowPress(msg)}>
                 <View style={localStyle.container}>
-                    <Ionicons name="ios-heart" size={16} style={localStyle.icon} color='#d9534f' />
-                    <Text key={msg.link_id} style={localStyle.text}>{body}</Text>
+                    <Ionicons name="ios-heart" size={14} style={localStyle.icon} color='#d9534f' />
+                    <UserIcon
+                        iconUrl={userIcon}
+                        width={24} height={24}
+                    />
+                    <Text style={localStyle.text}>关注了你</Text>
                     {this.renderDeleteButton(msg)}
                 </View>
             </Touchable>
@@ -145,7 +149,8 @@ const localStyle = StyleSheet.create({
     icon2: {
         width: 15,
         height: 15,
-        marginRight: 10,
+        marginLeft: -1,
+        marginRight: 9,
         marginTop: 7,
     },
     delete: {
