@@ -24,7 +24,8 @@ import {Icon} from '../style/icon';
 import Color from '../style/color';
 import Api from '../util/api';
 import Msg from '../util/msg';
-import Event from "../util/event";
+import Event from '../util/event';
+import Token from '../util/token';
 
 import NotebookLine from '../component/notebook/notebookLine';
 import ImageAction from '../component/image/imageAction'
@@ -54,6 +55,8 @@ export default class WritePage extends Component {
             fadeAnimOpacity: new Animated.Value(0),
             fadeAnimHeight: new Animated.Value(0)
         }
+
+        this.draftTimer = null;
     }
 
     static options(passProps) {
@@ -102,6 +105,9 @@ export default class WritePage extends Component {
     }
 
     closePage() {
+        clearInterval(this.draftTimer);
+        Token.setDraft('');
+
         this.contentInput.blur();
         if (this.diary || this.topic) {
             Navigation.pop(this.props.componentId);
@@ -112,10 +118,20 @@ export default class WritePage extends Component {
     }
 
     componentDidMount() {
+        Token.getDraft().then(draft => {
+            if(draft) {
+                this.setState({
+                    content: draft,
+                });
+            }
+        });
+
+        this.resetDraftTimer();
+
         this.loadNotebook().then(notebookCount => {
             if(notebookCount > 0) {
                 InteractionManager.runAfterInteractions(() => {
-                    this && this.contentInput && this.contentInput.focus();
+                    this.contentInput && this.contentInput.focus();
                 });
             } else {
                 Alert.alert('提示', '没有可用日记本，无法写日记',[
@@ -138,6 +154,19 @@ export default class WritePage extends Component {
 
     componentWillUnmount(){
         this.notebookListener.remove();
+    }
+
+    resetDraftTimer() {
+        if(this.draftTimer) {
+            clearInterval(this.draftTimer);
+        }
+
+        this.draftTimer = setInterval(() => {
+            let content = this.state.content;
+            if(content) {
+                Token.setDraft(content);
+            }
+        }, 5000);
     }
 
     openModal() {

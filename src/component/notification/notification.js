@@ -28,7 +28,6 @@ export default class Notification extends Component {
         if(msg && msg.type) {
             if(msg.type == 1) {
                 return this.renderComment(msg);
-
             } else if(msg.type == 2) {
                 return this.renderFollow(msg);
             } else if(msg.type == 3) {

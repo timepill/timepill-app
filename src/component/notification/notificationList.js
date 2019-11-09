@@ -34,6 +34,7 @@ export default class NotificationList extends Component {
         (async () => {
             try {
                 let notifications = await this.getMessages();
+
                 this.notificationsData = notifications;
                 this.setNotifications(notifications);
                 this.setState({error: false});
@@ -230,16 +231,7 @@ export default class NotificationList extends Component {
     }
 }
 
-// NotificationList.propTypes = {
-//     isHistory: PropTypes.boolean,
-//     onRefresh: PropTypes.func,
-//     isSetRead: PropTypes.boolean
-// };
-//
-// NotificationList.defaultProps = {
-//     isHistory: true,
-//     isSetRead: false,
-// };
+
 
 
 
