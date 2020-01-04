@@ -132,21 +132,34 @@ export default class UserPage extends Component {
 
     componentDidMount() {
         if(this.userId) {
-            Api.getRelation(this.userId)
-                .then(re => {
-                    this.followed = re;
-                    if(this.followed) {
+            Api.getSelfInfoByStore()
+                .then(user => {
+                    if(user && user.id == this.userId) {
                         Navigation.mergeOptions(this.props.componentId, {
                             topBar: {
                                 rightButtons: [{
-                                    id: 'navButtonFollowSelected',
-                                    icon: Icon.navButtonFollowSelected
+                                    id: 'setting',
+                                    icon: Icon.navButtonSetting
                                 }]
                             }
                         });
+                    } else {
+                        Api.getRelation(this.userId)
+                            .then(re => {
+                                this.followed = re;
+                                if(this.followed) {
+                                    Navigation.mergeOptions(this.props.componentId, {
+                                        topBar: {
+                                            rightButtons: [{
+                                                id: 'navButtonFollowSelected',
+                                                icon: Icon.navButtonFollowSelected
+                                            }]
+                                        }
+                                    });
+                                }
+                            });
                     }
                 });
-
         }
 
         this.notebookListener = DeviceEventEmitter.addListener(Event.updateNotebooks, (param) => {
