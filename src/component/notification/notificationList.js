@@ -34,6 +34,7 @@ export default class NotificationList extends Component {
         (async () => {
             try {
                 let notifications = await this.getMessages();
+
                 this.notificationsData = notifications;
                 this.setNotifications(notifications);
                 this.setState({error: false});
@@ -106,6 +107,29 @@ export default class NotificationList extends Component {
         }
     }
 
+    _onUserIconPress(msg) {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'User',
+                options: {
+                    bottomTabs: {
+                        visible: false,
+
+                        // hide bottom tab for android
+                        drawBehind: true,
+                        animate: true
+                    }
+                },
+                passProps: {
+                    user: {
+                        id: msg.userId,
+                        name: msg.userName,
+                    }
+                }
+            }
+        });
+    }
+
     _onCommentPress(msg) {
         Navigation.push(this.props.componentId, {
             component: {
@@ -159,7 +183,7 @@ export default class NotificationList extends Component {
     _onLikePress(msg) {
         Navigation.push(this.props.componentId, {
             component: {
-                name: 'User',
+                name: 'DiaryDetail',
                 options: {
                     bottomTabs: {
                         visible: false,
@@ -170,7 +194,7 @@ export default class NotificationList extends Component {
                     }
                 },
                 passProps: {
-                    user: msg.content.user
+                    diaryId: msg.content.dairy_id
                 }
             }
         });
@@ -199,11 +223,12 @@ export default class NotificationList extends Component {
                 renderItem={({item}) => {
                     return (
                         <Notification msg={item}
-                                      onCommentPress={this._onCommentPress.bind(this)}
-                                      onFollowPress={this._onFollowPress.bind(this)}
-                                      onLikePress={this._onLikePress.bind(this)}
-                                      onDeletePress={this._onDeletePress.bind(this)}
-                                      showDelete={this.props.isSetRead}
+                              onUserIconPress={this._onUserIconPress.bind(this)}
+                              onCommentPress={this._onCommentPress.bind(this)}
+                              onFollowPress={this._onFollowPress.bind(this)}
+                              onLikePress={this._onLikePress.bind(this)}
+                              onDeletePress={this._onDeletePress.bind(this)}
+                              showDelete={this.props.isSetRead}
                         />
                     );
                 }}
@@ -230,16 +255,7 @@ export default class NotificationList extends Component {
     }
 }
 
-// NotificationList.propTypes = {
-//     isHistory: PropTypes.boolean,
-//     onRefresh: PropTypes.func,
-//     isSetRead: PropTypes.boolean
-// };
-//
-// NotificationList.defaultProps = {
-//     isHistory: true,
-//     isSetRead: false,
-// };
+
 
 
 

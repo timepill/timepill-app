@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 var base64 = require('base-64');
 
 
-class TokenManager {
+class Token {
 
     generateToken(username, password) {
         return 'Basic ' + base64.encode(username + ":" + password);
@@ -101,4 +101,4 @@ class TokenManager {
 
 }
 
-export default new TokenManager()
+export default new Token()
