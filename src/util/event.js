@@ -7,5 +7,7 @@ export default {
     commentPressed: 'commentPressed',
     passwordUpdated: 'passwordUpdated',
     updateNewsRead: 'updateNewsRead',
-    userInfoUpdated: 'userInfoUpdated'
+    userInfoUpdated: 'userInfoUpdated',
+
+    userBlocked: 'userBlocked',
 }

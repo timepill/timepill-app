@@ -9,7 +9,8 @@ import {
     Modal,
     TouchableWithoutFeedback,
     InteractionManager,
-    StatusBar
+    StatusBar,
+    DeviceEventEmitter,
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {Button} from 'react-native-elements';
@@ -18,6 +19,7 @@ import ActionSheet from 'react-native-actionsheet-api';
 import Color from '../style/color'
 import Api from '../util/api';
 import Update from '../util/update';
+import Event from '../util/event'
 
 import DiaryList from '../component/diary/diaryList'
 import HomeDiaryData from '../dataLoader/homeDiaryData';
@@ -76,10 +78,15 @@ export default class HomePage extends Component {
                 Update.updateAndroid();
             }, 2000);
         }
+
+        this.blockUserListener = DeviceEventEmitter.addListener(Event.userBlocked, (param) => {
+            this.diaryList.filter(param.blockUserId);
+        });
     }
 
     componentWillUnmount() {
         this.bottomTabEventListener.remove();
+        this.blockUserListener.remove();
     }
 
     startTimer() {

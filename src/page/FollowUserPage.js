@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Animated} from 'react-native';
+import {StyleSheet, Text, View, Animated, DeviceEventEmitter} from 'react-native';
 import {
   PagerScroll,
   TabView,
@@ -8,7 +8,9 @@ import {
 } from 'react-native-tab-view';
 
 import Api from '../util/api';
+import Event from "../util/event";
 import Color from '../style/color';
+
 import FollowUserList from '../component/follow/followUserList'
 import FollowingUserData from '../dataLoader/followingUserData'
 import FollowedByUserData from '../dataLoader/followedByUserData'
@@ -44,6 +46,21 @@ export default class FollowUserPage extends Component {
         };
     }
 
+    componentDidMount() {
+        this.blockUserListener = DeviceEventEmitter.addListener(Event.userBlocked, (param) => {
+            if (this.followingList) {
+                this.followingList.refresh();
+            }
+            if (this.folloedByList) {
+                this.folloedByList.refresh();
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        this.blockUserListener.remove();
+    }
+
     _renderLabel = props => ({route}) => {
         let routes = props.navigationState.routes;
         let index = props.navigationState.index;
@@ -72,14 +89,14 @@ export default class FollowUserPage extends Component {
     };
 
     _renderScene = SceneMap({
-        following: () => <FollowUserList
+        following: () => <FollowUserList ref={(r) => this.followingList = r}
             listType={'followingUser'} dataSource={new FollowingUserData()}
             onDeletePress={async (id) => {
                 return Api.deleteFollow(id);
             }}
             {...this.props}
         />,
-        followedBy: () => <FollowUserList
+        followedBy: () => <FollowUserList ref={(r) => this.followedByList = r}
             listType={'followedByUser'} dataSource={new FollowedByUserData()}
             onDeletePress={async (id) => {
                 return Api.deleteFollowBy(id);

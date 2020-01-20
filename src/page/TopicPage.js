@@ -61,10 +61,14 @@ export default class TopicPage extends Component {
         this.diaryListener = DeviceEventEmitter.addListener(Event.updateDiarys, (param) => {
             this.diaryList.refresh();
         });
+        this.blockUserListener = DeviceEventEmitter.addListener(Event.userBlocked, (param) => {
+            this.diaryList.filter(param.blockUserId);
+        });
     }
 
     componentWillUnmount() {
         this.diaryListener.remove();
+        this.blockUserListener.remove();
     }
 
     render() {

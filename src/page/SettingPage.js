@@ -180,6 +180,13 @@ export default class SettingPage extends Component {
                 </View>
 
                 <View style={localStyle.group}>
+                    <TouchableOpacity style={localStyle.item} onPress={() => this.jumpTo('BlockUser')}>
+                        <Text style={localStyle.title}>屏蔽</Text>
+                        <Ionicons name="ios-arrow-forward" style={localStyle.arrow} size={18}/>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={localStyle.group}>
                     {
                         Api.IS_IOS ? (
                             <View>

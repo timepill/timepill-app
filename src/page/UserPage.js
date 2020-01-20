@@ -8,6 +8,7 @@ import {
 } from 'react-native-tab-view';
 import {Navigation} from 'react-native-navigation';
 
+import Msg from '../util/msg';
 import Api from '../util/api';
 import {Icon} from '../style/icon';
 import Event from "../util/event";
@@ -48,8 +49,8 @@ export default class UserPage extends Component {
                     text: passProps.user.name
                 },
                 rightButtons: [{
-                    id: 'followIcon',
-                    icon: Icon.navButtonFollow
+                    id: 'navButtonMore',
+                    icon: Icon.navButtonMore
                 }]
             },
             statusBar: {
@@ -76,41 +77,26 @@ export default class UserPage extends Component {
     }
 
     navigationButtonPressed({buttonId}) {
-        if(buttonId == 'followIcon') {
-            Api.addFollow(this.userId)
-                .then(() => {
-                    Navigation.mergeOptions(this.props.componentId, {
-                        topBar: {
-                            rightButtons: [{
-                                id: 'navButtonFollowSelected',
-                                icon: Icon.navButtonFollowSelected
-                            }]
-                        }
-                    });
+        if(buttonId == 'navButtonMore') {
+            ActionSheet.showActionSheetWithOptions({
+                options: ['屏蔽', '取消'],
+                cancelButtonIndex: 1,
+                destructiveButtonIndex: 0
 
-                    Alert.alert('已关注');
-                })
-                .catch(e => {
-                    Alert.alert('关注失败');
-                })
-
-        } else if(buttonId == 'navButtonFollowSelected') {
-            Api.deleteFollow(this.userId)
-                .then(() => {
-                    Navigation.mergeOptions(this.props.componentId, {
-                        topBar: {
-                            rightButtons: [{
-                                id: 'followIcon',
-                                icon: Icon.navButtonFollow
-                            }]
-                        }
-                    });
-
-                    Alert.alert('已取消关注');
-                })
-                .catch(e => {
-                    Alert.alert('取消关注失败');
-                })
+            }, (index) => {
+                if(index == 0) {
+                    Api.addUserBlock(this.userId)
+                        .then(() => {
+                            DeviceEventEmitter.emit(Event.userBlocked, {blockUserId: this.userId});
+                            Navigation.popToRoot(this.props.componentId);
+                            Msg.showMsg('该用户已被屏蔽');
+                        })
+                        .catch(e => {
+                            console.log('block error:', e);
+                            Alert.alert('屏蔽失败');
+                        });
+                }
+            });
 
         } else if(buttonId == 'setting') {
             Navigation.push(this.props.componentId, {
@@ -131,36 +117,27 @@ export default class UserPage extends Component {
     }
 
     componentDidMount() {
-        if(this.userId) {
-            Api.getSelfInfoByStore()
-                .then(user => {
-                    if(user && user.id == this.userId) {
-                        Navigation.mergeOptions(this.props.componentId, {
-                            topBar: {
-                                rightButtons: [{
-                                    id: 'setting',
-                                    icon: Icon.navButtonSetting
-                                }]
-                            }
+        Api.getSelfInfoByStore()
+            .then(user => {
+                if(!this.userId || (user && user.id == this.userId)) {
+                    this.userIntro.refresh(user.id);
+                    Navigation.mergeOptions(this.props.componentId, {
+                        topBar: {
+                            rightButtons: [{
+                                id: 'setting',
+                                icon: Icon.navButtonSetting
+                            }]
+                        }
+                    });
+
+                } else {
+                    Api.getRelation(this.userId)
+                        .then(re => {
+                            this.followed = re ? 1 : -1;
+                            this.userIntro.refreshFollowed(this.followed);
                         });
-                    } else {
-                        Api.getRelation(this.userId)
-                            .then(re => {
-                                this.followed = re;
-                                if(this.followed) {
-                                    Navigation.mergeOptions(this.props.componentId, {
-                                        topBar: {
-                                            rightButtons: [{
-                                                id: 'navButtonFollowSelected',
-                                                icon: Icon.navButtonFollowSelected
-                                            }]
-                                        }
-                                    });
-                                }
-                            });
-                    }
-                });
-        }
+                }
+            });
 
         this.notebookListener = DeviceEventEmitter.addListener(Event.updateNotebooks, (param) => {
             this.notebookList.refresh();

@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, ScrollView, InteractionManager} from 'react-native';
-import {Avatar} from "react-native-elements";
+import {StyleSheet, Text, View, ScrollView, InteractionManager, Alert} from 'react-native';
+import {Avatar, Button} from "react-native-elements";
 import moment from 'moment';
 
 import Color from '../style/color';
 import Api from '../util/api';
 import Msg from '../util/msg';
 
-import UserIcon from './userIcon'
-import Loading from './loading'
+import UserIcon from './userIcon';
+import Loading from './loading';
 
 
 export default class UserIntro extends Component {
@@ -18,37 +18,76 @@ export default class UserIntro extends Component {
 
         this.state = {
             user: props.user,
+            followed: 0,
+
             isLoading: true
         };
     }
 
     componentDidMount() {
-        Api.getSelfInfoByStore()
-            .then(user => {
-                this.selfInfo = user;
-
-                InteractionManager.runAfterInteractions(() => {
-                    this.refresh();
-                });
-            });
+        InteractionManager.runAfterInteractions(() => {
+            this.refresh();
+        });
     }
 
-    refresh() {
-        let userId = this.state.user ? this.state.user.id : this.selfInfo.id;
-        Api.getUserInfo(userId)
-            .then(user => {
+    _onAddFollow() {
+        Api.addFollow(this.state.user.id)
+            .then(() => {
                 this.setState({
-                    user: user
+                    followed: 1
                 });
+
+                Alert.alert('已关注');
             })
             .catch(e => {
-                Msg.showMsg('用户信息加载失败');
+                Alert.alert('关注失败');
             })
-            .finally(() => {
+    }
+
+    _onDeleteFollow() {
+        Api.deleteFollow(this.state.user.id)
+            .then(() => {
                 this.setState({
-                    isLoading: false
+                    followed: -1,
+                });
+
+                Alert.alert('已取消关注');
+            })
+            .catch(e => {
+                Alert.alert('取消关注失败');
+            })
+    }
+
+    refresh(userId) {
+        let targetId = userId;
+        if(!targetId) {
+            targetId = this.state.user ? this.state.user.id : null;
+        }
+
+        if(targetId) {
+            Api.getUserInfo(targetId)
+                .then(user => {
+                    this.setState({
+                        user: user
+                    });
                 })
+                .catch(e => {
+                    Msg.showMsg('用户信息加载失败');
+                })
+                .finally(() => {
+                    this.setState({
+                        isLoading: false
+                    })
+                });
+        }
+    }
+
+    refreshFollowed(followed = 0) {
+        if(followed) {
+            this.setState({
+                followed: followed
             });
+        }
     }
 
     render() {
@@ -57,10 +96,34 @@ export default class UserIntro extends Component {
         }
 
         const user = this.state.user;
+        const followed = this.state.followed;
+
         return user ? (
             <ScrollView style={localStyle.container} automaticallyAdjustContentInsets={false}>
                 <View style={localStyle.userIcon}>
                     <UserIcon width={90} height={90} iconUrl={user.coverUrl} />
+
+                    {
+                        followed < 0
+                        ? <Button title="+关注"
+                            outline={true}
+                            color={Color.primary}
+                            borderRadius={5}
+                            buttonStyle={localStyle.followButton}
+                            onPress={this._onAddFollow.bind(this)}
+                        />
+                        : (
+                            followed > 0
+                            ? <Button title="取消关注"
+                                backgroundColor={Color.primary}
+                                borderRadius={5}
+                                buttonStyle={localStyle.followButton}
+                                onPress={this._onDeleteFollow.bind(this)}
+                            />
+                            : null
+                        )
+                    }
+
                     <Text style={localStyle.userTitle}>{user.name}</Text>
                 </View>
 
@@ -88,6 +151,14 @@ const localStyle = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    followButton: {
+        width: 100,
+        height: 30,
+        marginTop: 20,
+        marginRight: 3,
+        paddingTop: 5,
+        paddingBottom: 5,
     },
     userTitle: {
         fontSize: 22,

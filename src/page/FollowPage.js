@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, DeviceEventEmitter} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 
 import Api from '../util/api';
+import Event from "../util/event";
 import {Icon} from '../style/icon';
 import Color from '../style/color';
 
@@ -64,6 +65,15 @@ export default class FollowPage extends Component {
                 }
             }
         );
+
+        this.blockUserListener = DeviceEventEmitter.addListener(Event.userBlocked, (param) => {
+            this.diaryList.filter(param.blockUserId);
+        });
+    }
+
+    componentWillUnmount() {
+        this.bottomTabEventListener.remove();
+        this.blockUserListener.remove();
     }
 
     render() {

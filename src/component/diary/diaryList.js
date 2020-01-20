@@ -122,6 +122,14 @@ export default class DiaryList extends Component {
         });
     }
 
+    filter(blockUserId) {
+        let diaries = this.state.diaries;
+        let filtered = diaries.filter(d => d.user.id != blockUserId);
+        this.setState({
+            diaries: filtered
+        });
+    }
+
     refreshOne(index, diary) {
         if(diary) {
             let list = this.state.diaries;
