@@ -369,16 +369,16 @@ async function getUpdateInfo() {
 }
 
 async function addUserBlock(user_id) {
-    return call('POST', `blocks/${user_id}`);
+    return call('POST', `/blocks/${user_id}`);
 }
 
 
 async function deleteUserBlock(user_id) {
-    return call('DELETE', `blocks/${user_id}`);
+    return call('DELETE', `/blocks/${user_id}`);
 }
 
 async function getBlockUsers() {
-    return call('GET', `blocks`);
+    return call('GET', `/blocks`);
 }
 
 export async function updatePushInfo() {
