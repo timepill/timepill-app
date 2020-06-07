@@ -115,7 +115,8 @@ export default class UserIntro extends Component {
                         : (
                             followed > 0
                             ? <Button title="取消关注"
-                                backgroundColor={Color.primary}
+                                outline={true}
+                                color={Color.primary}
                                 borderRadius={5}
                                 buttonStyle={localStyle.followButton}
                                 onPress={this._onDeleteFollow.bind(this)}
@@ -153,16 +154,19 @@ const localStyle = StyleSheet.create({
         justifyContent: 'center'
     },
     followButton: {
-        width: 100,
-        height: 30,
+        width: 90,
+        height: 28,
         marginTop: 20,
-        marginRight: 3,
+        marginRight: 5,
         paddingTop: 5,
         paddingBottom: 5,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     userTitle: {
         fontSize: 22,
         marginTop: 30,
+        marginRight: 3,
         fontWeight: 'bold',
         color: '#000'
     },
