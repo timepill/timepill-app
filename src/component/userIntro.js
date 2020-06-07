@@ -110,6 +110,7 @@ export default class UserIntro extends Component {
                             color={Color.primary}
                             borderRadius={5}
                             buttonStyle={localStyle.followButton}
+                            fontSize={14}
                             onPress={this._onAddFollow.bind(this)}
                         />
                         : (
@@ -119,6 +120,7 @@ export default class UserIntro extends Component {
                                 color={Color.primary}
                                 borderRadius={5}
                                 buttonStyle={localStyle.followButton}
+                                fontSize={14}
                                 onPress={this._onDeleteFollow.bind(this)}
                             />
                             : null
@@ -148,7 +150,7 @@ const localStyle = StyleSheet.create({
         backgroundColor: 'white'
     },
     userIcon: {
-        height: 230,
+        marginTop: 20,
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center'
